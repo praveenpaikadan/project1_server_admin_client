@@ -1,0 +1,115 @@
+adminUserModel : {
+    _Id
+    email: String
+    password: String
+}
+
+
+userModel: {
+	_Id
+	Auth : {
+        email: String
+        password : String
+        lastLoginTime :  
+    }
+	name : String 
+    avatar : Buffer
+	gender : Boolean
+	dob : String
+	height : Number
+	weight : Number
+    workOutData : ObjectID()
+}
+	
+
+programDataModel: {
+	_id
+    programID: Number
+	programName: String  
+	coverImage: String
+	durationWeeks : Number
+	daysPerWeek : Number
+	level : String 
+	goal: String,
+	equipment : [String]
+	schedule : 
+		[{ 
+            day : Number
+            exercises : [
+                {
+                    exerciseID : ObjectID()
+                    reps : Number
+                    weightInKg: Number
+                    restInSec : Number
+                    target: Number 
+                    }
+                ]
+            	
+	subscription : [
+            {    
+                planType : Complete Plan,
+                Description : String,
+			    Price : Number
+            },
+            {
+                planType: Monthly Plan,
+			    Description : String,
+			    Price : Number
+            }
+    ]
+		 
+}		
+
+exerciseModel :{
+	id_
+    exeriseID: Number
+	exerciseName : String
+	instructions:[
+        { 
+            step : Number
+            description: String 
+        }
+    ] 	
+		   
+	images:[
+        {imageUrl: String}
+    ]
+
+	restInSec: Number  
+	repetitionType: String	  
+}
+
+workoutDataModel: {
+    _id
+    ProgramList:[{
+        program: ObjectID(programDataModel)
+        uniqueProgramKey : String
+        planType: String 
+        status: String
+        lastDay: Number
+    }]
+
+    history:[{
+        uniqueProgramKey: String
+        exerciseHistory:[{
+            day: Number,
+            exercises:[ObjectID(exerciseInstanceModel)
+        }]
+    }]
+	}
+
+
+
+exerciseInstanceModel:{
+    _Id
+    user: ObjectID(userModel)
+    uniqueProgramKey: String
+    exercise: ObjectID(exerciseModel)
+    date: String
+    day: Number
+    set: Number
+    durationInSec: Number 
+}
+
+
+
