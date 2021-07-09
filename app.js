@@ -4,7 +4,7 @@ const morgan        = require('morgan');
 const bodyParser    = require('body-parser');
 
 
-const adminRoute    = require('./routes/admin-central-router') 
+const adminCentralRoute    = require('./routes/admin-central-router') 
 
 
 mangoose.connect('mongodb://localhost:27017/attestdb', {useNewUrlParser: true, useUnifiedTopology : true})
@@ -18,8 +18,6 @@ db.once('open', () => {
     console.log('Date base connection established ...' )
 })
 
-
-
 const app = express()
 app.use(morgan('dev'))
 
@@ -32,6 +30,6 @@ app.listen(PORT, () => {
 })
 
 
-app.use('/api/admin', adminRoute)
+app.use('/api/admin', adminCentralRoute)
 
 

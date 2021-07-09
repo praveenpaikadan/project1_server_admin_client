@@ -13,8 +13,7 @@ userModel: {
 	Auth : {
         email: String
         password : String
-        lastLoginTime : 
-	phoneNumber :  
+        lastLoginTime :  
     }
 	name : String 
     avatar : Buffer
@@ -26,42 +25,54 @@ userModel: {
 }
 	
 
-programModel: {
-	_id
-    programID: Number
-	programName: String  
-	coverImage: String
-	durationWeeks : Number
-	daysPerWeek : Number
-	level : String 
-	goal: String,
-	equipment : [String]
-	schedule : 
-		[{ 
-            day : Number
-            exercises : [
-                {
-                    exerciseID : ObjectID()
-                    reps : Number
-                    weightInKg: Number
-                    restInSec : Number
-                    target: Number 
-                    }
-                ]
-            	
-	subscription : [
-            {    
-                planType : Complete Plan,
-                Description : String,
-			    Price : Number
-            },
+programModel:
+    {   
+        meta : {
+        dateCreated:String,
+        subscribers:[String],
+        feedbacks:[
             {
-                planType: Monthly Plan,
-			    Description : String,
-			    Price : Number
+                feedbackDate: String,
+                subscriber : String,
+                review: String,
+                rating: Number,
             }
-    ]
+        ]
+    },
+
+	programName: String,  
+	coverImage: String,
+	durationWeeks : Number,
+	daysPerWeek : Number,
+	level : String,
+	goal: String,
+	equipment : [String],
+	schedule : 
+		[   
+            { 
+                day : Number,
+                exercises : 
+                    [
+                        {
+                            exerciseID : String,
+                            reps : Number,
+                            weightInKg: Number,
+                            restInSec : Number,
+                            target: Number ,
+                        }
+                    ],
+            }
+        ],	
+	subscription : 
+        [
+            {    
+                planType : String,
+                Description : String,
+			    PriceInRs : Number
+            }
+        ]
 		 
+})		 
 }		
 
 exerciseModel :{
