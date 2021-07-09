@@ -1,7 +1,10 @@
 adminUserModel : {
     _Id
+    name: String
     email: String
     password: String
+    designation: String
+    previlage: String
 }
 
 
@@ -10,7 +13,8 @@ userModel: {
 	Auth : {
         email: String
         password : String
-        lastLoginTime :  
+        lastLoginTime : 
+	phoneNumber :  
     }
 	name : String 
     avatar : Buffer
@@ -22,7 +26,7 @@ userModel: {
 }
 	
 
-programDataModel: {
+programModel: {
 	_id
     programID: Number
 	programName: String  
