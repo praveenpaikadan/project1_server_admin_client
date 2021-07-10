@@ -1,6 +1,25 @@
 const router   = require('express').Router();
 const Exercise = require('../../models/exercise')
 
+
+const validate = (req, res, next) => {
+    let valid = true 
+    // validators go here
+    
+    if (valid){
+        next()
+    }else{
+        res.json({
+            response: "Operation failed"
+        })
+    }
+}
+
+
+// routes
+
+router.use('/', validate)
+
 router.get('/', (req,res) => {
     Exercise.find()
     .then(response => {
@@ -16,23 +35,54 @@ router.get('/', (req,res) => {
     })
 })
 
-
-
 router.post('/', (req, res, next) => {
-    console.log(req.body)
+    console.log(req.body.programName)
     let exercise = new Exercise({
-        exerciseName : req.body.exerciseName,
+        exerciseName: req.body.exerciseName
     })
+
     exercise.save()   
     .then(response => {
         res.json({
-            status: 1,
-            response: 'Req saved'
+            response
         })
     })
     .catch(error => {
         res.json({
             status: 0,
+        })
+    })
+})
+
+router.patch('/',(req,res) => {
+    let conditions = { _id: req.body.id };
+    
+    Exercise.findByIdAndUpdate(conditions, req.body.data, { new: true})
+    .then((response) => {
+        res.json({
+            response
+        })
+    })
+    .catch(error => {
+        console.log(err)
+        res.json({
+            response: "Failed to update"
+        })
+    })
+})
+
+router.delete('/', (req, res)=>{
+    let conditions = { _id: req.body.id};
+    Exercise.findByIdAndDelete(conditions)
+    .then((response) => {
+        res.json({
+            response
+        })
+    })
+    .catch(error => {
+        console.log(err)
+        res.json({
+            response: "Failed to update"
         })
     })
 })

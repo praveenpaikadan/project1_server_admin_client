@@ -1,7 +1,5 @@
 const router   = require('express').Router();
-const Program = require('../../models/program')
-
-
+const AdminUser = require('../../models/admin-user')
 
 const validate = (req, res, next) => {
     let valid = true 
@@ -22,7 +20,7 @@ const validate = (req, res, next) => {
 router.use('/', validate)
 
 router.get('/', (req,res) => {
-    Program.find()
+    AdminUser.find()
     .then(response => {
         res.json({
             response
@@ -37,15 +35,20 @@ router.get('/', (req,res) => {
 })
 
 router.post('/', (req, res, next) => {
-    console.log(req.body.programName)
-    let program = new Program({
-        programName: req.body.programName
+    console.log(req.body)
+    let adminUser = new AdminUser({
+        name: req.body.name,
+        designation: req.body.designation,
+        previlage: req.body.previlages,
+        email: req.body.email,
+        password: req.body.password,
     })
 
-    program.save()   
+    adminUser.save()   
     .then(response => {
         res.json({
-            response
+            status: 1,
+            response 
         })
     })
     .catch(error => {
@@ -58,7 +61,7 @@ router.post('/', (req, res, next) => {
 router.patch('/',(req,res) => {
     let conditions = { _id: req.body.id };
     
-    Program.findByIdAndUpdate(conditions, req.body.data, { new: true})
+    AdminUser.findByIdAndUpdate(conditions, req.body.data, { new: true})
     .then((response) => {
         res.json({
             response
@@ -74,7 +77,7 @@ router.patch('/',(req,res) => {
 
 router.delete('/', (req, res)=>{
     let conditions = { _id: req.body.id};
-    Program.findByIdAndDelete(conditions)
+    AdminUser.findByIdAndDelete(conditions)
     .then((response) => {
         res.json({
             response
