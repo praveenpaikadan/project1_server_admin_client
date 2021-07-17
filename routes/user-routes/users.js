@@ -1,8 +1,5 @@
 const router   = require('express').Router();
-const AdminUser = require('../../models/admin-user')
-const { isAuth } = require('../authmiddleware'); 
-const { genPassword } = require('../../lib/passwordUtils')
-const passport = require('passport')
+const User = require('../../models/user')
 
 const validate = (req, res, next) => {
     let valid = true 
@@ -17,43 +14,13 @@ const validate = (req, res, next) => {
     }
 }
 
+
 // routes
+
 router.use('/', validate)
 
-router.post('/add', (req, res, next) => {
-
-    let saltHash = genPassword(req.body.password)
-    let salt = saltHash.salt; 
-    let hash = saltHash.hash;
-
-    let newAdmin = new AdminUser({
-        name: req.body.name,
-        designation: req.body.designation,
-        previlage: req.body.previlage,
-        email: req.body.email,
-        hash: hash,
-        salt: salt,
-    })
-
-    console.log(newAdmin)
-    
-    newAdmin.save()   
-    .then(response => {
-        res.json({
-            status: 1,
-            response 
-        })
-    })
-    .catch(error => {
-        console.log(error)
-        res.json({
-            status: 0,
-        })
-    })
-})
-
-router.get('/', (req,res, next) => {
-    AdminUser.find()
+router.get('/', (req,res) => {
+    User.find()
     .then(response => {
         res.json({
             response
@@ -67,10 +34,30 @@ router.get('/', (req,res, next) => {
     })
 })
 
+router.post('/', (req, res, next) => {
+    console.log(req.body)
+    let user = new User({
+        name: req.body.name,
+    })
+
+    user.save()   
+    .then(response => {
+        res.json({
+            status: 1,
+            response 
+        })
+    })
+    .catch(error => {
+        res.json({
+            status: 0,
+        })
+    })
+})
+
 router.patch('/',(req,res) => {
     let conditions = { _id: req.body.id };
     
-    AdminUser.findByIdAndUpdate(conditions, req.body.data, { new: true})
+    User.findByIdAndUpdate(conditions, req.body.data, { new: true})
     .then((response) => {
         res.json({
             response
@@ -86,7 +73,7 @@ router.patch('/',(req,res) => {
 
 router.delete('/', (req, res)=>{
     let conditions = { _id: req.body.id};
-    AdminUser.findByIdAndDelete(conditions)
+    User.findByIdAndDelete(conditions)
     .then((response) => {
         res.json({
             response

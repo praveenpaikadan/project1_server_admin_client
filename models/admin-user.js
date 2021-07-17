@@ -5,7 +5,8 @@ const adminUserSchema =  mongoose.Schema({
     designation: String,
     previlage: String,
     email: String,
-    password: String,
+    hash: String,
+    salt: String,
 }, { timestamps : true})
 
 const AdminUser = mongoose.model('adminUser', adminUserSchema)

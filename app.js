@@ -1,35 +1,59 @@
 const express       = require('express');
-const mangoose      = require('mongoose');
 const morgan        = require('morgan');
-const bodyParser    = require('body-parser');
+const passport      = require('passport')
+const session       = require('express-session');
+const MongoStore    = require('connect-mongo')(session);
 
+// database 
+const connection            = require('./config/database');
 
-const adminCentralRoute    = require('./routes/admin-central-router') 
+// Importing Primary routes
+const adminCentralRoute     = require('./routes/admin-central-router')
+const userCentralRoute      = require('./routes/user-central-router')
 
+// importing variables
+require('dotenv').config();
 
-mangoose.connect('mongodb://localhost:27017/attestdb', {useNewUrlParser: true, useUnifiedTopology : true})
-const db = mangoose.connection
+// Authentication confiurations
+require('./config/passport');
 
-db.on('error', err => {
-    console.log(err)
-})
-
-db.once('open', () => {
-    console.log('Date base connection established ...' )
-})
-
+// Starting app
 const app = express()
-app.use(morgan('dev'))
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Basic function middlewares
+app.use(morgan('dev'))
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// keep the order : express-session => passport.initialize => passsport.session
+
+// making session store in the database using existing connection
+const sessionStore = new MongoStore({ mongooseConnection: connection, collection: 'sessions'})
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+        maxAge: 1000*60*60*24*365
+    }
+}));
+
+
+// Initializing authentication and sessions.
+app.use(passport.initialize());
+app.use(passport.session());
+
+// routes
+app.use('/api/admin', adminCentralRoute)
+app.use('/api/v1/', userCentralRoute)
+
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
     console.log(`Server Running at ${PORT}`)
 })
 
-
-app.use('/api/admin', adminCentralRoute)
 
 
