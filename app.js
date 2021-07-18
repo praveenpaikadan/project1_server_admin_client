@@ -26,6 +26,9 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// templating
+app.set('views', './views')
+app.set('view engine', 'ejs')
 // keep the order : express-session => passport.initialize => passsport.session
 
 // making session store in the database using existing connection
@@ -41,12 +44,13 @@ app.use(session({
 }));
 
 
+
 // Initializing authentication and sessions.
 app.use(passport.initialize());
 app.use(passport.session());
 
 // routes
-app.use('/api/admin', adminCentralRoute)
+app.use('/admin', adminCentralRoute)
 app.use('/api/v1/', userCentralRoute)
 
 

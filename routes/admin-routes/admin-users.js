@@ -4,21 +4,9 @@ const { isAuth } = require('../authmiddleware');
 const { genPassword } = require('../../lib/passwordUtils')
 const passport = require('passport')
 
-const validate = (req, res, next) => {
-    let valid = true 
-    // validators go here
-    
-    if (valid){
-        next()
-    }else{
-        res.json({
-            response: "Operation failed"
-        })
-    }
-}
 
 // routes
-router.use('/', validate)
+
 
 router.post('/add', (req, res, next) => {
 

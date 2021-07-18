@@ -2,23 +2,7 @@ const router   = require('express').Router();
 const Exercise = require('../../models/exercise')
 
 
-const validate = (req, res, next) => {
-    let valid = true 
-    // validators go here
-    
-    if (valid){
-        next()
-    }else{
-        res.json({
-            response: "Operation failed"
-        })
-    }
-}
-
-
 // routes
-
-router.use('/', validate)
 
 router.get('/', (req,res) => {
     Exercise.find()
@@ -36,7 +20,6 @@ router.get('/', (req,res) => {
 })
 
 router.post('/', (req, res, next) => {
-    console.log(req.body.programName)
     let exercise = new Exercise({
         exerciseName: req.body.exerciseName
     })

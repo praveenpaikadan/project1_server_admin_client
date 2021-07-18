@@ -1,25 +1,7 @@
 const router   = require('express').Router();
 const Program = require('../../models/program')
 
-
-
-const validate = (req, res, next) => {
-    let valid = true 
-    // validators go here
-    
-    if (valid){
-        next()
-    }else{
-        res.json({
-            response: "Operation failed"
-        })
-    }
-}
-
-
 // routes
-
-router.use('/', validate)
 
 router.get('/', (req,res) => {
     Program.find()
@@ -36,7 +18,7 @@ router.get('/', (req,res) => {
     })
 })
 
-router.post('/', (req, res, next) => {
+router.post('/add', (req, res, next) => {
     console.log(req.body.programName)
     let program = new Program({
         programName: req.body.programName

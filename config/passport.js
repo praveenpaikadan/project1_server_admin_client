@@ -30,7 +30,6 @@ const userVerifyCallback = (email, password, done) => {
 }
 
 const adminVerifyCallback = (email, password, done) => {
-    console.log(email, password)
     AdminUser.findOne({ email: email})
     .then(user => {
         if(!user){
@@ -58,7 +57,6 @@ passport.use('admin', adminStrategy);
 
 
 passport.serializeUser((user, done) => {
-    console.log("serilaized .................... "+ user)
     done(null, user.id)
 })
 
@@ -66,7 +64,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((userId, done) => {
     AdminUser.findById(userId)
     .then(user => {
-        done(null,user)
+        done(null,{admin: true, ...user})
     })
     .catch(err => done(err) )
 })

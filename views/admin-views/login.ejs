@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript">
+      function handleSubmit(event) {
+        console.log('hai')
+        event.preventDefault();
+        const data = new FormData(event.target);
+        const value = Object.fromEntries(data.entries());
+          console.log({ value });
+        } 
+
+    </script>
+</head>
+<body>
+    <form method="POST"> 
+      <div class="container" style="width:fit-content;margin:auto;display: flex;flex-direction: column;">
+      <label for="email"><b>Email</b></label>
+      <input type="text" placeholder="Enter Username" name="email" required>
+  
+      <label for="password"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="password" required>
+  
+      <input type="submit" value="Login" onclick="console.log('clicked')" />
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+    </form>
+</body>
+</html>
