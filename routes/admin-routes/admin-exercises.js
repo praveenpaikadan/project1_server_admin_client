@@ -1,5 +1,7 @@
 const router   = require('express').Router();
-const Exercise = require('../../models/exercise')
+const Exercise = require('../../models/exercise');
+const multer = require('multer');
+const {upload} = require('../../config/multer');
 
 
 // routes
@@ -19,23 +21,56 @@ router.get('/', (req,res) => {
     })
 })
 
-router.post('/', (req, res, next) => {
-    let exercise = new Exercise({
-        exerciseName: req.body.exerciseName
-    })
+router.post('/',
 
-    exercise.save()   
-    .then(response => {
-        res.json({
-            response
+    upload.fields([{
+        name: 'images', maxCount: 2
+        }, {
+        name: 'video', maxCount: 1
+        }]) ,
+    
+    (req, res) => {
+
+        var image1 = req.files.images[0];
+        var image2 = req.files.images[1];
+        var video = req.files.video[0];
+
+        var data = req.body;
+
+        var instructions = []
+        
+        for(let key in data){
+            if (key.split('-')[0] == 'step'){
+                instructions.push({step: key.split('-')[1],  description: data[key]})
+            }
+        };
+
+        data.instructions = instructions
+        
+        console.log(data.instructions)
+
+        let exercise = new Exercise({
+            exerciseName : data.exerciseName,
+            instructions: data.instructions, 	
+            images:[image1, image2],
+            video: [video],
+            restInSec: data.restInSec,  
+            repetitionType: data.repetitionType,
         })
-    })
-    .catch(error => {
-        res.json({
-            status: 0,
+
+        exercise.save()   
+        .then(response => {
+            res.json({
+                response
+            })
         })
-    })
-})
+        .catch(error => {
+            console.log('failed')
+            res.status(500).json({
+                response: "Failed"
+            })
+        })
+});
 
 router.patch('/',(req,res) => {
     let conditions = { _id: req.body.id };

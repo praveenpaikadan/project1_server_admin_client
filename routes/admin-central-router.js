@@ -10,8 +10,10 @@ const { isAuth, isAdmin  } = require('./authmiddleware');
 
 // debuging middleware . TO be removed in production
 router.use((req,res,next) => {
-    console.log("req.user object : \n " + req.user)
-    // console.log(req)
+    // res.setHeader('Access-Control-Allow-Headers', 'Set-Cookie')
+    console.log('user' in req)
+    console.log(req['user']['_doc']['name'])
+    console.log(req.baseUrl)
     next()
 })
 

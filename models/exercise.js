@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const exerciseSchema = mongoose.Schema({
-    exeriseID: Number,
 	exerciseName : String,
 	instructions:[
         { 
@@ -9,9 +8,8 @@ const exerciseSchema = mongoose.Schema({
         }
     ], 	
 		   
-	images:[
-        {imageUrl: String}
-    ],
+	images:[{}],
+    video: [{}],
 
 	restInSec: Number,  
 	repetitionType: String,
@@ -19,5 +17,4 @@ const exerciseSchema = mongoose.Schema({
 }, { timestamps : true})
 
 const Exercise = mongoose.model('Exercise', exerciseSchema)
-
 module.exports = Exercise

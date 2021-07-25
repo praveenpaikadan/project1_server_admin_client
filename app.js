@@ -3,6 +3,8 @@ const morgan        = require('morgan');
 const passport      = require('passport')
 const session       = require('express-session');
 const MongoStore    = require('connect-mongo')(session);
+const bodyParser    = require('body-parser')
+var cors = require('cors');
 
 // database 
 const connection            = require('./config/database');
@@ -21,9 +23,17 @@ require('./config/passport');
 const app = express()
 
 // Basic function middlewares
+
+app.use(cors({
+    credentials: true, 
+    origin: 'http://localhost:3000', // web front end server address
+    //Origin: '*' // this will cause an error
+}))
+
 app.use(morgan('dev'))
 app.use(express.static("public"));
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 // templating
@@ -43,11 +53,11 @@ app.use(session({
     }
 }));
 
-
-
 // Initializing authentication and sessions.
 app.use(passport.initialize());
 app.use(passport.session());
+
+
 
 // routes
 app.use('/admin', adminCentralRoute)
