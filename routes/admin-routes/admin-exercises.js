@@ -6,6 +6,24 @@ const {upload} = require('../../config/multer');
 
 // routes
 
+router.get('/:id', (req,res) => {
+    console.log(req.params.id)
+    // if there is no item null is returned.
+    Exercise.findOne({"_id": req.params.id})
+    .then(response => {
+        console.log(response)
+        res.json({
+            response
+        })
+    })
+    .catch(error => {
+        console.log(err)
+        res.json({
+            response: 'An error Ocuured while fetching excercise details'
+        })
+    })
+})
+
 router.get('/', (req,res) => {
     Exercise.find()
     .then(response => {

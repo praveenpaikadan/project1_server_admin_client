@@ -1,21 +1,33 @@
 const router   = require('express').Router();
+const express  = require('express')
 const passport = require('passport');
 const adminUserRouter   = require('./admin-routes/admin-users')
 const adminProgramRouter   = require('./admin-routes/admin-programs')
 const adminExerciseRouter   = require('./admin-routes/admin-exercises');
 const { isAuth, isAdmin  } = require('./authmiddleware');
 
+const getMediaUrl = () => {
+    let sep =  __dirname.includes('/')?'/':"\\"
+    let url = __dirname.split(sep)
+    url.pop()
+    return ([...url, 'static', 'media'].join(sep))
+}
+
+const mediaUrl = getMediaUrl()
+
+
+
 // const adminClientRouter   = require('./admin-routes/admin-client)
 
 
 // debuging middleware . TO be removed in production
-router.use((req,res,next) => {
-    // res.setHeader('Access-Control-Allow-Headers', 'Set-Cookie')
-    console.log('user' in req)
-    console.log(req['user']['_doc']['name'])
-    console.log(req.baseUrl)
-    next()
-})
+// router.use((req,res,next) => {
+//     // res.setHeader('Access-Control-Allow-Headers', 'Set-Cookie')
+//     console.log('user' in req)
+//     console.log(req['user']['_doc']['name'])
+//     console.log(req.baseUrl)
+//     next()
+// })
 
 // public routes ----------------
 router.get('/', (req, res, next) => {
@@ -48,6 +60,7 @@ router.get('/logout', (req,res,next) => {
 })
 
 
+router.use('/media', express.static(mediaUrl));
 router.use('/adminusers', adminUserRouter)
 router.use('/programs', adminProgramRouter)
 router.use('/exercises', adminExerciseRouter)

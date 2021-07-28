@@ -5,7 +5,7 @@ var storage = multer.diskStorage({
 
 
 destination: function(req, file, callback) {
-    callback(null, './public');
+    callback(null, './static/media');
   },
   filename: function(req, file, callback) {
     if(file.originalname.length>6)
