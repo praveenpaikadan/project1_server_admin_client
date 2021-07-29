@@ -90,22 +90,59 @@ router.post('/',
         })
 });
 
-router.patch('/',(req,res) => {
-    let conditions = { _id: req.body.id };
+router.patch('/',
+
+    upload.fields([{
+        name: 'images', maxCount: 2
+        }, {
+        name: 'video', maxCount: 1
+        }]) ,
+
+
+    (req,res) => {
     
-    Exercise.findByIdAndUpdate(conditions, req.body.data, { new: true})
-    .then((response) => {
-        res.json({
-            response
+        var data = req.body;
+
+        var instructions = []         
+        for(let key in data){
+            if (key.split('-')[0] == 'step'){
+                instructions.push({step: key.split('-')[1],  description: data[key]})
+            }
+        };
+
+        if (instructions.length>0){
+            data.instructions = instructions
+        }
+
+        if(req.files.images){
+            var image1 = req.files.images[0];
+            var image2 = req.files.images[1];
+            data.images = [image1, image2];
+        }
+
+        if(req.files.video){
+            var video = req.files.video[0];
+            data.video = [video];
+        }
+
+        console.log(data.instructions)
+
+        let conditions = { _id: data.id };
+        
+        Exercise.findByIdAndUpdate(conditions, data, { new: true})
+        .then((response) => {
+            res.json({
+                response
+            })
+        })
+
+        .catch(err => {
+            console.log(err)
+            res.status(400).json({
+                response: "Failed to update"
+            })
         })
     })
-    .catch(error => {
-        console.log(err)
-        res.json({
-            response: "Failed to update"
-        })
-    })
-})
 
 router.delete('/', (req, res)=>{
     let conditions = { _id: req.body.id};
