@@ -3,8 +3,7 @@ module.exports.isAuth = (req, res, next) => {
         next();
     } else {
         console.log('Not Authenticated')
-        res.status(403)
-        res.redirect('/admin/login')
+        res.status(403).end()
     }
 };
 
