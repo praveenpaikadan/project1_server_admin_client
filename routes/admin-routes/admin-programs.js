@@ -1,7 +1,66 @@
 const router   = require('express').Router();
-const Program = require('../../models/program')
+const Program = require('../../models/program');
+const multer = require('multer');
+const {upload} = require('../../config/multer');
+
+const fs = require('fs');
 
 // routes
+
+const getMediaUrl = (filename) => {
+    let sep =  __dirname.includes('/')?'/':"\\"
+    let url = __dirname.split(sep)
+    url.pop()
+    url.pop()
+    return ([...url, 'static', 'media', filename].join(sep))
+}
+
+const deleteFiles = (files) => {
+    files.forEach(file => {
+        var mpath = getMediaUrl(file)
+        if (fs.existsSync(mpath)){
+            console.log(mpath)
+            fs.unlink(mpath, err => {
+                if (err) {
+                    console.log('Failed to delete :' + mpath)
+                }else{
+                    console.log('File Deleted : ' + mpath) 
+                };
+            });
+        }
+    });
+    return true
+}
+
+const getFilesToBeDeleted = async (id, contents) => {
+    let program = await Program.findById(id)
+    filesNamesToBeDeleted = []
+    for (content of contents) {
+        if (content !== null){
+            filesNamesToBeDeleted = [...filesNamesToBeDeleted, ...program[content].map(item => item.filename)]
+        }
+      }
+    return filesNamesToBeDeleted
+}
+
+
+// routes
+router.get('/:id', (req,res) => {
+    console.log(req.params.id)
+    // if there is no item null is returned.
+    Program.findOne({"_id": req.params.id})
+    .then(response => {
+        res.json({
+            response
+        })
+    })
+    .catch(error => {
+        console.log(err)
+        res.json({
+            response: 'An error Ocuured while fetching excercise details'
+        })
+    })
+})
 
 router.get('/', (req,res) => {
     Program.find()
@@ -13,59 +72,135 @@ router.get('/', (req,res) => {
     .catch(error => {
         console.log(err)
         res.json({
-            message: 'An error Ocuured while fetching excercise details'
+            response: 'An error Ocuured while fetching excercise details'
         })
     })
 })
 
-router.post('/add', (req, res, next) => {
-    console.log(req.body.programName)
-    let program = new Program({
-        programName: req.body.programName
-    })
+router.post('/',
 
-    program.save()   
-    .then(response => {
-        res.json({
-            response
-        })
-    })
-    .catch(error => {
-        res.json({
-            status: 0,
-        })
-    })
-})
-
-router.patch('/',(req,res) => {
-    let conditions = { _id: req.body.id };
+    upload.fields([{
+        name: 'images', maxCount: 2
+        }, {
+        name: 'video', maxCount: 1
+        }]) ,
     
-    Program.findByIdAndUpdate(conditions, req.body.data, { new: true})
-    .then((response) => {
-        res.json({
-            response
-        })
-    })
-    .catch(error => {
-        console.log(err)
-        res.json({
-            response: "Failed to update"
-        })
-    })
-})
+    (req, res) => {
+        console.log(JSON.parse(req.body.data))
+        res.end()
+        
+        // var image1 = req.files.images[0];
+        // var image2 = req.files.images[1];
+        // var video = req.files.video[0];
 
-router.delete('/', (req, res)=>{
-    let conditions = { _id: req.body.id};
-    Program.findByIdAndDelete(conditions)
-    .then((response) => {
-        res.json({
-            response
+        // var data = req.body;
+
+        // var instructions = []
+        
+        // for(let key in data){
+        //     if (key.split('-')[0] == 'step'){
+        //         instructions.push({step: key.split('-')[1],  description: data[key]})
+        //     }
+        // };
+
+        // data.instructions = instructions
+        
+        // console.log(data.instructions)
+        // let program = new Program(data)
+
+        // program.save()   
+        // .then(response => {
+        //     res.json({
+        //         response
+        //     })
+        // })
+        // .catch(error => {
+        //     console.log('failed')
+        //     res.status(500).json({
+        //         response: "Failed"
+        //     })
+        // })
+});
+
+router.patch('/',
+
+    upload.fields([{
+        name: 'images', maxCount: 2
+        }, {
+        name: 'video', maxCount: 1
+        }]) ,
+
+
+    (req,res) => {
+    
+        var data = req.body;
+
+        var instructions = []         
+        for(let key in data){
+            if (key.split('-')[0] == 'step'){
+                instructions.push({step: key.split('-')[1],  description: data[key]})
+            }
+        };
+
+        if (instructions.length>0){
+            data.instructions = instructions
+        }
+
+        if(req.files.images){
+            var image1 = req.files.images[0];
+            var image2 = req.files.images[1];
+            data.images = [image1, image2];
+        }
+
+        if(req.files.video){
+            var video = req.files.video[0];
+            data.video = [video];
+        }
+
+        let conditions = { _id: data.id };
+        getFilesToBeDeleted(data.id, [data.images?'images':null, data.video?'video':null])
+        .then((filesNamesToBeDeleted => {
+            Program.findByIdAndUpdate(conditions, data, { new: true})
+            .then((response) => {
+                deleteFiles(filesNamesToBeDeleted)
+                res.json({
+                    response
+                })
+            })
+    
+            .catch(err => {
+                console.log(err)
+                res.status(400).json({
+                    response: "Failed to update"
+                })
+            })
+                
+        }))
+});
+
+router.delete('/:id', (req, res, next)=>{
+    let id = req.params.id
+    getFilesToBeDeleted(id, ['images', 'video'])
+    .then(filesNamesToBeDeleted => {
+        Program.findByIdAndDelete(id)
+        .then((response) => {
+            deleteFiles(filesNamesToBeDeleted);
+            res.json({
+                response
+            })
+        })
+        .catch(error => {
+            console.log(err)
+            res.json({
+                response: "Failed to update"
+            })
         })
     })
-    .catch(error => {
+    .catch(err => {
         console.log(err)
-        res.json({
-            response: "Failed to update"
+        res.status(404).json({
+            response: null,
+            message: "No Item found"
         })
     })
 })

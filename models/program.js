@@ -44,7 +44,9 @@ const programSchema = mongoose.Schema({
                 Description : String,
 			    PriceInRs : Number
             }
-        ]
+        ],
+    images:[{}],
+    video: [{}],
 		 
 }, { timestamps : true})
 

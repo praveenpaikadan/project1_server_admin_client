@@ -3,15 +3,53 @@ const Exercise = require('../../models/exercise');
 const multer = require('multer');
 const {upload} = require('../../config/multer');
 
+const fs = require('fs');
 
 // routes
 
+const getMediaUrl = (filename) => {
+    let sep =  __dirname.includes('/')?'/':"\\"
+    let url = __dirname.split(sep)
+    url.pop()
+    url.pop()
+    return ([...url, 'static', 'media', filename].join(sep))
+}
+
+const deleteFiles = (files) => {
+    files.forEach(file => {
+        var mpath = getMediaUrl(file)
+        if (fs.existsSync(mpath)){
+            console.log(mpath)
+            fs.unlink(mpath, err => {
+                if (err) {
+                    console.log('Failed to delete :' + mpath)
+                }else{
+                    console.log('File Deleted : ' + mpath) 
+                };
+            });
+        }
+    });
+    return true
+}
+
+const getFilesToBeDeleted = async (id, contents) => {
+    let exercise = await Exercise.findById(id)
+    filesNamesToBeDeleted = []
+    for (content of contents) {
+        if (content !== null){
+            filesNamesToBeDeleted = [...filesNamesToBeDeleted, ...exercise[content].map(item => item.filename)]
+        }
+      }
+    return filesNamesToBeDeleted
+}
+
+
+// routes
 router.get('/:id', (req,res) => {
     console.log(req.params.id)
     // if there is no item null is returned.
     Exercise.findOne({"_id": req.params.id})
     .then(response => {
-        console.log(response)
         res.json({
             response
         })
@@ -34,7 +72,7 @@ router.get('/', (req,res) => {
     .catch(error => {
         console.log(err)
         res.json({
-            message: 'An error Ocuured while fetching excercise details'
+            response: 'An error Ocuured while fetching excercise details'
         })
     })
 })
@@ -66,7 +104,6 @@ router.post('/',
         data.instructions = instructions
         
         console.log(data.instructions)
-
         let exercise = new Exercise({
             exerciseName : data.exerciseName,
             instructions: data.instructions, 	
@@ -125,37 +162,50 @@ router.patch('/',
             data.video = [video];
         }
 
-        console.log(data.instructions)
-
         let conditions = { _id: data.id };
-        
-        Exercise.findByIdAndUpdate(conditions, data, { new: true})
+        getFilesToBeDeleted(data.id, [data.images?'images':null, data.video?'video':null])
+        .then((filesNamesToBeDeleted => {
+            Exercise.findByIdAndUpdate(conditions, data, { new: true})
+            .then((response) => {
+                deleteFiles(filesNamesToBeDeleted)
+                res.json({
+                    response
+                })
+            })
+    
+            .catch(err => {
+                console.log(err)
+                res.status(400).json({
+                    response: "Failed to update"
+                })
+            })
+                
+        }))
+});
+
+router.delete('/:id', (req, res, next)=>{
+    let id = req.params.id
+    getFilesToBeDeleted(id, ['images', 'video'])
+    .then(filesNamesToBeDeleted => {
+        Exercise.findByIdAndDelete(id)
         .then((response) => {
+            deleteFiles(filesNamesToBeDeleted);
             res.json({
                 response
             })
         })
-
-        .catch(err => {
+        .catch(error => {
             console.log(err)
-            res.status(400).json({
+            res.json({
                 response: "Failed to update"
             })
         })
     })
-
-router.delete('/', (req, res)=>{
-    let conditions = { _id: req.body.id};
-    Exercise.findByIdAndDelete(conditions)
-    .then((response) => {
-        res.json({
-            response
-        })
-    })
-    .catch(error => {
+    .catch(err => {
         console.log(err)
-        res.json({
-            response: "Failed to update"
+        res.status(404).json({
+            response: null,
+            message: "No Item found"
         })
     })
 })
