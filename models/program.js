@@ -14,7 +14,7 @@ const programSchema = mongoose.Schema({
     },
 
 	programName: String,  
-	coverImage: String,
+	image: [{}],
 	durationWeeks : Number,
 	daysPerWeek : Number,
 	level : String,
@@ -28,6 +28,7 @@ const programSchema = mongoose.Schema({
                     [
                         {
                             exerciseID : String,
+                            exerciseName : String,
                             reps : Number,
                             weightInKg: Number,
                             restInSec : Number,
@@ -40,9 +41,9 @@ const programSchema = mongoose.Schema({
 	subscription : 
         [
             {    
-                planType : String,
-                Description : String,
-			    PriceInRs : Number
+                planType : String, 
+                description : String,
+			    priceInRs : Number
             }
         ],
     images:[{}],

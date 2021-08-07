@@ -80,32 +80,21 @@ router.get('/', (req,res) => {
 router.post('/',
 
     upload.fields([{
-        name: 'images', maxCount: 2
+        name: 'images', maxCount: 1
         }, {
         name: 'video', maxCount: 1
         }]) ,
     
     (req, res) => {
-        console.log(JSON.parse(req.body.data))
+        // console.log(req.body)
+        var data = JSON.parse(req.body.data)
+        
+        data.images = req.files.images
+        data.videos = req.files.video
+        
+        console.log(data)
         res.end()
-        
-        // var image1 = req.files.images[0];
-        // var image2 = req.files.images[1];
-        // var video = req.files.video[0];
 
-        // var data = req.body;
-
-        // var instructions = []
-        
-        // for(let key in data){
-        //     if (key.split('-')[0] == 'step'){
-        //         instructions.push({step: key.split('-')[1],  description: data[key]})
-        //     }
-        // };
-
-        // data.instructions = instructions
-        
-        // console.log(data.instructions)
         // let program = new Program(data)
 
         // program.save()   
