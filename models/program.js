@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const programSchema = mongoose.Schema({
     meta : {
-        dateCreated:String,
         subscribers:[String],
         feedbacks:[
             {
@@ -14,7 +13,6 @@ const programSchema = mongoose.Schema({
     },
 
 	programName: String,  
-	image: [{}],
 	durationWeeks : Number,
 	daysPerWeek : Number,
 	level : String,
@@ -29,7 +27,6 @@ const programSchema = mongoose.Schema({
                         {
                             exerciseID : String,
                             exerciseName : String,
-                            reps : Number,
                             weightInKg: Number,
                             restInSec : Number,
                             target: Number ,
@@ -38,7 +35,7 @@ const programSchema = mongoose.Schema({
             }
         ],
         	
-	subscription : 
+	subscriptionOptions : 
         [
             {    
                 planType : String, 
@@ -47,7 +44,10 @@ const programSchema = mongoose.Schema({
             }
         ],
     images:[{}],
-    video: [{}],
+    videos: [{}],
+    active: Boolean,
+    type: Boolean,  // public = true, privet = false
+    privateClients: [{}],
 		 
 }, { timestamps : true})
 

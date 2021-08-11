@@ -93,22 +93,21 @@ router.post('/',
         data.videos = req.files.video
         
         console.log(data)
-        res.end()
 
-        // let program = new Program(data)
+        let program = new Program(data)
 
-        // program.save()   
-        // .then(response => {
-        //     res.json({
-        //         response
-        //     })
-        // })
-        // .catch(error => {
-        //     console.log('failed')
-        //     res.status(500).json({
-        //         response: "Failed"
-        //     })
-        // })
+        program.save()   
+        .then(response => {
+            res.json({
+                response
+            })
+        })
+        .catch(error => {
+            console.log('failed')
+            res.status(500).json({
+                response: "Failed"
+            })
+        })
 });
 
 router.patch('/',

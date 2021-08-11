@@ -40,6 +40,7 @@ programModel:
         ]
     },
 
+
 	programName: String,  
 	coverImage: String,
 	durationWeeks : Number,
@@ -47,7 +48,9 @@ programModel:
 	level : String,
 	goal: String,
 	equipment : [String],
-	schedule : 
+	video : {}
+    
+    schedule : 
 		[   
             { 
                 day : Number,
@@ -55,7 +58,9 @@ programModel:
                     [
                         {
                             exerciseID : String,
+                            exerciseName : String,
                             reps : Number,
+                            timeInSec : Number,
                             weightInKg: Number,
                             restInSec : Number,
                             target: Number ,
@@ -67,8 +72,8 @@ programModel:
         [
             {    
                 planType : String,
-                Description : String,
-			    PriceInRs : Number
+                description : String,
+			    priceInRs : Number
             }
         ]
 		 
