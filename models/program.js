@@ -48,6 +48,7 @@ const programSchema = mongoose.Schema({
     active: Boolean,
     type: Boolean,  // public = true, privet = false
     privateClients: [{}],
+    otherRemarks: String,
 		 
 }, { timestamps : true})
 

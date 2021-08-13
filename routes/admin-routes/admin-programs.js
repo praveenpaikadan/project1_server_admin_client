@@ -82,15 +82,15 @@ router.post('/',
     upload.fields([{
         name: 'images', maxCount: 1
         }, {
-        name: 'video', maxCount: 1
+        name: 'videos', maxCount: 1
         }]) ,
     
     (req, res) => {
-        // console.log(req.body)
+        console.log(req.body)
         var data = JSON.parse(req.body.data)
         
         data.images = req.files.images
-        data.videos = req.files.video
+        data.videos = req.files.videos
         
         console.log(data)
 
@@ -113,40 +113,29 @@ router.post('/',
 router.patch('/',
 
     upload.fields([{
-        name: 'images', maxCount: 2
+        name: 'images', maxCount: 1
         }, {
-        name: 'video', maxCount: 1
+        name: 'videos', maxCount: 1
         }]) ,
 
 
     (req,res) => {
-    
-        var data = req.body;
+        
 
-        var instructions = []         
-        for(let key in data){
-            if (key.split('-')[0] == 'step'){
-                instructions.push({step: key.split('-')[1],  description: data[key]})
-            }
-        };
-
-        if (instructions.length>0){
-            data.instructions = instructions
-        }
-
+        var data = JSON.parse(req.body.data)
+        var id = req.body.id
         if(req.files.images){
             var image1 = req.files.images[0];
-            var image2 = req.files.images[1];
-            data.images = [image1, image2];
+            data.images = [image1];
         }
 
-        if(req.files.video){
+        if(req.files.videos){
             var video = req.files.video[0];
-            data.video = [video];
+            data.videos = [video];
         }
 
-        let conditions = { _id: data.id };
-        getFilesToBeDeleted(data.id, [data.images?'images':null, data.video?'video':null])
+        let conditions = { _id: id };
+        getFilesToBeDeleted(data.id, [data.images?'images':null, data.videos?'videos':null])
         .then((filesNamesToBeDeleted => {
             Program.findByIdAndUpdate(conditions, data, { new: true})
             .then((response) => {
@@ -168,7 +157,7 @@ router.patch('/',
 
 router.delete('/:id', (req, res, next)=>{
     let id = req.params.id
-    getFilesToBeDeleted(id, ['images', 'video'])
+    getFilesToBeDeleted(id, ['images', 'videos'])
     .then(filesNamesToBeDeleted => {
         Program.findByIdAndDelete(id)
         .then((response) => {
