@@ -9,20 +9,17 @@ adminUserModel : {
 
 
 userModel: {
-	_Id
-	Auth : {
-        email: String
-        password : String
-        lastLoginTime :  
-    }
-	name : String 
-    avatar : Buffer
-	gender : Boolean
-	dob : String
-	height : Number
-	weight : Number
-    workOutData : ObjectID()
-}
+    name: String,
+    email: String,
+    hash: String,
+    salt: String,
+    avatar : {},
+	gender : String,
+	dob : String,
+	height : Number,
+	weight : Number,
+    workOutData : String,
+}, { timestamps : true})
 	
 
 programModel:

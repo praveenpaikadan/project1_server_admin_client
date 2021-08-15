@@ -4,6 +4,7 @@ const passport = require('passport');
 const adminUserRouter   = require('./admin-routes/admin-users')
 const adminProgramRouter   = require('./admin-routes/admin-programs')
 const adminExerciseRouter   = require('./admin-routes/admin-exercises');
+const adminClientRouter   = require('./admin-routes/admin-clients');
 const { isAuth, isAdmin  } = require('./authmiddleware');
 
 const getMediaUrl = () => {
@@ -40,7 +41,13 @@ router.get('/login', (req,res,next) => {
     res.render("admin-views/login")
 })
 
-router.post('/login', passport.authenticate('admin', {failureRedirect:'/admin/login', successRedirect:'/admin/dashboard'}))
+// router.post('/login', passport.authenticate('admin', {failureRedirect:'/admin/login', successRedirect:'/admin/dashboard'}))
+router.post('/login', passport.authenticate('admin'), (req, res) => {
+    var user = req.user
+    user.hash= null
+    user.salt= null
+    res.json({response: user})
+})
 
 
 // protected routes ----
@@ -64,6 +71,7 @@ router.use('/media', express.static(mediaUrl));
 router.use('/adminusers', adminUserRouter)
 router.use('/programs', adminProgramRouter)
 router.use('/exercises', adminExerciseRouter)
+router.use('/clients', adminClientRouter)
 
 //router.use('/clients', adminClientRouter)
 
