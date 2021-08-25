@@ -10,7 +10,7 @@ const customFields = {
 }
 
 const userVerifyCallback = (email, password, done) => {
-    User.findOne({ username: email})
+    User.findOne({ email: email})
     .then(user => {
         if(!user){
             return done(null, false)
@@ -62,9 +62,21 @@ passport.serializeUser((user, done) => {
 
 
 passport.deserializeUser((userId, done) => {
-    AdminUser.findById(userId)
+    User.findById(userId)
     .then(user => {
-        done(null,{admin: true, ...user})
+        if(user === null) {
+            AdminUser.findById(userId)
+            .then(user => {
+                console.log(user)
+                done(null,{admin: true, ...user})
+            })
+            .catch(err => {
+                done(err)
+            })        
+
+            return 
+        }
+        done(null,user)
     })
     .catch(err => done(err) )
 })

@@ -7,36 +7,6 @@ const passport = require('passport')
 
 // routes
 
-
-router.post('/add', (req, res, next) => {
-
-    let saltHash = genPassword(req.body.password)
-    let salt = saltHash.salt; 
-    let hash = saltHash.hash;
-    req.body.salt = salt
-    req.body.hash = hash
-    req.body.password = null
-
-    let newUser = new User(req.body)
-
-    console.log(newUser)
-    
-    newUser.save()   
-    .then(response => {
-        res.json({
-            status: 1,
-            response 
-        })
-    })
-
-    .catch(error => {
-        console.log(error)
-        res.json({
-            status: 0,
-        })
-    })
-})
-
 router.get('/', (req,res, next) => {
     User.find()
     .then(response => {

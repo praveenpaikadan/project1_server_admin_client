@@ -5,6 +5,7 @@ const session       = require('express-session');
 const MongoStore    = require('connect-mongo')(session);
 const bodyParser    = require('body-parser')
 var cors = require('cors');
+// const { tokenInterceptor } = require('./lib/tokenUtils')
 
 // database 
 const connection            = require('./config/database');
@@ -29,6 +30,10 @@ app.use(cors({
     origin: 'http://localhost:3000', // web front end server address
     //Origin: '*' // this will cause an error
 }))
+
+
+// to add cookies from x-access-token header in requests from mobile clients
+// app.use(tokenInterceptor)
 
 app.use(morgan('dev'))
 app.use(express.static("static"));
