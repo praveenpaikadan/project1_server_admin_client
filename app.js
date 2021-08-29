@@ -4,8 +4,9 @@ const passport      = require('passport')
 const session       = require('express-session');
 const MongoStore    = require('connect-mongo')(session);
 const bodyParser    = require('body-parser')
+const {tokenInterceptor} = require('./lib/tokenUtils')
+
 var cors = require('cors');
-// const { tokenInterceptor } = require('./lib/tokenUtils')
 
 // database 
 const connection            = require('./config/database');
@@ -44,6 +45,8 @@ app.use(express.urlencoded({ extended: true }));
 // templating
 app.set('views', './views')
 app.set('view engine', 'ejs')
+
+app.use(tokenInterceptor)
 // keep the order : express-session => passport.initialize => passsport.session
 
 // making session store in the database using existing connection
