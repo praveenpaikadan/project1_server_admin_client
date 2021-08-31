@@ -87,11 +87,18 @@ router.post('/',
     
     (req, res) => {
 
-        var image1 = req.files.images[0];
-        var image2 = req.files.images[1];
-        var video = req.files.video[0];
-
         var data = req.body;
+
+        if(req.files.images){
+            var image1 = req.files.images[0];
+            var image2 = req.files.images[1];
+            data.images = [image1, image2];
+        }
+
+        if(req.files.video){
+            var video = req.files.video[0];
+            data.video = [video];
+        }
 
         var instructions = []
         
@@ -103,15 +110,8 @@ router.post('/',
 
         data.instructions = instructions
         
-        console.log(data.instructions)
-        let exercise = new Exercise({
-            exerciseName : data.exerciseName,
-            instructions: data.instructions, 	
-            images:[image1, image2],
-            video: [video],
-            restInSec: data.restInSec,  
-            repetitionType: data.repetitionType,
-        })
+        console.log(data)
+        let exercise = new Exercise(data)
 
         exercise.save()   
         .then(response => {
