@@ -63,29 +63,20 @@ const {upload} = require('../../config/multer');
 // })
 
 router.get('/', (req,res) => {
+
     
-    res.json({
-        response: 
-            [
-                {name: 'Praveen', activeProgram: 'Strength Training', programType:'Complete', lastTracked: '01/01/2021',expiryData: '10/01/2021', '_id': '4646456464sd6wef4s'},
-                {name: 'Olivia',activeProgram: 'Strength Training', programType:'Complete', lastTracked: '01/01/2021',expiryData: '10/01/2021',  '_id': '5ce6456464sd6wesfvd'},
-                {name: 'Moota',activeProgram: 'Strength Training', programType:'Complete', lastTracked: '01/01/2021',expiryData: '10/01/2021',  '_id': '464dfev6dfs464sd6wef4s'},
-                
-            ]
+    Users.find().select("_id, name").sort("name")
+    .then(response => {
+        res.json({
+            response
+        })
     })
-    
-    // Program.find()
-    // .then(response => {
-    //     res.json({
-    //         response
-    //     })
-    // })
-    // .catch(error => {
-    //     console.log(err)
-    //     res.json({
-    //         response: 'An error Ocuured while fetching excercise details'
-    //     })
-    // })
+    .catch(error => {
+        console.log(err)
+        res.json({
+            response: 'An error Ocuured while fetching excercise details'
+        })
+    })
 })
 
 // router.post('/',

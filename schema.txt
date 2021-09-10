@@ -1,3 +1,4 @@
+//Done
 adminUserModel : {
     _Id
     name: String
@@ -7,7 +8,7 @@ adminUserModel : {
     previlage: String
 }
 
-
+// Done
 userModel: {
     name: String,
     email: String,
@@ -22,6 +23,7 @@ userModel: {
 }, { timestamps : true})
 	
 
+//Done
 programModel:
     {   
         meta : {
@@ -77,6 +79,7 @@ programModel:
 })		 
 }		
 
+// Done
 exerciseModel :{
 	id_
     exeriseID: Number
@@ -96,37 +99,26 @@ exerciseModel :{
 	repetitionType: String	  
 }
 
+
 workoutDataModel: {
     _id
-    ProgramList:[{
-        program: ObjectID(programDataModel)
-        uniqueProgramKey : String
-        planType: String 
-        status: String
-        lastDay: Number
-    }]
-
-    history:[{
-        uniqueProgramKey: String
+    programName: String,
+    programID: mongoose.Schema.Types.ObjectId,
+    userID: mongoose.Schema.Types.ObjectId,
+    history:[{        
         exerciseHistory:[{
             day: Number,
-            exercises:[ObjectID(exerciseInstanceModel)
+            timeInSecs: Number,
+            finishTime: String,
+            exercises:[ {
+                ref: 'exercise instance'
+                exerciseNumber: Number
+                exerciseID: mongoose.Schema.Types.ObjectId
+                reps: [String]
+                repetitionType: String
+            }  ]
         }]
     }]
-	}
-
-
-
-exerciseInstanceModel:{
-    _Id
-    user: ObjectID(userModel)
-    uniqueProgramKey: String
-    exercise: ObjectID(exerciseModel)
-    date: String
-    day: Number
-    set: Number
-    durationInSec: Number 
 }
-
 
 

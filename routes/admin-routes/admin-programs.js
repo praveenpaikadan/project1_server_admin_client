@@ -134,6 +134,7 @@ router.patch('/',
             data.videos = [video];
         }
 
+        console.log(data.privateClients)
         let conditions = { _id: id };
         getFilesToBeDeleted(data.id, [data.images?'images':null, data.videos?'videos':null])
         .then((filesNamesToBeDeleted => {

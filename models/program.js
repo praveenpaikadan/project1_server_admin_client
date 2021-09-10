@@ -29,7 +29,8 @@ const programSchema = mongoose.Schema({
                             exerciseName : String,
                             weightInKg: Number,
                             restInSec : Number,
-                            target: Number ,
+                            target: [],  
+                            repetitionType: String
                         }
                     ],
             }
@@ -47,7 +48,7 @@ const programSchema = mongoose.Schema({
     videos: [{}],
     active: Boolean,
     type: Boolean,  // public = true, privet = false
-    privateClients: [{}],
+    privateClients: [{userID: String,  name: String}],
     otherRemarks: String,
 		 
 }, { timestamps : true})

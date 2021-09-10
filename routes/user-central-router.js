@@ -4,6 +4,8 @@ const passport = require('passport')
 const User = require('../models/user')
 const { genPassword } = require('../lib/passwordUtils')
 const { isAuth } = require('./authmiddleware')
+const WorkoutRouter = require('./user-routes/workout-data')
+const SubscriptionRouter = require('./user-routes/subscription')
 
 
 router.use((req, res, next) => {
@@ -108,7 +110,8 @@ router.get('/logout', (req,res,next) => {
 router.use(isAuth)
 
 router.use('/user', UserRouter)
-// router.use('/programs', adminProgramRouter)
+router.use('/workoutdata', WorkoutRouter)
+router.use('/subscription', SubscriptionRouter)
 // router.use('/exercises', adminExerciseRouter)
 
 //router.use('/clients', adminClientRouter)

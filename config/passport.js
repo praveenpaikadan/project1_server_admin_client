@@ -67,7 +67,7 @@ passport.deserializeUser((userId, done) => {
         if(user === null) {
             AdminUser.findById(userId)
             .then(user => {
-                console.log(user)
+                // console.log(user)
                 done(null,{admin: true, ...user})
             })
             .catch(err => {

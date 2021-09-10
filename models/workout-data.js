@@ -1,46 +1,25 @@
-// workoutDataModel: {
+const mongoose = require('mongoose');
 
-//     const mongoose = require('mongoose');
+const workoutDataSchema =  mongoose.Schema({
+        programName: String,
+        programID: mongoose.Schema.Types.ObjectId,
+        userID: mongoose.Schema.Types.ObjectId,
+        startDate: String,
+        endDate: String,
+        history:[{
+                ref: {type: String, default: 'dayInst'},
+                day: Number,
+                time:String,
+                exercises:[{
+                    ref: {type: String, default: 'exInst'},
+                    exerciseNumber: Number,
+                    exerciseID: mongoose.Schema.Types.ObjectId,
+                    reps: [String],
+                    repetitionType: String
+            }]
+        }]
+    }, { timestamps : true})
 
-//     const workoutDataSchema =  mongoose.Schema({
-//         ProgramList:[{
-//             program: ObjectId,
-//             uniqueProgramKey : String,
-//             planType: String ,
-//             status: String,
-//             lastDay: Number
-//             }],
-    
-//             history:[{
-//                 uniqueProgramKey: String,
-//                 exerciseHistory:[{
-//                 day: Number,
-//                 exercises:[ObjectId]
-//             }]
-//         }]
-//         }, { timestamps : true})
-    
-//     const WorkoutData = mongoose.model('workoutData', workoutDataSchema)
-    
-//     module.exports = WorkoutData    
-    
-    
-    
-    
+const WorkoutData = mongoose.model('WorkoutData', workoutDataSchema)
 
-//     ProgramList:[{
-//         program: ObjectID(programDataModel)
-//         uniqueProgramKey : String
-//         planType: String 
-//         status: String
-//         lastDay: Number
-//     }]
-
-//     history:[{
-//         uniqueProgramKey: String
-//         exerciseHistory:[{
-//             day: Number,
-//             exercises:[ObjectID(exerciseInstanceModel)
-//         }]
-//     }]
-// 	}
+module.exports = WorkoutData;

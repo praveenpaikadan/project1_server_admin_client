@@ -14,6 +14,7 @@ const exerciseSchema = mongoose.Schema({
 	restInSec: Number,  
 	repetitionType: String,
     active: Boolean,
+    equipments: [String],
 
 }, { timestamps : true})
 

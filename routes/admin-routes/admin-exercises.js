@@ -108,9 +108,10 @@ router.post('/',
             }
         };
 
+        data.equipments = data.equipments.split(',')
+
         data.instructions = instructions
         
-        console.log(data)
         let exercise = new Exercise(data)
 
         exercise.save()   
@@ -161,6 +162,11 @@ router.patch('/',
             var video = req.files.video[0];
             data.video = [video];
         }
+
+        data.equipments = data.equipments.split(',')
+        console.log(data)
+
+    
 
         let conditions = { _id: data.id };
         getFilesToBeDeleted(data.id, [data.images?'images':null, data.video?'video':null])
