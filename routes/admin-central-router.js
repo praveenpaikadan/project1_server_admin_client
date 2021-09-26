@@ -7,14 +7,12 @@ const adminExerciseRouter   = require('./admin-routes/admin-exercises');
 const adminClientRouter   = require('./admin-routes/admin-clients');
 const { isAuth, isAdmin  } = require('./authmiddleware');
 
-const getMediaUrl = () => {
+const getMediaPath = (type) => {
     let sep =  __dirname.includes('/')?'/':"\\"
     let url = __dirname.split(sep)
     url.pop()
-    return ([...url, 'static', 'media'].join(sep))
+    return ([...url, 'static', type?'media':'protected-media'].join(sep))
 }
-
-const mediaUrl = getMediaUrl()
 
 
 
@@ -67,7 +65,7 @@ router.get('/logout', (req,res,next) => {
 })
 
 
-router.use('/media', express.static(mediaUrl));
+router.use('/media', express.static(getMediaPath(false)), express.static(getMediaPath(true)));
 router.use('/adminusers', adminUserRouter)
 router.use('/programs', adminProgramRouter)
 router.use('/exercises', adminExerciseRouter)

@@ -124,19 +124,22 @@ router.patch('/',
 
         var data = JSON.parse(req.body.data)
         var id = req.body.id
+
+        console.log(req.files)
         if(req.files.images){
+            console.log('..................................')
             var image1 = req.files.images[0];
             data.images = [image1];
         }
 
         if(req.files.videos){
-            var video = req.files.video[0];
+            var video = req.files.videos[0];
             data.videos = [video];
         }
 
         console.log(data.privateClients)
         let conditions = { _id: id };
-        getFilesToBeDeleted(data.id, [data.images?'images':null, data.videos?'videos':null])
+        getFilesToBeDeleted(id, [data.images?'images':null, data.videos?'videos':null])
         .then((filesNamesToBeDeleted => {
             Program.findByIdAndUpdate(conditions, data, { new: true})
             .then((response) => {

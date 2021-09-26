@@ -1,7 +1,7 @@
 const router   = require('express').Router();
 const Exercise = require('../../models/exercise');
 const multer = require('multer');
-const {upload} = require('../../config/multer');
+const {protected_upload} = require('../../config/multer');
 
 const fs = require('fs');
 
@@ -12,7 +12,7 @@ const getMediaUrl = (filename) => {
     let url = __dirname.split(sep)
     url.pop()
     url.pop()
-    return ([...url, 'static', 'media', filename].join(sep))
+    return ([...url, 'static', 'protected-media', filename].join(sep))
 }
 
 const deleteFiles = (files) => {
@@ -79,7 +79,7 @@ router.get('/', (req,res) => {
 
 router.post('/',
 
-    upload.fields([{
+    protected_upload.fields([{
         name: 'images', maxCount: 2
         }, {
         name: 'video', maxCount: 1
@@ -120,6 +120,7 @@ router.post('/',
                 response
             })
         })
+        
         .catch(error => {
             console.log('failed')
             res.status(500).json({
@@ -130,7 +131,7 @@ router.post('/',
 
 router.patch('/',
 
-    upload.fields([{
+    protected_upload.fields([{
         name: 'images', maxCount: 2
         }, {
         name: 'video', maxCount: 1

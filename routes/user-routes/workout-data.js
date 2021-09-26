@@ -1,23 +1,12 @@
+const { getWorkoutData } = require('../../controllers/workoutdata-controller');
+const Program = require('../../models/program');
 const { insertMany, deleteOne } = require('../../models/workout-data');
 const WorkoutData = require('../../models/workout-data')
 const router   = require('express').Router();
 
-router.get('/', (req, res) => {
-    var user = req.user._doc._id
-    WorkoutData.findOne({"userID": user})
-    .then(response => {
-        res.json({
-            response
-        })
-    })
-    .catch(error => {
-        // console.log(error)
-        res.json({
-            errorMessage: 'An error Ocuured while fetching workout details'
-        })
-    })
+router.get('/', getWorkoutData, (req, res) => {
+    res.json(req.workoutData)
 })
-
 
 // This route pushes a days workout to the workout history
 router.post('/push', (req, res) => {

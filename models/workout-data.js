@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const workoutDataSchema =  mongoose.Schema({
-        programName: String,
         programID: mongoose.Schema.Types.ObjectId,
         userID: mongoose.Schema.Types.ObjectId,
         startDate: String,
         endDate: String,
+        currentDay: Number,
         history:[{
                 ref: {type: String, default: 'dayInst'},
                 day: Number,

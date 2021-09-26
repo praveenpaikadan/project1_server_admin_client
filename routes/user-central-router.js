@@ -6,6 +6,14 @@ const { genPassword } = require('../lib/passwordUtils')
 const { isAuth } = require('./authmiddleware')
 const WorkoutRouter = require('./user-routes/workout-data')
 const SubscriptionRouter = require('./user-routes/subscription')
+const express = require('express')
+
+const getMediaPath = () => {
+    let sep =  __dirname.includes('/')?'/':"\\"
+    let url = __dirname.split(sep)
+    url.pop()
+    return ([...url, 'static', 'media'].join(sep))
+}
 
 
 router.use((req, res, next) => {
@@ -107,6 +115,8 @@ router.get('/logout', (req,res,next) => {
     })
 })
 
+
+router.use('/media', express.static(getMediaPath()));  // publically available media only
 router.use(isAuth)
 
 router.use('/user', UserRouter)

@@ -1,9 +1,6 @@
 const router   = require('express').Router();
 const User = require('../../models/user')
-const { isAuth } = require('../authmiddleware'); 
-const { genPassword } = require('../../lib/passwordUtils')
-const passport = require('passport');
-const { getAllData } = require('../../controllers/sync-controller');
+const { getWorkoutData } = require('../../controllers/workoutdata-controller');
 
 
 // routes
@@ -21,16 +18,11 @@ router.get('/data', (req, res) => {
     })
 })
 
-router.get('/updatelocal', (req, res) => {
-    getAllData(req)
-    .then((response) => {
-        if (response){res.json(response)}
-        else{res.status(500).json({response: "Failed"})}
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(500).json({response: "Failed"})
-    })
+router.get('/updatelocal', getWorkoutData, (req, res) => {
+    user = req.user._doc
+    user.salt = null
+    user.hash = null 
+    res.json({credentials: user, workoutData: req.workoutData })
 })
 
 router.patch('/data',(req,res) => {
