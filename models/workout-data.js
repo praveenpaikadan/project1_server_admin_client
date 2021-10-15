@@ -9,11 +9,12 @@ const workoutDataSchema =  mongoose.Schema({
         history:[{
                 ref: {type: String, default: 'dayInst'},
                 day: Number,
-                time:String,
+                date:String,
                 exercises:[{
                     ref: {type: String, default: 'exInst'},
                     exerciseNumber: Number,
                     exerciseID: mongoose.Schema.Types.ObjectId,
+                    exerciseName: String,
                     reps: [String],
                     repetitionType: String
             }]

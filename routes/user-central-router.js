@@ -8,11 +8,11 @@ const WorkoutRouter = require('./user-routes/workout-data')
 const SubscriptionRouter = require('./user-routes/subscription')
 const express = require('express')
 
-const getMediaPath = () => {
+const getMediaPath = (secured=false) => {
     let sep =  __dirname.includes('/')?'/':"\\"
     let url = __dirname.split(sep)
     url.pop()
-    return ([...url, 'static', 'media'].join(sep))
+    return ([...url, 'static', `${!secured?'media':'protected-media'}`].join(sep))
 }
 
 
@@ -119,11 +119,10 @@ router.get('/logout', (req,res,next) => {
 router.use('/media', express.static(getMediaPath()));  // publically available media only
 router.use(isAuth)
 
+router.use('/protected-media', express.static(getMediaPath(secured=true)));  // protected media only
 router.use('/user', UserRouter)
 router.use('/workoutdata', WorkoutRouter)
 router.use('/subscription', SubscriptionRouter)
-// router.use('/exercises', adminExerciseRouter)
 
-//router.use('/clients', adminClientRouter)
 
 module.exports = router

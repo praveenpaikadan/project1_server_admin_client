@@ -3,9 +3,23 @@ const Program = require('../../models/program');
 const { insertMany, deleteOne } = require('../../models/workout-data');
 const WorkoutData = require('../../models/workout-data')
 const router   = require('express').Router();
+const Exercise = require('../../models/exercise')
 
 router.get('/', getWorkoutData, (req, res) => {
     res.json(req.workoutData)
+})
+
+router.get('/exercise/:id', (req,res) => {
+    Exercise.findOne({"_id": req.params.id})
+    .then(response => {
+        res.json(response)
+    })
+    .catch(error => {
+        console.log(err)
+        res.status(500).json({
+            message: 'An error Ocuured while fetching excercise details'
+        })
+    })
 })
 
 // This route pushes a days workout to the workout history
