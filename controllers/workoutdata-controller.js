@@ -11,6 +11,7 @@ getWorkoutData = async (req, res, next) => {
             next()
             return
         }
+        
         var programID = response.programID 
         Program.findById(programID).select({meta: 0, createdAt: 0, goal: 0, otherRemarks: 0, subscriptionOptions: 0})
         .then(program => {

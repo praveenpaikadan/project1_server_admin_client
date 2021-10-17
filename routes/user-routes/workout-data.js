@@ -24,16 +24,11 @@ router.get('/exercise/:id', (req,res) => {
 
 // This route pushes a days workout to the workout history
 router.post('/push', (req, res) => {
-    var wodata = req.body.workoutData
+    var wodata = req.body.dayWorkoutData
     var day = wodata.day
-    var userID = req.user._doc._id
-    var woID = req.body.workoutID
+    var woID = wodata.workoutID
 
     console.log(wodata)
-
-    if(userID != req.body.userID){
-        res.status(401).json({errorMessage: "Unauthorised Action by the user"})
-    }
 
 
     // TBD => include functions to Examine recieved wodata then end or continue with request

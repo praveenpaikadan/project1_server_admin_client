@@ -9,8 +9,9 @@ const workoutDataSchema =  mongoose.Schema({
         history:[{
                 ref: {type: String, default: 'dayInst'},
                 day: Number,
-                date:String,
-                exercises:[{
+                date: String,
+                dateCompleted:String,
+                workout:[{
                     ref: {type: String, default: 'exInst'},
                     exerciseNumber: Number,
                     exerciseID: mongoose.Schema.Types.ObjectId,

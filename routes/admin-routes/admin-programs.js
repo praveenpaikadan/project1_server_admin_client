@@ -125,9 +125,7 @@ router.patch('/',
         var data = JSON.parse(req.body.data)
         var id = req.body.id
 
-        console.log(req.files)
         if(req.files.images){
-            console.log('..................................')
             var image1 = req.files.images[0];
             data.images = [image1];
         }
