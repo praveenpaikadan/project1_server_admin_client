@@ -75,4 +75,44 @@ router.post('/push', (req, res) => {
     .catch(err => console.log(err))
 })
 
+
+router.post('/bulk', (req, res) => {
+    var dataArray = req.body.bulkDayWorkoutData
+    if(dataArray){
+        dataArray.forEach(data => {
+            var wodata = data
+            var day = wodata.day
+            var woID = wodata.workoutID
+
+            console.log(wodata)
+
+            WorkoutData.bulkWrite([
+                {
+                updateOne:{
+                    filter: { _id: woID},
+                    update: { '$pull': {'history': {day: day}}}}
+                },
+                {
+                updateOne:{
+                    filter: { _id: woID},
+                    update: {'$addToSet': {'history': wodata}}}
+                }
+                ], {ordered: true})
+
+            .then(result => {})
+            .catch(err => console.log(err))
+                res.end()
+                return
+                });
+    }else{
+        res.status(400).json({message: 'Bad request'})
+    }
+    res.end() 
+        
+})
+
+
+
 module.exports = router
+
+
