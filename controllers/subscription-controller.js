@@ -5,7 +5,7 @@ const User = require('../models/user')
 const Program = require('../models/program')
 
 const getAvailablePrograms = (req, res, next) => {
-    console.log(req)
+    // console.log(req)
     var userID = req.user._doc?req.user._doc._id:"1234"
     var name = req.user._doc.name
     console.log({_id: userID, name: name})

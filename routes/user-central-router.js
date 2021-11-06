@@ -109,6 +109,7 @@ router.post('/login', passport.authenticate('user'), (req, res) => {
 })
 
 router.get('/logout', (req,res,next) => {
+    console.log('Reacched logout route')
     req.logOut()
     req.session.destroy((err)=> {
         if(!err){res.send('Logged out')}
