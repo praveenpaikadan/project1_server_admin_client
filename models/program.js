@@ -17,11 +17,14 @@ const programSchema = mongoose.Schema({
 	daysPerWeek : Number,
 	level : String,
 	goal: String,  
+    category: String,
 	equipments : [String],
 	schedule : 
 		[   
             { 
                 day : Number,
+                timeInMins: Number,
+                targetBodyPart: String,
                 exercises : 
                     [
                         {

@@ -1,5 +1,18 @@
 const Program = require('../models/program');
+const Exercise = require('../models/exercise')
 const WorkoutData = require('../models/workout-data')
+
+calsPerRepObj = async () => {
+    try{
+        returnVal = {}
+        var list = await Exercise.find({}, {_id: 1, calsPerRep: 1})
+        for (var i=0; i<list.length; i++){returnVal[list[i]['_id']] = list[i]['calsPerRep']}
+        return returnVal
+    }catch{
+        return false
+    }  
+}
+
 
 getWorkoutData = async (req, res, next) => {
     var user = req.user._doc._id
@@ -14,9 +27,11 @@ getWorkoutData = async (req, res, next) => {
         
         var programID = response.programID 
         Program.findById(programID).select({meta: 0, createdAt: 0, goal: 0, otherRemarks: 0, subscriptionOptions: 0})
-        .then(program => {
+        .then(async program => {
             if(program){
                 response._doc.program = program._doc
+                var calsPerRepList = await calsPerRepObj()
+                response._doc.calsPerRepList = calsPerRepList
                 req.workoutData = response._doc
                 next()
                 return
@@ -38,6 +53,7 @@ getWorkoutData = async (req, res, next) => {
         })
     })
 }
+
 
 
 const makeNewWorkoutData = (req, res, next) => {

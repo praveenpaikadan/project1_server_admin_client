@@ -24,4 +24,6 @@ const getAvailablePrograms = (req, res, next) => {
     .catch(err => res.status(502).json({errorMessage: "Failed to get avialble programs for you"}))
 }
 
+
+
 module.exports = { getAvailablePrograms }
