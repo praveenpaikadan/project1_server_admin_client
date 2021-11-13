@@ -84,7 +84,6 @@ router.post('/',
         }, {
         name: 'video', maxCount: 1
         }]) ,
-    
     (req, res) => {
 
         var data = req.body;
@@ -136,7 +135,6 @@ router.patch('/',
         }, {
         name: 'video', maxCount: 1
         }]) ,
-
 
     (req,res) => {
     

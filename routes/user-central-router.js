@@ -16,10 +16,10 @@ const getMediaPath = (secured=false) => {
 }
 
 
-router.use((req, res, next) => {
-    console.log(req.headers.cookie)
-    next()
-})
+// router.use((req, res, next) => {
+//     console.log(req.body)
+//     next()
+// })
 
 
 router.post('/checkemail', (req, res, next) => {

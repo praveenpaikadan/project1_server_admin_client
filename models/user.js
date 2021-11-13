@@ -12,6 +12,8 @@ const UserSchema =  mongoose.Schema({
 	height : Number,
 	weight : Number,
     workOutData : String,
+    phone: String,
+    profilePhoto: {}
 }, { timestamps : true})
 
 const User = mongoose.model('user', UserSchema)

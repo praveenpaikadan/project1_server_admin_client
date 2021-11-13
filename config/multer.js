@@ -28,8 +28,22 @@ var protected_storage = multer.diskStorage({
     }
   });
 
+var profile_storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, './static/profile-photos');
+  },
+  filename: function(req, file, callback) {
+    var date = new Date()
+    var arr = file.originalname.split('.')
+    var extension = arr.length>1?arr[arr.length-1]:''
+    let userID = req.session.passport.user
+      callback(null, userID+'-'+date.getTime() +'.'+extension );
+  }
+})
+
 var upload = multer({ storage: storage })
 var protected_upload = multer({ storage: protected_storage })
+var profile_upload = multer({ storage: profile_storage })
 
 
-module.exports =  {upload, protected_upload} 
+module.exports =  {upload, protected_upload, profile_upload} 

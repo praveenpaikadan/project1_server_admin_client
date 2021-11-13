@@ -47,6 +47,11 @@ app.use(express.urlencoded({ extended: true }));
 // app.set('views', './views')
 // app.set('view engine', 'ejs')
 
+// app.use((req, res, next) => {
+//     console.log(req.headers)
+//     next()
+// })
+
 app.use(tokenInterceptor)
 // keep the order : express-session => passport.initialize => passsport.session
 
