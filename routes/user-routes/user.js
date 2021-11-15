@@ -44,7 +44,7 @@ const deleteFiles = (files) => {
 
 const getFilesToBeDeleted = async (id, content) => {
     let user = await User.findById(id)
-    return [user[content].filename]
+    return user[content]?[user[content].filename]:[]
 }
 
 // routes
@@ -93,13 +93,17 @@ router.use('/getprofilephoto',
     express.static(getMediaPath())
     );  
 
-router.post('/profilephoto',     
+router.post('/profilephoto', 
+
+    // (req, res, next) => { console.log(req.body);res.end()},   
 
     profile_upload.fields([{
         name: 'profilephoto', maxCount: 1
         }]) ,
 
     (req, res) => {
+
+        console.log(req.body)
 
         let userID = req.session.passport.user
         console.log(userID)
@@ -108,9 +112,9 @@ router.post('/profilephoto',
             User.findOneAndUpdate({"_id": userID}, {profilePhoto: req.files.profilephoto[0]}, {new: true})
             .then((response) => {
                 deleteFiles(filesNamesToBeDeleted)
-                    res.json({
-                        response
-                    })
+                res.json(
+                    response
+                )
             })
             .catch(err => {
                 console.log(err)
