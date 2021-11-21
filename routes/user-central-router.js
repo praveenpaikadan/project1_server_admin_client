@@ -6,6 +6,7 @@ const { genPassword } = require('../lib/passwordUtils')
 const { isAuth } = require('./authmiddleware')
 const WorkoutRouter = require('./user-routes/workout-data')
 const SubscriptionRouter = require('./user-routes/subscription')
+const GeneralRouter = require('./user-routes/general')
 const express = require('express')
 
 const getMediaPath = (secured=false) => {
@@ -124,6 +125,6 @@ router.use('/protected-media', express.static(getMediaPath(secured=true)));  // 
 router.use('/user', UserRouter)
 router.use('/workoutdata', WorkoutRouter)
 router.use('/subscription', SubscriptionRouter)
-
+router.use('/general', GeneralRouter)
 
 module.exports = router

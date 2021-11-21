@@ -83,7 +83,7 @@ router.post('/delete-day', (req, res) => {
     var woID = req.body.data.workoutID
     var userID = req.user._doc?req.user._doc._id:"111111111111111111111111"
 
-    WorkoutData.findOneAndUpdate( // select your doc in moongo
+    WorkoutData.findOneAndUpdate( // select doc in moongo
         {_id: woID, userID: userID }, // your query, usually match by _id
         { $pull: { history: { day: day } } }, // item(s) to match from array you want to pull/remove
         { multi: false } // set this to true if you want to remove multiple elements.
@@ -100,11 +100,14 @@ router.post('/delete-day', (req, res) => {
 
 router.post('/bulk', (req, res) => {            // handle pending uploads due to network error or server or database failure. The req data is an array of both data to be pushed to 
                                                 // history and data to be removed from the history, which is differentiated by the key 'toDel'.
-    
-    
     console.log(req.body.bulkDayWorkoutData)                                       
     var userID = req.user._doc?req.user._doc._id:"111111111111111111111111"
     var dataArray = req.body.bulkDayWorkoutData
+
+    if(!dataArray[0]){
+        res.status(400).end()
+        return
+    }
     var woID = dataArray[0].workoutID
 
     
