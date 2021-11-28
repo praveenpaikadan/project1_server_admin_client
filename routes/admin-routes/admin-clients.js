@@ -1,7 +1,8 @@
 const router   = require('express').Router();
-const Users = require('../../models/user');
+const User = require('../../models/user');
 const multer = require('multer');
 const {upload} = require('../../config/multer');
+const Program = require('../../models/program');
 
 // const fs = require('fs');
 
@@ -63,9 +64,7 @@ const {upload} = require('../../config/multer');
 // })
 
 router.get('/', (req,res) => {
-
-    
-    Users.find().select("_id, name").sort("name")
+    User.find().select({_id:1, email: 1, name:1}).sort("name")
     .then(response => {
         res.json({
             response
@@ -77,6 +76,20 @@ router.get('/', (req,res) => {
             response: 'An error Ocuured while fetching excercise details'
         })
     })
+})
+
+// not complete --------------
+router.get('/assigned-programs/:id', (req,res) => {
+    var userID = req.params['id']
+
+    const selectOptions = { active: 1, _id:1, programName: 1 }
+
+    // Program.find().or([{active: true, type: true}, {active: true, type: false, privateClients: { $elemMatch: { _id: userID }}}])
+    
+    Program.find().or([{type: true}, {type: false, "privateClients.userID" :userID }])
+    .select(selectOptions)
+    .then(response => res.json(response))
+    .catch(err => res.status(502).json({errorMessage: "Failed to get avialble programs for you"}))
 })
 
 // router.post('/',
