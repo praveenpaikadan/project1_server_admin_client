@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 const dietPlanSchema = mongoose.Schema({
 	planName : String,
 	description: String,
-    client: {userID: String, userName: String, programID: String, programName: String},
+    water: Number,
+    ss: {type: Boolean, default: false},
+    client: {userID: String, userName: String, email: String, programID: String, programName: String},
     dietPlan: [{
         day: Number, 
         target: [{
@@ -14,12 +16,12 @@ const dietPlanSchema = mongoose.Schema({
         plan: [{
             title:String,
             time: Number,
-            contents: [String]
+            contents: [{content: String}]
         }]
     }],
     active: Boolean
 
 }, { timestamps : true})
 
-const DietPlan = mongoose.model('Exercise', dietPlanSchema)
+const DietPlan = mongoose.model('DietPlan', dietPlanSchema)
 module.exports = DietPlan

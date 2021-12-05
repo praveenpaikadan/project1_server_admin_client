@@ -39,9 +39,13 @@ app.use(cors({
 app.use(morgan('dev'))
 app.use(express.static("static"));
 
-app.use(express.json());  // comment this out if any anomaly
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());  // comment this out if any anomaly
+// app.use(bodyParser.json());
+// app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json({limit: '5mb'}));  // comment this out if any anomaly
+app.use(bodyParser.json({limit: '5mb'}));
+app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
 // templating
 // app.set('views', './views')

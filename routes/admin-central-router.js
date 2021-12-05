@@ -7,6 +7,7 @@ const adminExerciseRouter   = require('./admin-routes/admin-exercises');
 const adminClientRouter   = require('./admin-routes/admin-clients');
 const { isAuth, isAdmin  } = require('./authmiddleware');
 const adminContactRouter = require('./admin-routes/admin-contact')
+const adminDietPlanRouter = require('./admin-routes/admin-diet-plans')
 
 const getMediaPath = (type) => {
     let sep =  __dirname.includes('/')?'/':"\\"
@@ -72,6 +73,7 @@ router.use('/programs', adminProgramRouter)
 router.use('/exercises', adminExerciseRouter)
 router.use('/clients', adminClientRouter)
 router.use('/contact', adminContactRouter)
+router.use('/diet-plan', adminDietPlanRouter)
 
 
 

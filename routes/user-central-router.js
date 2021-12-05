@@ -7,6 +7,7 @@ const { isAuth } = require('./authmiddleware')
 const WorkoutRouter = require('./user-routes/workout-data')
 const SubscriptionRouter = require('./user-routes/subscription')
 const GeneralRouter = require('./user-routes/general')
+const DietPlanRouter = require('./user-routes/diet-plan')
 const express = require('express')
 
 const getMediaPath = (secured=false) => {
@@ -126,5 +127,6 @@ router.use('/user', UserRouter)
 router.use('/workoutdata', WorkoutRouter)
 router.use('/subscription', SubscriptionRouter)
 router.use('/general', GeneralRouter)
+router.use('/diet-plan', DietPlanRouter)
 
 module.exports = router
