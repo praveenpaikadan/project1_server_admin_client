@@ -9,6 +9,9 @@ const SubscriptionRouter = require('./user-routes/subscription')
 const GeneralRouter = require('./user-routes/general')
 const DietPlanRouter = require('./user-routes/diet-plan')
 const express = require('express')
+const {sendVerificationEmail, verifyEmail} = require('../controllers/email-verfication')
+
+
 
 const getMediaPath = (secured=false) => {
     let sep =  __dirname.includes('/')?'/':"\\"
@@ -24,6 +27,11 @@ const getMediaPath = (secured=false) => {
 // })
 
 
+// Emai lVerfication works like this - On signing upth euser enter the emil, password , name the on pressing sign up data gets posted to the below route. The server will send a verification code to the email, and stroe email, salt, hash of this code in the database.
+// on the nest screen user enter this code, the code will be posted to check codee and the email is send to the /cjheckcode route -> the route eill identify the document item based on the email and compare the hash of the code received. 
+// on matching, the route will return a second code to the client -> this code is hashed and saved in the same object as before. The client attach this code to the final user creation post to validate the entry
+// The purpose of 2 codes is to prevent making of user document if the sign up procedure is not complete., and note to mess with other route which already exist.
+
 router.post('/checkemail', (req, res, next) => {
 
     if(!(req.body.email)){
@@ -38,13 +46,28 @@ router.post('/checkemail', (req, res, next) => {
             res.status(409).json({errorMessage: "Already registered. Try with a different email OR Sign In"})
             return
         }else{
-            res.status(200).end()
+            sendVerificationEmail(req.body)
+            res.status(200).send('Email Verification code send')
             return
         }})
     .catch(err =>{
         res.status(500).json({errorMessage: "Data base error"})
     })
 })
+
+router.post('/verifyemail', (req, res, next) => {
+    console.log(req.body)
+    if(!req.body.email || !req.body.code){
+        res.status(400).end()
+        return
+    }
+    verifyEmail(req.body.email, req.body.code)
+    .then((response) => {
+        res.json({verified: response})  // 1 -> success, 0 => 'Expired', -1 => failes, 99 => Error
+    })
+})
+
+
 
 router.post('/signup', (req, res, next) => {
     console.log(req.body)
@@ -61,7 +84,6 @@ router.post('/signup', (req, res, next) => {
             // if the query returned an item that is not null
             res.status(409).json({errorMessage: "Already registered. Try with a different email OR Sign In"})
             return
-        
         }else{
 
             // if query returned null
