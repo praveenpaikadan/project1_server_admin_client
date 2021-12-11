@@ -2,12 +2,34 @@ const nodemailer = require("nodemailer");
 const {genCode, genPassword, validPassword} = require('../lib/passwordUtils')
 const EmailCode = require('../models/email-code');
 
+const routineCodeCleanup = () => {
+  console.log('Routine verification code cleanup is running, to clean up email codes expired 24 hours before every 24 hours') // cleanup all expired codes expired 24 hours before every 24 hours
+  try{
+    setInterval(() => {
+      EmailCode.deleteMany({ expiry: {$lt: Date.now()-(24*60*60*1000)}})
+      .then((results) => {console.log(results)})
+      console.log('Code cleaup actioned')
+    }, 24*60*60*1000) 
+
+  }catch(error){
+    let d = new Date()
+    console.log('Routine verification code cleanup failed in action at ', d)
+    console.log(error)
+  }
+}
+
+async function removeVerificationCodes(email){
+  EmailCode.deleteMany({ email: email})
+  .then(()=> {})
+  .catch((error) => console.log(error))
+}
+
 // async..await is not allowed in global scope, must use a wrapper
 async function sendVerificationEmail(reqBody) {
 
   let {user, email} = reqBody
 
- let expiry = 10 * 1000 //10 mins
+ let expiry = 10 * 60000 //10 mins
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
   
@@ -29,12 +51,12 @@ async function sendVerificationEmail(reqBody) {
     from: '"Fred Foo 👻" <foo@example.com>', // sender address
     to: email, // list of receivers
     subject: "Verification Code", // Subject line
-    text: "Your Verification Code is "+ code, // plain text body
-    html: `<b>Hi ${user?user:'user'} Your Verification Code is ${code}</b>`, // html body
+    text: `Your Verification Code is ${code}. This code will expire in ${expiry/60000} minutes` , // plain text body
+    html: `<b>Hi ${user?user:'user'} Your Verification Code is ${code}. This code will expire in ${expiry/60000} minutes</b>`, // html body
   });
 
-  var emailCode = new EmailCode({email: email, salt: salt, hash: hash, expiry: Date.now() + expiry})
-  emailCode.save({email: email, salt: salt, hash: hash, expiry: Date.now() + expiry})
+  var emailCode = new EmailCode({email: email, salt: salt, hash: hash, expiry: (Date.now() + expiry)})
+  emailCode.save()
   .then((DBresponse) => {
     console.log(DBResponse)
   })
@@ -55,25 +77,35 @@ async function verifyEmail(email,code){
   let condition = {email: email}
   try{
     let response = await (await EmailCode.find(condition))
+
+    if (response === []){
+      return -1
+    }
+
     for (let i = 0; i< response.length; i++){
       if(validPassword(code, response[i].hash, response[i].salt)){
-        console.log(code)
+      
         if(Date.now() > response[i].expiry){
-          EmailCode.deleteMany({ expiry: {$lt: Date.now()}})  // deleting all expired codes.
+          console.log(Date.now() +'>'+ response[i].expiry)
           return 0  // code expired 
+
         }else{  
-          response[i].updateOne({expiry: Date.now() + (30*1000)})  // extending expiry by 30 mins.
+          response[i].updateOne({expiry: Date.now() + (30*60000)})  // extending expiry by 30 mins.
           .then(() => {
+            console.log('Success')
             EmailCode.deleteMany({ expiry: {$lt: Date.now()}}) // deleting all expired codes -> A clean up process
           })    
           return 1  // code valid
         }
       }
     } 
+
     return -1 // invalid code
   }catch{
     return 99 // error
   }
 } 
 
-module.exports = {sendVerificationEmail, verifyEmail}
+routineCodeCleanup()
+
+module.exports = {sendVerificationEmail, verifyEmail, removeVerificationCodes}

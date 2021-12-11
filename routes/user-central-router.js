@@ -9,7 +9,7 @@ const SubscriptionRouter = require('./user-routes/subscription')
 const GeneralRouter = require('./user-routes/general')
 const DietPlanRouter = require('./user-routes/diet-plan')
 const express = require('express')
-const {sendVerificationEmail, verifyEmail} = require('../controllers/email-verfication')
+const {sendVerificationEmail, verifyEmail, removeVerificationCodes} = require('../controllers/email-verfication');
 
 
 
@@ -34,6 +34,8 @@ const getMediaPath = (secured=false) => {
 
 router.post('/checkemail', (req, res, next) => {
 
+    var shouldExist = req.body.shouldExist?true:false  //when shouldExist is in the body, it means the request is for a reset password. Other wise it is for first time registration 
+
     if(!(req.body.email)){
         res.status(400).end()
         return
@@ -41,15 +43,30 @@ router.post('/checkemail', (req, res, next) => {
 
     User.findOne({email: req.body.email})
     .then((result) => {
-        if(result!=null){
-            // if the query returned an item that is not null
-            res.status(409).json({errorMessage: "Already registered. Try with a different email OR Sign In"})
-            return
+
+        if(!shouldExist){
+            if(result!=null){
+                // if the query returned an item that is not null
+                res.status(409).json({errorMessage: "Already registered. Try with a different email OR Sign In"})
+                return
+            }else{
+                sendVerificationEmail(req.body)
+                res.status(200).send('Email Verification code send')
+                return
+            }
+
         }else{
-            sendVerificationEmail(req.body)
-            res.status(200).send('Email Verification code send')
-            return
-        }})
+            if(result==null){
+                // if the query returned an item that is not null
+                res.status(200).json({success: false})
+                return
+            }else{
+                sendVerificationEmail({email: req.body.email, user: result.name})
+                res.status(200).json({name: result.name, success: true})
+                return
+            }
+        }
+    })
     .catch(err =>{
         res.status(500).json({errorMessage: "Data base error"})
     })
@@ -67,8 +84,6 @@ router.post('/verifyemail', (req, res, next) => {
     })
 })
 
-
-
 router.post('/signup', (req, res, next) => {
     console.log(req.body)
 
@@ -85,32 +100,41 @@ router.post('/signup', (req, res, next) => {
             res.status(409).json({errorMessage: "Already registered. Try with a different email OR Sign In"})
             return
         }else{
-
-            // if query returned null
-            let saltHash = genPassword(req.body.password)
-            let salt = saltHash.salt; 
-            let hash = saltHash.hash;
-            req.body.salt = salt
-            req.body.hash = hash
-            req.body.password = null
-        
-            let newUser = new User(req.body)
-        
-            console.log(newUser)
-        
-            newUser.save()   
-            .then(response => {
-                response.hash = null
-                response.salt= null
-                res.json(response)
-            })
-        
-            .catch(error => {
-                console.log(error)
-                // 503 service unavailable
-                res.status(503).json({
-                    errorMessage:"Data base Error"
-                })
+            // checking email verification is done.
+            verifyEmail(req.body.email, req.body.code)
+            .then((result) => {
+                if(result == -1 || result == 0){
+                    res.status(409).json({errorMessage: "Your email verification has expired/failed. Please Sign Up Again"})
+                    return
+                }else if(result == 99){
+                    res.status(409).json({errorMessage: "Something happened. We are not able to register you. Please try again"})
+                }else{
+                    removeVerificationCodes(req.body.email)
+                    let saltHash = genPassword(req.body.password)
+                    let salt = saltHash.salt; 
+                    let hash = saltHash.hash;
+                    req.body.salt = salt
+                    req.body.hash = hash
+                    req.body.verified = true
+                    let newUser = new User(req.body)
+                
+                    console.log(newUser)
+                
+                    newUser.save()   
+                    .then(response => {
+                        response.hash = null
+                        response.salt= null
+                        res.json(response)
+                    })
+                
+                    .catch(error => {
+                        console.log(error)
+                        // 503 service unavailable
+                        res.status(503).json({
+                            errorMessage:"Data base Error"
+                        })
+                    }) 
+                }
             }) 
         }})
 
@@ -122,6 +146,52 @@ router.post('/signup', (req, res, next) => {
         })
     })
 })
+
+router.post('/resetpwd', (req, res, next) => {
+
+    if(!(req.body.email && req.body.password && req.body.code)){
+        res.status(400).end()
+        return
+    }
+
+    verifyEmail(req.body.email, req.body.code)
+        .then((result) => {
+            if(result == -1 || result == 0){
+                res.json({success: false, message: 'Email verification have expired/failed. Please try again', redirect: true})
+                return
+            }else if(result == 99){
+                res.json({success: false, message: "Something happened. We are not able to change your password. Please try again"})
+            }else{
+                removeVerificationCodes(req.body.email)
+                let saltHash = genPassword(req.body.password)
+                var update = saltHash
+                User.findOneAndUpdate({"email": req.body.email}, update, {new: true})  
+                .then(response => {
+                    res.json({success: true, message: 'Password changed successfully. Please Sign in with new password', redirect: true})
+                })
+                .catch(error => {
+                    console.log(error)
+                    // 503 service unavailable
+                    res.status(503).json({
+                        success:false,
+                        message:"We were not able to change your password. Please try again "
+                    })
+                }) 
+            }
+        }) 
+
+
+    .catch(error => {
+        console.log(error)
+        // 503 service unavilable 
+        res.status(503).json({
+            success:false,
+            message:"Data base error"
+        })
+    })
+})
+
+
 
 //api/v1/login
 router.post('/login', passport.authenticate('user'), (req, res) => {
