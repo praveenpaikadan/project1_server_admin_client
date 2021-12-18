@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/praveenpaikadan/Project-1-Server#readme",
   "dependencies": {
+    "axios": "^0.24.0",
     "connect-mongo": "^3.1.2",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

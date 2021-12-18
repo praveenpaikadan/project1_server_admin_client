@@ -1,6 +1,6 @@
 const mongoose = require('moNgoose')
 const WorkoutData = require('../models/workout-data')
-const Transactions = require('../models/transaction-record')
+const Transactions = require('../models/receipt')
 const User = require('../models/user')
 const Program = require('../models/program')
 

@@ -8,6 +8,7 @@ const WorkoutRouter = require('./user-routes/workout-data')
 const SubscriptionRouter = require('./user-routes/subscription')
 const GeneralRouter = require('./user-routes/general')
 const DietPlanRouter = require('./user-routes/diet-plan')
+const PaymentRouter = require('./user-routes/payment')
 const express = require('express')
 const {sendVerificationEmail, verifyEmail, removeVerificationCodes} = require('../controllers/email-verfication');
 
@@ -165,6 +166,7 @@ router.post('/resetpwd', (req, res, next) => {
                 removeVerificationCodes(req.body.email)
                 let saltHash = genPassword(req.body.password)
                 var update = saltHash
+                console.log(update)
                 User.findOneAndUpdate({"email": req.body.email}, update, {new: true})  
                 .then(response => {
                     res.json({success: true, message: 'Password changed successfully. Please Sign in with new password', redirect: true})
@@ -220,5 +222,6 @@ router.use('/workoutdata', WorkoutRouter)
 router.use('/subscription', SubscriptionRouter)
 router.use('/general', GeneralRouter)
 router.use('/diet-plan', DietPlanRouter)
+router.use('/payment', PaymentRouter)
 
 module.exports = router
