@@ -3,13 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="icon" href="data:,">
     <style>
-      button {max-width: '90%'; width: 250px; height: 60px; border-radius: 10px;}
+
+      body{
+        font-family: 'Ubuntu', sans-serif;
+        /* width: 100vw; */
+        width: 300px;
+        margin: 0px;
+        border: 0px;
+        height: 100vh;
+        box-sizing: border-box;
+       }
+
+      .wrapper-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      button {
+        max-width: '90%'; 
+        width: 250px; 
+        height: 60px; 
+        border-radius: 10px;
+        
+      }
+
+
+      .top-container{
+        margin-top: 35px;
+        width: '150px';
+        display: flex;
+        flex-direction: row;
+        margin-left: 10px;
+        margin-right: 10px;
+        justify-content: flex-start;
+        align-items: center;
+      }
+
+      .img-container{
+        width: 100px;
+        height: 90px;
+        border-radius: 5px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+      }
+
+      img{
+        border-radius: 5px;
+        width: 100px;
+        object-fit:contain;
+      }
+
+      .title-container{
+        margin: 10px;
+      }
+
+      .title-container > p{
+        font-size: 11px;
+        line-height: 5px;
+      }
+
+      .header-text{
+        font-size: 17px;
+      }
+
+      .content-container{
+        margin-left: 10px;
+        margin-right: 10px;
+        display: flex;
+        flex:1;
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .content-container-top{
+        flex: 1;
+        margin: 20px;
+        font-size: 14px;
+
+      }
+
+      .content-container-bottom{
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 20px;
+        font-size: 12px;
+        align-self: flex-start;
+      }
+
+      .bottom-container{
+        display: flex;
+        align-items: center;
+        width: 100vw;
+        position: sticky;
+        background-color: white;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 1px -4px 13px -3px rgba(0,0,0,0.44);
+-webkit-box-shadow: 1px -4px 13px -3px rgba(0,0,0,0.44);
+-moz-box-shadow: 1px -4px 13px -3px rgba(0,0,0,0.44);
+      }
+
+      #rzp-button1, #go-to-home-button{
+        width: 280px;
+        height: 55px;
+        margin:auto;
+        font-size: 22px;
+        font-weight: 800;
+        font-family: 'Ubuntu', sans-serif;
+        color:white;
+        letter-spacing: 1px;
+        border: none;
+        /* margin: 10px; */
+        box-shadow: -3px 20px 19px -2px rgba(138, 138, 138, 0.205);
+        -webkit-box-shadow: -3px 20px 19px -2px rgba(138, 138, 138, 0.247);
+        -moz-box-shadow: -3px 20px 19px -2px rgba(138, 138, 138, 0.185);
+        margin: 20px;
+        margin-top: 10px;
+        background-color: <%= color %>;
+      }
+
+      #go-to-home-button{
+        margin-top: 40px;
+      }
+
+      #rzp-button1:hover{
+        opacity: 0.5;
+      }
+
+      .success-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        text-align: center;
+        background: #EBF0F5;
+      }
+
+      #success-main{
+        display: none;
+      }
+
+      #wait-main{
+        display: none;
+      }
+
+      .success-h1 {
+        color: #88B04B;
+        font-family: 'Ubuntu', sans-serif; 
+        font-weight: 900;
+        font-size: 40px;
+      }
+      .success-p {
+        color: #404F5E;
+        font-family: 'Ubuntu', sans-serif; 
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size:15px;
+        margin: 0;
+      }
+
+      .success-i {
+        color: #9ABC66;
+        font-size: 100px;
+        line-height: 200px;
+        margin-left:-15px;
+      }
+      .success-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        width: 90vw;
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 3px #C8D0D8;
+        display: inline-block;
+        margin: 0 auto;
+      }
 
     </style>
     <script type="text/javascript">
+
       function handleSubmit(event) {
         console.log('hai')
         event.preventDefault();
@@ -20,25 +211,104 @@
       
     </script>
 </head>
-<body style="width: 100vw; height: 100vh; margin: 0;padding: 0;">
-  <div style="background-color: #FF4C00; width: 100%; height: 100%; display: flex;align-items: center;flex-direction: column;" >
-    <button style="margin-top:40px" id="rzp-button1">Pay</button>
-    <button style="margin-top:40px" id="jab">Just A Button</button>
+<body>
+
+  <div class="wrapper-container" id="success-main">
+    <div class="success-container">
+      <div class="success-card">
+        <div>
+          <div class="badge" style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:20px auto;">
+            <i class="success-i checkmark">✓</i>
+          </div>
+          <h1 class="success-h1">Success</h1> 
+          <p class="success-p" id="success-message"></p>
+        </div>
+        <button id="go-to-home-button">Go To Home</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapper-container" id="main">
+    <div class='top-container'>
+      <div class='img-container'>
+        <img src="<%= imgUrl %>">
+        </img>
+      </div>
+      <div class="title-container">
+        <h1 class="header-text"> <%=notes.productName %> </h1>
+        <p><b>Goal: </b><%=goal%></p>
+        <p><b>Level: </b><%=level%></p>
+      </div>
+    </div>
+
+      <div class="content-container">
+
+        <div class="content-container-top">
+          <p><%-productDescription%></p>
+        </div>
+
+      </div>
+
+      <div class="bottom-container">
+        <div class="content-container-bottom">
+          <p><b>Duration:</b> <%= duration %> weeks</p>
+          <p><b>Subscription Type:</b> <%= notes.planType %></p>
+          <p><b>Payable amount (incl. GST):</b> Rs. <%= amount/100%></p>
+        </div>
+        <button id="rzp-button1">Proceed to Pay</button>
+        <!-- <button id="jab">Just A Button</button> -->
+      </div>
   </div>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
+
     var options = {
         "key": "rzp_test_XvlgoOL0WFWEfn", // Enter the Key ID generated from the Dashboard
         "amount": "<%= amount %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         "currency": "INR",
         "name": "<%= name %>",
         "description": "<%= description %>",
-        "image": "https://picsum.photos/200",
+        "image": "<%= imgUrl %>",
         "order_id": "<%= order_id %>", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
         "handler": function (response){
-            alert(response.razorpay_payment_id);
-            alert(response.razorpay_order_id);
-            alert(response.razorpay_signature)
+            let payload = {
+              rpResponse: response,
+              receiptID: "<%= receiptID %>",
+              batch: "<%= batch %>",
+            }
+
+            const setLoading = (() => {
+              document.getElementById("main").innerHTML = 
+              `<div class="success-container">
+                <div style="display: flex; flex-direction: column; align-items: center; justifyContent: center;">
+                  <div class="spinner-grow text-success" role="status" style="width: 60px; height: 60px;">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <br/>
+                  <p style="margin: 25px; font-family: 'Ubuntu', sans-serif; font-size: 0.9rem;"">Please wait while verifying your payment. Please do not go back or exit...</p>
+                <div>
+              </div>`;
+            })
+
+            setLoading()
+            fetch("<%= successHandlerUrl %>", {
+              method: 'POST',
+              headers:{'x-access-token': "<%= authToken %>", 'Content-Type': 'application/json'},
+              body: JSON.stringify(payload),
+            })
+            .then(response => response.json())
+            .then((data) => {
+              if(data.verificationStatus === 'success'){
+                document.getElementById("success-message").innerHTML = data.message;
+                document.getElementById("main").style.display = 'none';
+                document.getElementById("success-main").style.display = 'block';
+              }else{
+                alert(data.message)
+              }
+              
+            }
+            )
+
         },
         "prefill": {
             "name": "<%= userName %>",
@@ -53,7 +323,9 @@
     };
 
     var rzp1 = new Razorpay(options);
+
     rzp1.on('payment.failed', function (response){
+            alert("Payment Failed")
             alert(response.error.code);
             alert(response.error.description);
             alert(response.error.source);
@@ -62,13 +334,14 @@
             alert(response.error.metadata.order_id);
             alert(response.error.metadata.payment_id);
     });
-  document.getElementById('rzp-button1').onclick = function(e){
-      rzp1.open();
-      e.preventDefault();
-  }
 
-  document.getElementById('jab').onclick = function(e){
-        window.ReactNativeWebView.postMessage('Pay Clicked')
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+
+  document.getElementById('go-to-home-button').onclick = function(e){
+        window.ReactNativeWebView.postMessage("go_to_home")
       }
   </script>
 </body>

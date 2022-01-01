@@ -17,6 +17,7 @@ const programSchema = mongoose.Schema({
 	daysPerWeek : Number,
 	level : String,
 	goal: String,  
+    productDescription: String,                  
     category: String,
 	equipments : [String],
 	schedule : 

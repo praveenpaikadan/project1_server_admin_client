@@ -4,13 +4,27 @@ const Receipt =  mongoose.Schema(
     {
         userID: String,
         userName: String,
-        programName: String,
-        programID: String,
+        userEmail: String,
+        productName: String,
+        productID: String,
         planName: String,
         planID: String,
         dateOfReceipt: Date,
-        amountInINR: Number, 
-        paid: Boolean,
+        planType: String,
+        startDate: Date,
+        paymentStatus: {type: String, default: 'fresh'},
+        activeBatch: {type: Number, default: 0},
+        paymentBatches: [{
+            amount: Number,
+            batch: Number,
+            orderRequest: {},
+            orderResponse: {},
+            successResponse: {},
+            errorResponseHistory:[{}],
+            currency: String,
+            reminderDate: Date,
+            dueDate: Date,
+        }],
     }, { timestamps : true}
 )
 
