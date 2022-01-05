@@ -1,6 +1,8 @@
 const Program = require('../models/program');
 const Exercise = require('../models/exercise')
-const WorkoutData = require('../models/workout-data')
+const WorkoutData = require('../models/workout-data');
+const User = require('../models/user');
+const DietPlan = require('../models/diet-plan');
 
 calsPerRepObj = async () => {
     try{
@@ -16,8 +18,11 @@ calsPerRepObj = async () => {
 
 getWorkoutData = async (req, res, next) => {
     var user = req.user._doc._id
+    var workoutID = req.user._doc.currentWorkout?req.user._doc.currentWorkout.workoutID:undefined
+
+    console.log(workoutID)
     
-    WorkoutData.findOne({"userID": user})
+    WorkoutData.findOne({_id: workoutID})
     .then(response => { 
         if(!response){
             req.workoutData = null
@@ -84,4 +89,40 @@ const makeNewWorkoutData = (req, res, next) => {
 
 }
 
-module.exports = {getWorkoutData, makeNewWorkoutData}
+const handleSuccesfulSubscription = async (receipt, batchProcessed) => {
+    
+    if(batchProcessed === 0){
+
+        var user = await User.findOne({_id: receipt.userID})
+
+        var newWorkoutData = new WorkoutData({
+            programName: receipt.productName,
+            programID: receipt.productID,
+            planID: receipt.planID,
+            userID: user._id,
+            history:[],
+            currentDay: 1
+        })
+
+        newWorkoutData = await newWorkoutData.save()
+
+        // var dietPlan = await DietPlan.findOne({"client.userID": user._id, "client.programID": user.programID })
+        var currentWorkout = {
+            programID: receipt.productID,
+            workoutID: newWorkoutData._id,
+            receiptID: receipt._id,
+            planType: receipt.planType,
+            status: 'active'
+        }
+
+        console.log(currentWorkout)
+        user.currentWorkout = currentWorkout
+        var updatedUser = await user.save()
+    }else{
+        var user = await User.findOne({_id: data.userID})
+        user.currentWorkout.status = 'active'
+        user.save()
+    }
+}
+
+module.exports = {getWorkoutData, makeNewWorkoutData, handleSuccesfulSubscription}

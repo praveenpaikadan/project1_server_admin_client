@@ -136,7 +136,7 @@
         -moz-box-shadow: -3px 20px 19px -2px rgba(138, 138, 138, 0.185);
         margin: 20px;
         margin-top: 10px;
-        background-color: <%= color %>;
+        background-color: #FF4C00;
       }
 
       #go-to-home-button{
@@ -306,8 +306,7 @@
                 alert(data.message)
               }
               
-            }
-            )
+            })
 
         },
         "prefill": {
@@ -326,13 +325,17 @@
 
     rzp1.on('payment.failed', function (response){
             alert("Payment Failed")
-            alert(response.error.code);
             alert(response.error.description);
-            alert(response.error.source);
-            alert(response.error.step);
-            alert(response.error.reason);
-            alert(response.error.metadata.order_id);
-            alert(response.error.metadata.payment_id);
+
+            var payload = response.error 
+            payload.receiptID= "<%= receiptID %>",
+            payload.batch= "<%= batch %>",
+
+            fetch("<%= failedHandlerUrl %>", {
+              method: 'POST',
+              headers:{'x-access-token': "<%= authToken %>", 'Content-Type': 'application/json'},
+              body: JSON.stringify(payload),
+            })
     });
 
     document.getElementById('rzp-button1').onclick = function(e){

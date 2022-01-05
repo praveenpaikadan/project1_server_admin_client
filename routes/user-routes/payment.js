@@ -1,6 +1,7 @@
 const router   = require('express').Router();
 const path = require('path')
 const {Order, returnReceiptIfExist, successPaymentHandler, failedPaymentHandler} = require('../../controllers/payment-controllers');
+const { handleSuccesfulSubscription } = require('../../controllers/workoutdata-controller');
 const { tokenExtractor } = require('../../lib/tokenUtils');
 var ipAddress = require('ip').address();
 var PORT = require('dotenv').config().parsed.PORT;
@@ -19,15 +20,15 @@ router.get('/payment-page', async (req, res, next) => {
       res.status(400).send('Bad Request')
     }
     
-    var order = new Order(data) 
+    var order = new Order(data) // Create user defined class order instance
     var existingReceipt = await returnReceiptIfExist(data) 
-    var receipt = await order.createReceipt(existingReceipt)
+    var receipt = await order.create_redate_validate_Receipt(existingReceipt)
     var orderDetails = await order.retreiveOrderDetails()
     if(!orderDetails){
       orderDetails = await order.createOrder()
     }
 
-    console.log(orderDetails)
+    // console.log(orderDetails)
     
 
     if(orderDetails){
@@ -50,7 +51,8 @@ router.get('/payment-page', async (req, res, next) => {
             level: order.programData.level,
             goal: order.programData.goal,
             color: "#FF4C00",
-            successHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/verify`
+            successHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/verify`,
+            failedHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/recordfailure`
         })
 
 
@@ -72,25 +74,28 @@ router.get('/payment-page', async (req, res, next) => {
 
 router.post('/verify', async (req, res, next) => {
     var data = req.body
+    console.log(data)
+    data.userID = req.user._doc._id
     var response = await successPaymentHandler(data)
+    if(response.verificationStatus === 'success'){
+      try{
+        await handleSuccesfulSubscription(response.receipt, response.batchProcessed)
+      }catch(error){
+        console.log(error)
+      }
+     
+    }
     if(response.verificationStatus){
-      console.log(response)
       res.json(response)
     }
     return
 })
 
-// router.post('/recordfailure', async (req, res, next) => {
-//   var data = req.body
-//   var response = await failedPaymentHandler(data)
-//   if(response){
-//     console.log(response)
-//     res.json({verificationStatus: 'success', message: response})
-//   }else{
-//     res.json({verificationStatus:'failed', message: 'Your payment verification has failed. Please redo the payment. Incase amount is deducted from the account, please contact us from trainer contact page.'})
-//   }
-// })
-
-
+router.post('/recordfailure', async (req, res, next) => {
+  var data = req.body
+  await failedPaymentHandler(data)
+  res.end()
+  return
+})
 
 module.exports = router

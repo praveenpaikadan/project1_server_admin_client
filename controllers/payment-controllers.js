@@ -4,6 +4,9 @@ const Receipt = require('../models/receipt')
 const Program = require('../models/program')
 const Razorpay = require('../config/payment')
 const crypto = require('crypto');
+const User = require('../models/user')
+const WorkoutData = require('../models/workout-data')
+const { findOneAndUpdate } = require('../models/receipt')
 
 
 class Order{
@@ -23,82 +26,122 @@ class Order{
         }
     }
 
-    async createReceipt(existingReceipt){
+    async create_redate_validate_Receipt(existingReceipt){
+
+        const createReceipt = async (receipt_id) => {
+
+            this.programData = await Program.findOne({_id: this.originationData.programID})
+                var paymentBatches = []
+                function addDays(date, number) {
+                    const newDate = new Date(date);
+                    return new Date(newDate.setDate(newDate.getDate() + number));
+                }
+                
+                let startDay = 1  // day in workout
+                let reminder = 3 // remind 3 days before
+    
+                let plan = this.programData.subscriptionOptions.find(item => item._id == this.originationData.planID)
+                let reccurence = plan.paymentReccurence
+
+                if(this.originationData.planType !== 'Complete'){
+                    
+                    var no_batches = Math.round(this.programData.durationWeeks * this.programData.daysPerWeek/reccurence)
+
+                    for(let i =0; i<no_batches; i++){
+                        let dueDay = startDay + (i*reccurence)
+                        let reminderDay = dueDay - reminder
+                        let newEntry = {
+                            batch: i,
+                            dueDay: dueDay,
+                            currency: 'INR',
+                            amount: plan['priceInRs'],
+                            reminderDay: reminderDay,
+                        } 
+                        paymentBatches.push(newEntry)
+                    }
+                }else{
+                    paymentBatches.push({
+                        amount: plan['priceInRs'],
+                        batch: 0,
+                        currency: 'INR',
+                    })
+                }
+    
+                var receipt = {
+                    userID: this.originationData.userID,
+                    userName: this.originationData.userName,
+                    userEmail: this.originationData.userEmail,
+                    productName: this.originationData.programName,
+                    productID: this.originationData.programID,
+                    planName: this.originationData.planType,
+                    planID: this.originationData.planID,
+                    activeBatch: 0,
+                    dateOfReceipt: new Date(),
+                    planType: this.originationData.planType,
+                    startdate: this.originationData.startDate,
+                    paymentBatches: paymentBatches
+                }
+    
+                //
+                if(receipt_id){
+
+                    this.receipt = await Receipt.findOneAndUpdate({_id: receipt_id}, receipt, {new: true}) 
+                    return this.receipt
+
+                }
+                //
+                var receiptObj = new Receipt(receipt)
+                this.receipt  = await receiptObj.save()
+                return this.receipt
+        }
+
         if(existingReceipt){
             if(existingReceipt.activeBatch === 0){ 
+
+                // Not yet processed receipt for any payments.
+                return await createReceipt(existingReceipt._id)
+
+                //OR
+                
+                {/*
                 try{
                     var a = new Date()
                     var searchParams  = existingReceipt._id;
                     var updateParams = {dateOfReceipt: new Date()};
-                    console.log(searchParams, updateParams)
-                    var existingReceipt = await Receipt.findByIdAndUpdate(searchParams, updateParams )
-                    this.receipt = existingReceipt;
-                    if(this.receipt){
+                    // var existingReceipt = await Receipt.findByIdAndUpdate(searchParams, updateParams)
+                    var existingReceipt = await Receipt.findOne(searchParams)
+                    if(existingReceipt){
                         this.programData = await Program.findById(this.receipt.productID)
                     }
+                    // updating already existing receipt with meta data other than ids.
+                    receipt.userName = this.originationData.userName
+                    receipt.userEmail =  this.originationData.userEmail
+                    
                 }catch(error){
                     console.log(error)
                     return null
                 }
+                */}
+
+
+            }else if(existingReceipt.activeBatch === -1){
+            // handle program complete, but payment request is made =======
+            
+
+            }else{
+                // Renewal of subscription
+                this.receipt = existingReceipt
+                if(this.receipt){
+                    this.programData = await Program.findById(this.receipt.productID)
+                }
+                return existingReceipt
             }
+
             return existingReceipt
 
         }else{
-            this.programData = await Program.findOne({_id: this.originationData.programID})
-            var paymentBatches = []
-            function addDays(date, number) {
-                const newDate = new Date(date);
-                return new Date(newDate.setDate(newDate.getDate() + number));
-            }
-            
-            let startdate = new Date('12-20-2021') 
-            let reminder = 3 // remind 3 days before
-
-            // functions to check if receipt is already made goes here.
-
-            let plan = this.programData.subscriptionOptions.find(item => item._id == this.originationData.planID)
-            
-            if(this.originationData.planType === 'Monthly'){
-                
-                var no_batches = Math.round(this.programData.durationWeeks/4)
-                for(let i =0; i<no_batches; i++){
-                    let dueDate = addDays(startdate, i*30)
-                    let reminderDate = addDays(dueDate, reminder-1)
-                    let newEntry = {
-                        batch: i,
-                        dueDate: dueDate,
-                        currency: 'INR',
-                        amount: plan['priceInRs'],
-                        reminderDate: reminderDate,
-                    } 
-                    paymentBatches.push(newEntry)
-                }
-            }else if(this.originationData.planType === 'Complete'){
-                paymentBatches.push({
-                    amount: plan['priceInRs'],
-                    batch: 0,
-                    currency: 'INR',
-                    dueDate: startdate,
-                })
-            }
-
-            var receipt = {
-                userID: this.originationData.userID,
-                userName: this.originationData.userName,
-                userEmail: this.originationData.userEmail,
-                productName: this.originationData.programName,
-                productID: this.originationData.programID,
-                planName: this.originationData.planType,
-                planID: this.originationData.planID,
-                activeBatch: 0,
-                dateOfReceipt: new Date(),
-                planType: this.originationData.planType,
-                startdate: this.originationData.startDate,
-                paymentBatches: paymentBatches
-            }
-            var receiptObj = new Receipt(receipt)
-            this.receipt  = await receiptObj.save()
-            return this.receipt
+            // Very fresh request
+            return await createReceipt()
         }
     }
 
@@ -144,9 +187,9 @@ class Order{
     getImageFile(){
         try{
             return this.programData.images[0].filename
-        }catch(error){
-            return null
+        }catch(error){ 
             console.log(error)
+            return null
         }
         
     }
@@ -192,13 +235,16 @@ class Order{
                 planType: this.receipt.planType
             }
           })
-          console.log(response)
           return response
     } 
 }
 
 async function returnReceiptIfExist(data){
-    var searchParams = {userID: data.userID, productID: data.programID, planID: data.planID}
+    if(data.receiptID){
+        var searchParams = {userID: data.userID, _id: data.receiptID}
+    }else{
+        var searchParams = {userID: data.userID, productID: data.programID, planID: data.planID}
+    }
     try{
         var response  = await Receipt.findOne(searchParams)
         if (response === []){
@@ -212,6 +258,7 @@ async function returnReceiptIfExist(data){
 }
 
 async function successPaymentHandler(data){
+
     function createMessage(params){
         var verb = params.planType === 'Complete'?'subscribed to':'renewed subscription for';
         if(verb === 'renewed subscription for' && params.batchNo === 0){
@@ -231,7 +278,6 @@ async function successPaymentHandler(data){
         var batchNo = Number(data.batch)
         // batchNo actually refer to batchIndex
         var receipt = await Receipt.findOne({_id: data.receiptID})
-        console.log(receipt)
         var batchUnderProcess = receipt.paymentBatches.find(item => item.batch === batchNo)
         var order_id = batchUnderProcess.orderResponse.id
         var payment_id = data.rpResponse.razorpay_payment_id
@@ -250,17 +296,6 @@ async function successPaymentHandler(data){
                 receipt.activeBatch = batchNo + 1
             }  
             var receipt = await Receipt.findByIdAndUpdate(data.receiptID, receipt)
-            console.log(receipt)
-
-            // all changes regrading subscription goes here
-
-
-
-
-
-
-
-            // ---------------------------------------------
 
             var message = createMessage({
                 productName: receipt.productName,
@@ -271,20 +306,27 @@ async function successPaymentHandler(data){
                 payment_id: payment_id,
                 paymentStatus: receipt.paymentStatus
             })
-            return ({verificationStatus: 'success', message: message})
+            var returnValue = {verificationStatus: 'success', message: message, receipt: receipt, batchProcessed: batchNo}
+            return returnValue
         }else{
-            return ({verificationStatus: 'failed', message: 'Your payment verification has failed. Please redo the payment. Incase amount is deducted from the account, please contact us from trainer contact page.'})
+            return ({verificationStatus: 'failed', message: 'Your payment verification has failed. Please redo the payment. Incase amount is deducted from your account, please contact us from trainer contact page.'})
         }
     }catch(error){
         console.log(error)
-        return ({verificationStatus: 'error'})
+        return ({verificationStatus: 'error', message: 'Not able to verify your payment at the moment please contact trainer'})
     }
 }
 
 async function failedPaymentHandler(data){
+    try{
+        var searchParams = {_id: data.receiptID, "paymentBatches.orderResponse.id": data.metadata.order_id}
+        var receipt = await Receipt.findOneAndUpdate(searchParams, { "$push": { 'paymentBatches.$.errorResponseHistory': data } })
+    }catch(error){
+        console.log(error)
+    }
     return
 }
 
 
 
-module.exports = { Order, returnReceiptIfExist, successPaymentHandler }
+module.exports = { Order, returnReceiptIfExist, successPaymentHandler, failedPaymentHandler}

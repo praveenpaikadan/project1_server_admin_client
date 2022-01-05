@@ -22,6 +22,24 @@ router.get('/exercise/:id', (req,res) => {
     })
 })
 
+router.post('/initiate', (req, res) => {   // set starting date
+    var data = req.body
+    console.log(data)
+    userID = req.user._doc?req.user._doc._id:null
+    WorkoutData.findOneAndUpdate({_id: data.workoutID, userID: userID}, {startDate: new Date()}, {new: true})
+    .then((response) => {
+        console.log(response)
+        if(response){
+            res.json({status: 1, workoutData: response})  // success
+        }else{
+            res.json({status: 0}) // failed
+        }
+    })
+    .catch(() => {
+        res.json({status: -1}) // error
+    })
+})
+
 // This route pushes a days workout to the workout history
 router.post('/push', (req, res) => {
     var wodata = req.body.dayWorkoutData

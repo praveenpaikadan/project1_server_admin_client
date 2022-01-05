@@ -45,7 +45,9 @@ const programSchema = mongoose.Schema({
             {    
                 planType : String, 
                 description : String,
-			    priceInRs : Number
+			    priceInRs : Number,
+                paymentReccurence: Number,
+                forceLock: Boolean
             }
         ],
     images:[{}],
