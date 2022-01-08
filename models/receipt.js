@@ -24,6 +24,7 @@ const Receipt =  mongoose.Schema(
             currency: String,
             reminderDay: Number,
             dueDay: Number,
+            expiryDay: Number,
         }],
     }, { timestamps : true}
 )

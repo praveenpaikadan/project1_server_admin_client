@@ -1,9 +1,10 @@
-const { getWorkoutData } = require('../../controllers/workoutdata-controller');
+const { getWorkoutData, calsPerRepObj } = require('../../controllers/workoutdata-controller');
 const Program = require('../../models/program');
 const { insertMany, deleteOne } = require('../../models/workout-data');
 const WorkoutData = require('../../models/workout-data')
 const router   = require('express').Router();
 const Exercise = require('../../models/exercise')
+
 
 router.get('/', getWorkoutData, (req, res) => {
     res.json(req.workoutData)
@@ -21,6 +22,49 @@ router.get('/exercise/:id', (req,res) => {
         })
     })
 })
+
+
+router.get('/complete-history', (req,res) => {
+    var userID = req.user._doc._id
+    WorkoutData.find({userID: userID}).sort({startDate: "descending"})
+    .then(response => {
+        var programIDList  = response.map(item => item.programID)
+        var wdList = JSON.parse(JSON.stringify(response))
+        Program.find({_id:programIDList}).select({programName: 1, 'images.filename': 1, level: 1, goal: 1, daysPerWeek: 1, durationWeeks: 1, category: 1, 'schedule.targetBodyPart': 1, 'schedule.day': 1})
+        .then((programsRes) => {
+            var programs = JSON.parse(JSON.stringify(programsRes))
+            calsPerRepObj()
+            .then((calsPerRepObject) => {
+                for(let i =0; i < response.length; i++){
+                    wdList[i]['program'] = programs.find((item) => item._id === wdList[i]['programID'])
+                    wdList[i]['calsPerRepList'] = calsPerRepObject?calsPerRepObject:{}
+                }
+                console.log(wdList)
+                res.json(wdList)
+            })
+            .catch(error => {
+                console.log(error)
+                res.status(500).json({
+                    message: 'An error Ocuured while fetching details'
+                })
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(500).json({
+                message: 'An error Ocuured while fetching details'
+            })
+        })
+        
+    })
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({
+            message: 'An error Ocuured while fetching details'
+        })
+    })
+})
+
 
 router.post('/initiate', (req, res) => {   // set starting date
     var data = req.body

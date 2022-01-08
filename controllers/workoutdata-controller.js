@@ -112,17 +112,21 @@ const handleSuccesfulSubscription = async (receipt, batchProcessed) => {
             workoutID: newWorkoutData._id,
             receiptID: receipt._id,
             planType: receipt.planType,
-            status: 'active'
+            status: 'active',
+            unlockedDays: receipt.paymentBatches.find((item) => item.batch == batchProcessed)['expiryDay'],
+            reminder: 3,
         }
 
         console.log(currentWorkout)
         user.currentWorkout = currentWorkout
         var updatedUser = await user.save()
     }else{
-        var user = await User.findOne({_id: data.userID})
+        var user = await User.findOne({_id: receipt.userID})
         user.currentWorkout.status = 'active'
-        user.save()
+        user.currentWorkout.unlockedDays =  receipt.paymentBatches.find((item) => item.batch == batchProcessed)['expiryDay']
+        console.log(user.currentWorkout)
+        var updatedUser = await user.save()
     }
 }
 
-module.exports = {getWorkoutData, makeNewWorkoutData, handleSuccesfulSubscription}
+module.exports = {getWorkoutData, makeNewWorkoutData, handleSuccesfulSubscription, calsPerRepObj}

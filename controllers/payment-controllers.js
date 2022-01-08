@@ -6,8 +6,6 @@ const Razorpay = require('../config/payment')
 const crypto = require('crypto');
 const User = require('../models/user')
 const WorkoutData = require('../models/workout-data')
-const { findOneAndUpdate } = require('../models/receipt')
-
 
 class Order{
 
@@ -37,35 +35,41 @@ class Order{
                     return new Date(newDate.setDate(newDate.getDate() + number));
                 }
                 
-                let startDay = 1  // day in workout
+                let startDay = 0  // day in workout
                 let reminder = 3 // remind 3 days before
     
                 let plan = this.programData.subscriptionOptions.find(item => item._id == this.originationData.planID)
+                let totalDays = this.programData.durationWeeks * this.programData.daysPerWeek
                 let reccurence = plan.paymentReccurence
-
-                if(this.originationData.planType !== 'Complete'){
-                    
-                    var no_batches = Math.round(this.programData.durationWeeks * this.programData.daysPerWeek/reccurence)
-
-                    for(let i =0; i<no_batches; i++){
-                        let dueDay = startDay + (i*reccurence)
-                        let reminderDay = dueDay - reminder
-                        let newEntry = {
-                            batch: i,
-                            dueDay: dueDay,
-                            currency: 'INR',
-                            amount: plan['priceInRs'],
-                            reminderDay: reminderDay,
-                        } 
-                        paymentBatches.push(newEntry)
-                    }
-                }else{
-                    paymentBatches.push({
-                        amount: plan['priceInRs'],
-                        batch: 0,
-                        currency: 'INR',
-                    })
+                if(plan.planType == 'Complete'){
+                    reccurence = this.programData.durationWeeks * this.programData.daysPerWeek
                 }
+                
+                // if(this.originationData.planType !== 'Complete'){
+                    
+                var no_batches = Math.round(totalDays/reccurence)
+
+                for(let i =0; i<no_batches; i++){
+                    let dueDay = startDay + (i*reccurence)
+                    let expiryDay = dueDay + reccurence
+                    let reminderDay = dueDay - reminder
+                    let newEntry = {
+                        batch: i,
+                        dueDay: dueDay,
+                        expiryDay: expiryDay,
+                        currency: 'INR',
+                        amount: plan['priceInRs'],
+                        reminderDay: reminderDay,
+                    } 
+                    paymentBatches.push(newEntry)
+                }
+                // }else{
+                //     paymentBatches.push({
+                //         amount: plan['priceInRs'],
+                //         batch: 0,
+                //         currency: 'INR',
+                //     })
+                // }
     
                 var receipt = {
                     userID: this.originationData.userID,
@@ -126,6 +130,7 @@ class Order{
 
             }else if(existingReceipt.activeBatch === -1){
             // handle program complete, but payment request is made =======
+            // check if the duration of program is extended by the trainer
             
 
             }else{

@@ -16,11 +16,14 @@ const UserSchema =  mongoose.Schema({
     phone: String,
     currentWorkout: {
         programID: String, 
-        workoutID: String, 
+        workoutID: String,
+        unlockedDays: Number, 
+        // No total days is provided for flexibility of trainer to increase number of days if needed.
         planType: String,
         status: String, 
         currentPaymentBatchNo: Number,
         receiptID: String,
+        reminder: Number
     },
     profilePhoto: {}
 }, { timestamps : true})
