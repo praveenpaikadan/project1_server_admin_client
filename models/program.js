@@ -24,17 +24,19 @@ const programSchema = mongoose.Schema({
 		[   
             { 
                 day : Number,
+                dayIntroVideoEmbedString: String,
                 timeInMins: Number,
                 targetBodyPart: String,
                 exercises : 
                     [
                         {
-                            exerciseID : String,
+                            exerciseID : String,    
                             exerciseName : String,
                             weightInKg: Number,
                             restInSec : Number,
                             target: [],  
-                            repetitionType: String
+                            repetitionType: String,
+                            restAfterInMins: Number
                         }
                     ],
             }
@@ -52,6 +54,8 @@ const programSchema = mongoose.Schema({
         ],
     images:[{}],
     videos: [{}],
+    imageUrl: String,
+    videoEmbedString: String,
     active: Boolean,
     type: Boolean,  // public = true, privet = false
     privateClients: [{userID: String,  name: String}],

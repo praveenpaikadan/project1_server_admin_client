@@ -9,8 +9,11 @@ const exerciseSchema = mongoose.Schema({
     ], 	
 		   
 	images:[{}],
+    imageUrl1: String,
+    imageUrl2: String,
     video: [{}],
-	restInSec: Number,  
+    videoEmbedString: String,
+	// restInSec: Number,  
 	repetitionType: String,
     active: Boolean,
     calsPerRep: Number,
