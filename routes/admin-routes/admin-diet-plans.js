@@ -27,7 +27,7 @@ router.get('/:id', (req,res) => {
 })
 
 router.get('/', (req,res) => {
-    DietPlan.find().select({_id:1, planName: 1, description: 1, client: 1, active: 1})
+    DietPlan.find().select({_id:1, planName: 1, description: 1, client: 1, active: 1, keyWords: 1}).sort({updatedAt: 'descending'})
     .then(response => {
         res.json({
             response

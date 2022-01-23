@@ -12,7 +12,8 @@ const programSchema = mongoose.Schema({
         ]
     },
 
-	programName: String,  
+	programName: String, 
+    keyWords: {type: String, default: ''}, 
 	durationWeeks : Number,
 	daysPerWeek : Number,
 	level : String,

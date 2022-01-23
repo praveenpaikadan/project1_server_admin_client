@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const exerciseSchema = mongoose.Schema({
 	exerciseName : String,
+    keyWords : {type: String, default: ''},
 	instructions:[
         { 
             step : Number,
@@ -8,10 +9,10 @@ const exerciseSchema = mongoose.Schema({
         }
     ], 	
 		   
-	images:[{}],
-    imageUrl1: String,
-    imageUrl2: String,
-    video: [{}],
+	// images:[{}],
+    coverImage: String,
+    explainatoryImages: String,
+    // video: [{}],
     videoEmbedString: String,
 	// restInSec: Number,  
 	repetitionType: String,

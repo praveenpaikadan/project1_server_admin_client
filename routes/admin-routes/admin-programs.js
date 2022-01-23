@@ -98,9 +98,9 @@ router.post('/',
 
         program.save()   
         .then(response => {
-            res.json({
+            res.json(
                 response
-            })
+            )
         })
         .catch(error => {
             console.log('failed')

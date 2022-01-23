@@ -5,6 +5,7 @@ const adminUserRouter   = require('./admin-routes/admin-users')
 const adminProgramRouter   = require('./admin-routes/admin-programs')
 const adminExerciseRouter   = require('./admin-routes/admin-exercises');
 const adminClientRouter   = require('./admin-routes/admin-clients');
+const adminMediaRouter   = require('./admin-routes/admin-media');
 const { isAuth, isAdmin  } = require('./authmiddleware');
 const adminContactRouter = require('./admin-routes/admin-contact')
 const adminDietPlanRouter = require('./admin-routes/admin-diet-plans')
@@ -74,7 +75,7 @@ router.use('/exercises', adminExerciseRouter)
 router.use('/clients', adminClientRouter)
 router.use('/contact', adminContactRouter)
 router.use('/diet-plan', adminDietPlanRouter)
-
+router.use('/handle-media', adminMediaRouter)
 
 
 //router.use('/clients', adminClientRouter)

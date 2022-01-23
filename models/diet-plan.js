@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const dietPlanSchema = mongoose.Schema({
 	planName : String,
+    keyWords : {type: String, default: ''},
 	description: String,
     water: Number,
     ss: {type: Boolean, default: false},

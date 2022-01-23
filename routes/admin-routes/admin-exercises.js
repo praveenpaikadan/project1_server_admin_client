@@ -78,7 +78,6 @@ router.get('/', (req,res) => {
 })
 
 router.post('/',
-
     protected_upload.fields([{
         name: 'images', maxCount: 2
         }, {
@@ -88,16 +87,16 @@ router.post('/',
 
         var data = req.body;
 
-        if(req.files.images){
-            var image1 = req.files.images[0];
-            var image2 = req.files.images[1];
-            data.images = [image1, image2];
-        }
+        // if(req.files.images){
+        //     // var image1 = req.files.images[0];
+        //     // var image2 = req.files.images[1];
+        //     data.images = req.files.images;
+        // }
 
-        if(req.files.video){
-            var video = req.files.video[0];
-            data.video = [video];
-        }
+        // if(req.files.video){
+        //     var video = req.files.video[0];
+        //     data.video = [video];
+        // }
 
         var instructions = []
         
@@ -108,16 +107,21 @@ router.post('/',
         };
 
         data.equipments = data.equipments.split(',')
+        if(data.coverImage){
+            data.coverImage = data.coverImage.trim()
+        }
 
+        if(data.explainatoryImages){
+            data.explainatoryImages = data.explainatoryImages.trim()
+        }
         data.instructions = instructions
-        
         let exercise = new Exercise(data)
 
         exercise.save()   
         .then(response => {
-            res.json({
+            res.json(
                 response
-            })
+            )
         })
         
         .catch(error => {
@@ -151,15 +155,21 @@ router.patch('/',
             data.instructions = instructions
         }
 
-        if(req.files.images){
-            var image1 = req.files.images[0];
-            var image2 = req.files.images[1];
-            data.images = [image1, image2];
+        // if(req.files.images){
+        //     data.images = req.files.images;
+        // }
+
+        // if(req.files.video){
+        //     var video = req.files.video[0];
+        //     data.video = [video];
+        // }
+
+        if(data.coverImage){
+            data.coverImage = data.coverImage.trim()
         }
 
-        if(req.files.video){
-            var video = req.files.video[0];
-            data.video = [video];
+        if(data.explainatoryImages){
+            data.explainatoryImages = data.explainatoryImages.trim()
         }
 
         data.equipments = data.equipments.split(',')
@@ -190,14 +200,15 @@ router.patch('/',
 
 router.delete('/:id', (req, res, next)=>{
     let id = req.params.id
-    getFilesToBeDeleted(id, ['images', 'video'])
-    .then(filesNamesToBeDeleted => {
+    // getFilesToBeDeleted(id, ['images', 'video'])
+    // .then(filesNamesToBeDeleted => {
+        
         Exercise.findByIdAndDelete(id)
         .then((response) => {
-            deleteFiles(filesNamesToBeDeleted);
-            res.json({
+            // deleteFiles(filesNamesToBeDeleted);
+            res.json(
                 response
-            })
+            )
         })
         .catch(error => {
             console.log(err)
@@ -205,14 +216,15 @@ router.delete('/:id', (req, res, next)=>{
                 response: "Failed to update"
             })
         })
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(404).json({
-            response: null,
-            message: "No Item found"
-        })
-    })
+
+    // })
+    // .catch(err => {
+    //     console.log(err)
+    //     res.status(404).json({
+    //         response: null,
+    //         message: "No Item found"
+    //     })
+    // })
 })
 
 module.exports = router
