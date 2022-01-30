@@ -6,15 +6,24 @@ const adminProgramRouter   = require('./admin-routes/admin-programs')
 const adminExerciseRouter   = require('./admin-routes/admin-exercises');
 const adminClientRouter   = require('./admin-routes/admin-clients');
 const adminMediaRouter   = require('./admin-routes/admin-media');
+const adminWorkoutRouter   = require('./admin-routes/admin-workouts');
 const { isAuth, isAdmin  } = require('./authmiddleware');
 const adminContactRouter = require('./admin-routes/admin-contact')
 const adminDietPlanRouter = require('./admin-routes/admin-diet-plans')
+
 
 const getMediaPath = (type) => {
     let sep =  __dirname.includes('/')?'/':"\\"
     let url = __dirname.split(sep)
     url.pop()
     return ([...url, 'static', type?'media':'protected-media'].join(sep))
+}
+
+const getProfilePicturePath = () => {
+    let sep =  __dirname.includes('/')?'/':"\\"
+    let url = __dirname.split(sep)
+    url.pop()
+    return ([...url, 'static', 'profile-photos'].join(sep))
 }
 
 
@@ -68,11 +77,12 @@ router.get('/logout', (req,res,next) => {
 })
 
 
-router.use('/media', express.static(getMediaPath(false)), express.static(getMediaPath(true)));
+router.use('/media', express.static(getMediaPath(false)), express.static(getMediaPath(true)), express.static(getProfilePicturePath()));
 router.use('/adminusers', adminUserRouter)
 router.use('/programs', adminProgramRouter)
 router.use('/exercises', adminExerciseRouter)
 router.use('/clients', adminClientRouter)
+router.use('/workouts', adminWorkoutRouter)
 router.use('/contact', adminContactRouter)
 router.use('/diet-plan', adminDietPlanRouter)
 router.use('/handle-media', adminMediaRouter)

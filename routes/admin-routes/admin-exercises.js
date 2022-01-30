@@ -48,7 +48,7 @@ const getFilesToBeDeleted = async (id, contents) => {
 router.get('/:id', (req,res) => {
     console.log(req.params.id)
     // if there is no item null is returned.
-    Exercise.findOne({"_id": req.params.id})
+    Exercise.findOne({"_id": req.params.id}).sort({updatedAt: "descending"})
     .then(response => {
         res.json({
             response
@@ -63,7 +63,7 @@ router.get('/:id', (req,res) => {
 })
 
 router.get('/', (req,res) => {
-    Exercise.find()
+    Exercise.find().select({equipments: 0, images: 0, video: 0, instructions: 0}).sort({updatedAt: "descending"})
     .then(response => {
         res.json({
             response

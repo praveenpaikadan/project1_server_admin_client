@@ -5,8 +5,8 @@ const workoutDataSchema =  mongoose.Schema({
         userID: mongoose.Schema.Types.ObjectId,
         startDate: Date,
         unlockedDays: Number,
-        endDate: Date,
-        currentDay: Number,
+        endDate: Date,       // deprecated
+        currentDay: Number,  // deprecated
         history:[{
                 ref: {type: String, default: 'dayInst'},
                 day: Number,

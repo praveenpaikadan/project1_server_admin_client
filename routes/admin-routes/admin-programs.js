@@ -46,7 +46,7 @@ const getFilesToBeDeleted = async (id, contents) => {
 
 // routes
 router.get('/:id', (req,res) => {
-    console.log(req.params.id)
+
     // if there is no item null is returned.
     Program.findOne({"_id": req.params.id})
     .then(response => {
@@ -55,24 +55,24 @@ router.get('/:id', (req,res) => {
         })
     })
     .catch(error => {
-        console.log(err)
+        console.log(error)
         res.json({
-            response: 'An error Ocuured while fetching excercise details'
+            error: 'An error Ocuured while fetching program details'
         })
     })
 })
 
 router.get('/', (req,res) => {
-    Program.find()
+    Program.find().select({schedule: 0, goal: 0, images: 0, videos: 0, subscriptionOptions:0, equipments: 0, meta: 0}).sort({updatedAt: "descending"})
     .then(response => {
         res.json({
             response
         })
     })
     .catch(error => {
-        console.log(err)
+        console.log(error)
         res.json({
-            response: 'An error Ocuured while fetching excercise details'
+            error: 'An error Ocuured while fetching program details'
         })
     })
 })
@@ -105,7 +105,7 @@ router.post('/',
         .catch(error => {
             console.log('failed')
             res.status(500).json({
-                response: "Failed"
+                error: "Failed"
             })
         })
 });

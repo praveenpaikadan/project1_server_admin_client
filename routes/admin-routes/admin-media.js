@@ -3,6 +3,7 @@ const Media = require('../../models/media');
 const {upload} = require('../../config/multer');
 const { deleteFiles } = require('../../lib/helpers');
 
+
 router.get('/getall', (req,res) => {
     Media.find().select({_id: 1, relativeUrl: 1, identifierText: 1}).sort({updatedAt: "descending"})
     .then(response => {

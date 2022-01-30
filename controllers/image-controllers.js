@@ -5,10 +5,6 @@ const Program = require('../models/program')
 var ipAddress = require('ip').address();
 const PORT = process.env.PORT;
 
-
-
-
-
 const getFullMediaUrlIfRelative = (potRelUrl) => {
     if(potRelUrl.substring(0, 7) === `/media/` ){
         return 'http://'+ ipAddress+':'+String(PORT)+'/api/v1'+ potRelUrl

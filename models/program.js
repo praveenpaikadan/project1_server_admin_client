@@ -55,7 +55,7 @@ const programSchema = mongoose.Schema({
         ],
     images:[{}],
     videos: [{}],
-    imageUrl: String,
+    coverImage: String,
     videoEmbedString: String,
     active: Boolean,
     type: Boolean,  // public = true, privet = false

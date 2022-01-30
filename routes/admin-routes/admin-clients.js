@@ -63,8 +63,23 @@ const Program = require('../../models/program');
 //     })
 // })
 
+router.get('/:id', (req,res) => {
+
+    User.findById(req.params.id).select({hash:0, salt: 0}).sort("name")
+    .then(response => {
+        res.json(response)
+    })
+    .catch(error => {
+        console.log(error)
+        res.json({
+            response: 'An error Ocuured while fetching excercise details'
+        })
+    })
+})
+
+
 router.get('/', (req,res) => {
-    User.find().select({_id:1, email: 1, name:1}).sort("name")
+    User.find().select({hash:0, salt: 0}).sort("name")
     .then(response => {
         res.json({
             response
@@ -77,6 +92,8 @@ router.get('/', (req,res) => {
         })
     })
 })
+
+
 
 // not complete --------------
 router.get('/assigned-programs/:id', (req,res) => {
