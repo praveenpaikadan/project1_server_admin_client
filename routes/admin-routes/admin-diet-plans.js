@@ -4,9 +4,25 @@ const multer = require('multer');
 
 
 
-// routes
+router.get('/getid', (req,res) => {
+    
+    var {userID, programID} = req.query 
 
+    
+    DietPlan.findOne({"client.userID": userID, "client.programID": programID }).select({_id: 1})
+    .then(response => {
+        res.json({
+            response
+        })
 
+    })
+    .catch(error => {
+        console.log(error)
+        res.json({
+            error: 'An error Ocuured while fetching excercise details'
+        })
+    })
+})
 
 // routes
 router.get('/:id', (req,res) => {
