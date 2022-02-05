@@ -19,7 +19,7 @@ class Order{
             var response = await Razorpay.orders.fetch(this.receipt.paymentBatches[active].orderResponse.id)
             return response
         }catch(error){
-            console.log(error)
+            // console.log(error)
             return null
         }
     }
@@ -61,6 +61,7 @@ class Order{
                         amount: plan['priceInRs'],
                         reminderDay: reminderDay,
                     } 
+
                     paymentBatches.push(newEntry)
                 }
                 // }else{
@@ -101,10 +102,8 @@ class Order{
 
         if(existingReceipt){
             if(existingReceipt.activeBatch === 0){ 
-
                 // Not yet processed receipt for any payments.
                 return await createReceipt(existingReceipt._id)
-
                 //OR
                 
                 {/*
@@ -151,23 +150,27 @@ class Order{
     }
 
     async createOrder(){
-        var activeBatch = this.receipt.paymentBatches[this.receipt.activeBatch]
-        var request = {
-            "amount":activeBatch.amount*100,  // for razor pay the amount should be in paisa
-            "currency":activeBatch.currency,
-            "receipt":`${this.receipt._id}_${activeBatch.batch}`,
-            "notes":{
-                paidByUser: this.receipt.userName,
-                paidByEmail: this.receipt.userEmail,
-                productName: this.receipt.productName,
-                productID: this.receipt.productID,
-                totalBatches: this.receipt.paymentBatches.length,
-                planType: this.receipt.planType,
-                batch: this.receipt.activeBatch,
-            }
-        }
+
+
+
+        console.log('..... inside createOrder ..........', this.receipt)
 
         try{
+            var activeBatch = this.receipt.paymentBatches[this.receipt.activeBatch]
+            var request = {
+                "amount":activeBatch.amount*100,  // for razor pay the amount should be in paisa
+                "currency":activeBatch.currency,
+                "receipt":`${this.receipt._id}_${activeBatch.batch}`,
+                "notes":{
+                    paidByUser: this.receipt.userName,
+                    paidByEmail: this.receipt.userEmail,
+                    productName: this.receipt.productName,
+                    productID: this.receipt.productID,
+                    totalBatches: this.receipt.paymentBatches.length,
+                    planType: this.receipt.planType,
+                    batch: this.receipt.activeBatch,
+                }
+            }
             var response  = await Razorpay.orders.create(request)
             if(response.id){
                 var receiptID = this.receipt._id
@@ -183,7 +186,7 @@ class Order{
                 return null
             }
         }catch(error){
-            console.log(error)
+            console.log('Failed To create order => ', error)
             return null
         }
     }
@@ -270,11 +273,13 @@ async function successPaymentHandler(data){
             verb = 'subscribed to'
         }
         var message = 
-        `You have successfully ${verb} ${params.productName}
+        `<div>
+        <p class="success-message-p">You have successfully ${verb} ${params.productName} !!
         <br /><br/>
-        Amount Paid: Rs. ${params.amount} <br /><br/>
-        Payment Id : ${params.payment_id} <br /><br/>
-        Receipt Id: ${params.receipt_id}`
+        Amount Paid: Rs. ${params.amount} <br />
+        Payment Id : ${params.payment_id} <br />
+        Receipt Id: ${params.receipt_id}</p>
+        </div>`
         return message
     }
 
@@ -314,7 +319,7 @@ async function successPaymentHandler(data){
             var returnValue = {verificationStatus: 'success', message: message, receipt: receipt, batchProcessed: batchNo}
             return returnValue
         }else{
-            return ({verificationStatus: 'failed', message: 'Your payment verification has failed. Please redo the payment. Incase amount is deducted from your account, please contact us from trainer contact page.'})
+            return ({verificationStatus: 'failed', message: 'Your payment verification has failed. Please redo the payment. Incase amount is deducted from your account, please wait till its refunded OR you contact us from trainer contact page.'})
         }
     }catch(error){
         console.log(error)

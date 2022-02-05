@@ -2,6 +2,7 @@ const router   = require('express').Router();
 const path = require('path')
 const {Order, returnReceiptIfExist, successPaymentHandler, failedPaymentHandler} = require('../../controllers/payment-controllers');
 const { handleSuccesfulSubscription } = require('../../controllers/workoutdata-controller');
+const { getFullMediaUrlIfRelative } = require('../../lib/helpers');
 const { tokenExtractor } = require('../../lib/tokenUtils');
 var ipAddress = require('ip').address();
 var PORT = require('dotenv').config().parsed.PORT;
@@ -16,6 +17,7 @@ router.get('/payment-page', async (req, res, next) => {
 
     var authToken = req.headers['x-access-token']?req.headers['x-access-token']:tokenExtractor(req)
 
+    console.log(data)
     if(!data.type){
       res.status(400).send('Bad Request')
     }
@@ -24,6 +26,7 @@ router.get('/payment-page', async (req, res, next) => {
     var existingReceipt = await returnReceiptIfExist(data) 
     var receipt = await order.create_redate_validate_Receipt(existingReceipt)
     var orderDetails = await order.retreiveOrderDetails()
+    
     if(!orderDetails){
       orderDetails = await order.createOrder()
     }
@@ -33,7 +36,8 @@ router.get('/payment-page', async (req, res, next) => {
 
     if(orderDetails){
         res.render('user-views/payment-page', {
-            imgUrl: `http://${ipAddress}:${PORT}/api/v1/media/${order.getImageFile()}`,
+            // imgUrl: `http://${ipAddress}:${PORT}/api/v1/media/${order.getImageFile()}`,
+            imgUrl:  getFullMediaUrlIfRelative(order.programData.coverImage),
             receiptID: receipt._id,
             batch: orderDetails.notes.batch,
             amount: orderDetails.amount,
@@ -41,7 +45,7 @@ router.get('/payment-page', async (req, res, next) => {
             name: "Aboo Thahir Fitness",
             description: "Test Transaction",
             // productDescription: order.programData.productDescription,
-            productDescription: "<b>Occaecat</b> <br/> magna exercitation aute pariatur elit ullamco occaecat officia irure esse laboris. Ea cillum fugiat sint id magna. Ut consequat mollit Lorem sunt elit. Ut cupidatat culpa mollit sit voluptate quis est ipsum consequat fugiat eiusmod tempor in occaecat. Reprehenderit consequat sint et reprehenderit dolore quis ut ea.Occaecat magna exercitation aute pariatur elit ullamco occaecat officia irure esse laboris. Ea cillum fugiat sint id magna. Ut consequat mollit Lorem sunt elit. Ut cupidatat culpa mollit sit voluptate quis est ipsum consequat fugiat eiusmod tempor in occaecat. Reprehenderit consequat sint et reprehenderit dolore quis ut ea.Occaecat magna exercitation aute pariatur elit ullamco occaecat officia irure esse laboris. Ea cillum fugiat sint id magna. Ut consequat mollit Lorem sunt elit. Ut cupidatat culpa mollit sit voluptate quis est ipsum consequat fugiat eiusmod tempor in occaecat. Reprehenderit consequat sint et reprehenderit dolore quis ut ea.Occaecat magna exercitation aute pariatur elit ullamco occaecat officia irure esse laboris. Ea cillum fugiat sint id magna. Ut consequat mollit Lorem sunt elit. Ut cupidatat culpa mollit sit voluptate quis est ipsum consequat fugiat eiusmod tempor in occaecat. Reprehenderit consequat sint et reprehenderit dolore quis ut ea.",
+            productDescription: order.programData.otherRemarks || order.programData.goal,
             notes: orderDetails.notes,
             order_id: orderDetails.id,
             batch: orderDetails.notes.batch,
@@ -49,7 +53,7 @@ router.get('/payment-page', async (req, res, next) => {
             userEmail: orderDetails.notes.paidByEmail,
             duration: order.programData.durationWeeks,
             level: order.programData.level,
-            goal: order.programData.goal,
+            goal: order.programData.category,
             color: "#FF4C00",
             successHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/verify`,
             failedHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/recordfailure`
@@ -64,7 +68,7 @@ router.get('/payment-page', async (req, res, next) => {
             <title>Something went wrong. Go back and try again</title>
           </head>
           <body>
-            <h3>Something went wrong. Go back and try again</h3>    
+            <h3 style="margin-top: 100px;">Something went wrong. Go back and try again</h3>    
           </body>
         </html>
       `
