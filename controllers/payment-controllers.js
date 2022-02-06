@@ -274,11 +274,14 @@ async function successPaymentHandler(data){
         }
         var message = 
         `<div>
-        <p class="success-message-p">You have successfully ${verb} ${params.productName} !!
+        <p style="text-align: center;" class="success-message-p">You have successfully ${verb} ${params.productName} !!
+        </p>
         <br /><br/>
-        Amount Paid: Rs. ${params.amount} <br />
-        Payment Id : ${params.payment_id} <br />
-        Receipt Id: ${params.receipt_id}</p>
+        <p class="success-details-p">
+            Amount Paid: Rs. ${params.amount} <br />
+            Payment Id : ${params.payment_id} <br />
+            Receipt Id: ${params.receipt_id}
+        </p>
         </div>`
         return message
     }

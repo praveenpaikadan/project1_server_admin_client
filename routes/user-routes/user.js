@@ -54,7 +54,7 @@ router.get('/data', (req, res) => {
     console.log(userID)
     User.findOne({"_id": userID}, {hash: 0, salt: 0})
     .then((response) => {
-        res.json({response})
+        res.json(response)
     })
     .catch(err => {
         console.log(err)

@@ -54,7 +54,8 @@ router.get('/payment-page', async (req, res, next) => {
             duration: order.programData.durationWeeks,
             level: order.programData.level,
             goal: order.programData.category,
-            color: "#FF4C00",
+            // color: "#FF4C00",
+            color: "#5bb543",
             successHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/verify`,
             failedHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/recordfailure`
         })
