@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url("http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css");
+
+body{
+    margin: 0px;
+    --main-color: #FF4C00;
+}
+
+label{
+  margin-right:10px;
+}
+
+textarea{
+  min-width: 500px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgba(179, 179, 179, 0.096); 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(175, 175, 175, 0.281); 
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(153, 153, 152, 0.61); 
+  }
+  
+
+:root{
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1em;
+}
+
+.hoverable:hover{
+    cursor: pointer;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.hoverable-plain:hover{
+  cursor: pointer;
+}
+
+.delete-hoverable{
+  background-color: rgba(139, 139, 139, 0.233);
+}
+
+.delete-hoverable:hover{
+  cursor: pointer;
+  background-color: rgba(235, 54, 54, 0.233);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.rowItemContainer:hover{
+  cursor: pointer;
+  background-color: rgba(167, 162, 153, 0.1);
+}
+
+
+.height-transition{
+  transition: height 2s ;
+}
+
+.page-heading{
+  text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.shadow1{
+  box-shadow: -1px -2px 18px 0px rgba(255,62,0,0.14);
+-webkit-box-shadow: -1px -2px 18px 0px rgba(255,62,0,0.14);
+-moz-box-shadow: -1px -2px 18px 0px rgba(255,62,0,0.14);
+}
+
+
+

@@ -5,6 +5,7 @@ const session       = require('express-session');
 const MongoStore    = require('connect-mongo')(session);
 const bodyParser    = require('body-parser')
 const {tokenInterceptor} = require('./lib/tokenUtils')
+const path = require('path');
 
 var cors = require('cors');
 
@@ -37,7 +38,8 @@ app.use(cors({
 // app.use(tokenInterceptor)
 
 app.use(morgan('dev'))
-app.use(express.static("static"));
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 
 // app.use(express.json());  // comment this out if any anomaly
 // app.use(bodyParser.json());
@@ -78,7 +80,7 @@ app.use(passport.session());
 
 
 // routes
-app.use('/admin', adminCentralRoute)
+app.use('/admin/api', adminCentralRoute)
 app.use('/api/v1/', userCentralRoute)
 
 

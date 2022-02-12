@@ -1,0 +1,156 @@
+.main {
+        display:flex;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+.container {
+      flex:1;
+      min-width:600px;
+      flex-direction:column;
+      min-width:1; 
+      box-sizing: border-box;
+      padding: 15px;
+      height:100vh;
+      
+}
+
+.backButton{
+    opacity:0.3;
+    
+}
+
+.backButton:hover{
+    opacity: 0.6;
+    cursor: pointer;
+    color: var(--main-color)
+  }
+.wrapperContainer{
+        display: flex;
+        flex-direction: column;
+        height:100%;
+    }
+
+.unScrollableContainer{
+
+    }
+
+.scrollableContainer{
+    flex:1;
+    overflow-y: scroll;
+    flex-grow:1;
+    }
+
+.rightContainer{
+    background-color: blanchedalmond;
+    width:300px;
+    padding: 10px;
+    background-color: rgba(182, 177, 177, 0.363);
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+
+}
+.mainName{
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-top: 10px;
+    opacity: 0.75;
+    text-align: center;
+}
+
+.contact{
+    display: flex;
+    align-items: center;
+    opacity: 0.8;
+    font-size: 0.9em;
+}
+
+.contactIcon {
+    color: var(--main-color);
+    margin-right: 5px;
+}
+
+.otherDetailsContainer{
+    /* background-color: coral; */
+    align-self: flex-start;
+    margin-top: 0px;
+    padding:10px;
+    opacity: 0.8;
+}
+
+.detailsItemContainer{
+    margin: 10px;
+    display: flex;
+    /* background-color: cornsilk; */
+    font-size: 0.9em;
+}
+
+.detailsKey{
+    font-weight: bold;
+    margin-right: 5px;
+    color: var(--main-color);
+}
+
+.activeProgramHeading{
+    font-size: 1.5em;
+    font-weight: bold;
+    border-bottom: 5px solid var(--main-color);
+    padding-top:10px;
+    padding-bottom: 10px;
+}
+
+.workout-item{
+    margin: auto;
+    width: 95%;
+    margin: 5px;
+    display: flex;
+    padding: 5px;
+    box-shadow: 2px 3px 13px -1px rgba(0,0,0,0.18);
+    -webkit-box-shadow: 2px 3px 13px -1px rgba(0,0,0,0.18);
+}
+
+.workout-item-date{
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    
+}
+
+.exercises-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.exercise-item__{
+    min-width: 100px;
+    margin: 5px;
+    /* height: 200px; */
+    align-items: flex-start;
+}
+
+.exercise-item >p{
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    font-weight: 400;
+}
+
+.set-item{
+    font-size: 0.8em;
+    margin: 0;
+    padding: 0;
+}
+
+.link-btn{
+    width: fit-content;
+    margin-right: 20px;
+}
+
+.button-container{
+    position: sticky;
+    top: 0;
+    padding-bottom: 10px;
+    padding-top: 0px;
+
+}

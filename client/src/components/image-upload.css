@@ -1,0 +1,83 @@
+.upload__image-wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.click-or-drop-button{
+    height: 80px;
+    border: 2px dashed var(--main-color);
+    background-color: inherit;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.click-or-drop-button:hover{
+    cursor: pointer;
+    font-size: 1.2em;
+    color: var(--main-color);
+}
+
+
+.uploaded-images-container{
+    display: flex;
+    justify-content: center;
+    overflow-x: scroll;
+    padding-bottom: 10px;
+}
+
+.uploded-image-container{
+    width:100%;
+    height: 75%;
+}
+
+.image-item{
+    width: 170px;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid var(--main-color);
+    border-radius: 15px;
+    overflow:hidden;;
+}
+
+.onclick-remove-button{
+
+    margin-top: 20px;
+    border: 2px dashed red;
+    background-color: inherit;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 10px;
+}
+
+.onclick-remove-button:hover{
+    background-color: red;
+    color: white;
+}
+
+/* .image-item__btn-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+} */
+
+.image-item__btn-wrapper > button{
+    margin: 5px;
+    background-color: inherit;
+    border:1px solid grey;
+    border-radius: 5px;
+}
+
+.image-item__btn-wrapper > button:nth-child(1):hover{
+    background-color: var(--main-color);
+    color: white;
+}
+
+.image-item__btn-wrapper > button:nth-child(2):hover{
+    background-color: red;
+    color: white;
+}

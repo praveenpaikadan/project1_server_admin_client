@@ -1,0 +1,160 @@
+.main {
+        display:flex;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+.container {
+      flex:1;
+      min-width:600px;
+      flex-direction:column;
+      min-width:1; 
+      box-sizing: border-box;
+      padding: 15px;
+      height:100vh;
+      
+}
+
+.backButton{
+    opacity:0.3;
+    
+}
+
+.backButton:hover{
+    opacity: 0.6;
+    cursor: pointer;
+    color: var(--main-color)
+  }
+.wrapperContainer{
+        display: flex;
+        flex-direction: column;
+        height:100%;
+    }
+
+.unScrollableContainer{
+
+    }
+
+.scrollableContainer{
+    padding-right: 10px;
+    flex:1;
+    overflow-y: scroll;
+    flex-grow:1;
+    padding-bottom: 20px;
+    }
+
+.rightContainer{
+    background-color: blanchedalmond;
+    width:300px;
+    padding: 10px;
+    background-color: rgba(182, 177, 177, 0.363);
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+
+}
+.mainName{
+    font-weight: bold;
+    font-size: 2em;
+    margin-top: 10px;
+    opacity: 0.75;
+    text-align: center;
+}
+
+.form{
+    max-width: 800px;
+    padding: 10px;
+    margin: auto;
+    border: none;
+    justify-self: center;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    /* justify-content: space-between; */
+}
+
+.fieldItemContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-width: 400px;
+    width:100%;
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+.fieldKey{
+    font-weight: bold;
+    margin-right: 10px;
+    width:200px;
+
+}
+
+.fieldValue{
+    flex:1;
+    display: flex;
+    flex-direction: column;    
+}
+
+.fieldValue > input{
+    padding: 10px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.fieldValue > span{
+    font-size: 0.75em;
+    margin-top: 5px;
+}
+
+
+
+.form > div {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+
+.form > div >label {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+
+.form > div >input  {
+    font-weight: bold;
+    padding: 10px;
+}
+
+.form > div >select  {
+    font-weight: bold;
+    padding: 10px;
+}
+
+.form > div >select>option  {
+    font-weight: bold;
+    padding: 10px;
+}
+
+.instructionContainer > div {
+    display: flex;
+}
+
+.instructionContainer > div > textarea {
+    height: 50px;
+    flex: 1;
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+.form > button{
+    height: 40px;
+    margin-top: 20px;
+    width:300px;
+    font-size: 20px;
+}

@@ -1,0 +1,46 @@
+.login-box-container{
+    width: 350px;
+    height: 360px;
+    margin: auto;
+    transform: translateY(20vh);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+    background-color: rgba(65, 65, 65, 0.26);
+    box-sizing: border-box;
+    padding:30px;
+    border-radius: 30px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.logo-container {
+    align-self: center;
+}
+
+.cred-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+}
+
+.cred-field > input{
+    border-radius: 10px;
+    border: none;
+    padding: 3px;
+    margin: none;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.cred-field > input:active{
+    border: none;
+    margin: 0;
+}
+
+.fail-text{
+    display: inline;
+    margin: auto;
+    color: red;
+}
