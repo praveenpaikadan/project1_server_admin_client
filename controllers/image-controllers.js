@@ -1,5 +1,5 @@
 
-const mongoose = require('moNgoose')
+const mongoose = require('mongoose')
 const Exercise = require('../models/exercise')
 const Program = require('../models/program')
 var ipAddress = require('ip').address();
