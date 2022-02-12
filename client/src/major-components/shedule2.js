@@ -7,6 +7,7 @@ import { DriveVideoWrapperCopyButton } from '../components/copy-wrapper-button';
 import { Autocomplete } from '@mui/material';
 import { TextField } from '@material-ui/core';
 import { getAllProgramData, getProgramDataByID } from '../fetch-handlers/programs';
+import { BASE_URL } from '../App';
 
 //{label, name, register, errors, required=true, options}
 
@@ -223,7 +224,6 @@ const Schedule2 = ({setScheduleData, dv, scheduleRetreiver, exportSchedule}) => 
         }
     })
 
-    const BASE_URL = 'http://localhost:3567/admin'
     const [exerciseOptions, setExerciseOptions] = useState([]) 
     const [isLoading, setIsLoading] = useState(true)
     async function getAllExerciseData()  {

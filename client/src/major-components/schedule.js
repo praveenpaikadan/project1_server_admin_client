@@ -3,9 +3,9 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Loader from '../components/loader';
+import { BASE_URL } from '../App';
 
 //{label, name, register, errors, required=true, options}
-
 
 const DeleteExerciseButton = ({exercises, handleDeleteExercise, dayIndex}) => {
     if (exercises.length >= 2){
@@ -218,8 +218,6 @@ const Day = ({dayData, handleDataChange, dayIndex, handleAddExercise, handleDele
 
 const Schedule = ({setScheduleData, dv}) => {
 
-
-    const BASE_URL = 'http://localhost:3567/admin'
     const [exerciseOptions, setExerciseOptions] = useState([]) 
     const [isLoading, setIsLoading] = useState(true)
     async function getAllExerciseData()  {

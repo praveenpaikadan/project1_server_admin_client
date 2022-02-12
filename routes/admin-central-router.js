@@ -26,8 +26,6 @@ const getProfilePicturePath = () => {
     return ([...url, 'static', 'profile-photos'].join(sep))
 }
 
-
-
 // const adminClientRouter   = require('./admin-routes/admin-client)
 
 

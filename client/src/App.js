@@ -12,8 +12,8 @@ import { useState, useEffect } from 'react';
 import { getCurrentUserData } from './fetch-handlers/admin-user';
 import Loader from './components/loader';
 
-// const BASE_URL = 'http://localhost:3567/admin'
-const BASE_URL = "https://personal-training-app.herokuapp.com/admin/api"
+// const BASE_URL = 'http://localhost:3567/api/admin'
+const BASE_URL = "https://personal-training-app.herokuapp.com/api/admin"
 
 function App() {
 

@@ -18,6 +18,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import Schedule2 from './shedule2';
 import { DriveVideoWrapperCopyButton } from '../components/copy-wrapper-button';
 import { getFullUrlIfRelative } from '../utilities/helpers';
+import { BASE_URL } from '../App';
 
 axios.defaults.withCredentials = true
 
@@ -45,8 +46,6 @@ const ProgramForm = ({data}) => {
     useEffect(() => {
         window.scroll(0,0)
     }, [])
-
-    const BASE_URL = 'http://localhost:3567/admin'
 
     // const {path, url}  = useRouteMatch();
     // const history = useHistory()
@@ -195,7 +194,7 @@ const ProgramForm = ({data}) => {
 
 
             // sending data and listenong for  progress and result(status)
-            axios.post(`http://localhost:3567/admin/programs`, bodyFormData, {
+            axios.post(BASE_URL+ `/programs`, bodyFormData, {
                 onUploadProgress: ProgressEvent => {
                     setProgress((ProgressEvent.loaded / ProgressEvent.total*100),
                 )}
@@ -228,7 +227,7 @@ const ProgramForm = ({data}) => {
             // }
 
             // sending data and listenong for  progress and result(status)
-            axios.patch("http://localhost:3567/admin/programs", bodyFormData, {
+            axios.patch(BASE_URL+ `/programs`, bodyFormData, {
                 onUploadProgress: ProgressEvent => {
                     setProgress((ProgressEvent.loaded / ProgressEvent.total*100),
                 )}

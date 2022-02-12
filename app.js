@@ -38,7 +38,7 @@ app.use(cors({
 // app.use(tokenInterceptor)
 
 app.use(morgan('dev'))
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use('/admin',express.static(path.join(__dirname, 'client/build')));
 
 
 // app.use(express.json());  // comment this out if any anomaly
@@ -80,7 +80,7 @@ app.use(passport.session());
 
 
 // routes
-app.use('/admin/api', adminCentralRoute)
+app.use('/api/admin', adminCentralRoute)
 app.use('/api/v1/', userCentralRoute)
 
 
