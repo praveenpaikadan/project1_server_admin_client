@@ -38,7 +38,12 @@ app.use(cors({
 // app.use(tokenInterceptor)
 
 app.use(morgan('dev'))
-app.use('/admin',express.static(path.join(__dirname, 'client/build')));
+
+// serve react js static files for admin dash
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 
 
 // app.use(express.json());  // comment this out if any anomaly
