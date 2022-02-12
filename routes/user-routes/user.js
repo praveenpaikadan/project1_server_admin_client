@@ -63,18 +63,37 @@ router.get('/data', (req, res) => {
 })
 
 router.post('/editprofile', (req, res) => {
+
+    if(! ['name', 'email', 'gender', 'dob', 'height', 'weight'].includes(req.body['field'])){
+        res.status(401).end()
+        return
+    } 
+
     let userID = req.session.passport.user
     var update = {}
     update[req.body['field']] = req.body['value']
 
     User.findOneAndUpdate({"_id": userID}, update, {new: true})
     .then((response) => {
-        res.json(response)
+        if(req.body['field'] === 'weight'){
+            User.findOneAndUpdate({"_id": userID}, {'weightHistory': [...response.weightHistory, {date: new Date(), weight: req.body['value']}]}, {new: true})
+            .then((response) => {
+                res.json(response)
+            })
+            .catch(() => {
+                console.log(err)
+                res.status(500).json({response: "Failed"})
+            })
+        }else{
+            res.json(response)
+        }
     })
     .catch(err => {
         console.log(err)
         res.status(500).json({response: "Failed"})
     })
+
+
 })
 
 router.use('/getprofilephoto',

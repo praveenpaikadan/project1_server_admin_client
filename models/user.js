@@ -14,6 +14,7 @@ const UserSchema =  mongoose.Schema({
 	weight : Number,
     workOutData : String,
     phone: String,
+    weightHistory: [{date: Date, weight: Number}],
     currentWorkout: {
         programID: String, 
         workoutID: String,

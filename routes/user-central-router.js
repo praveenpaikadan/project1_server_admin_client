@@ -118,6 +118,7 @@ router.post('/signup', (req, res, next) => {
                     req.body.salt = salt
                     req.body.hash = hash
                     req.body.verified = true
+                    req.body.weightHistory =  [{date: new Date, weight: req.body.weight}]
                     let newUser = new User(req.body)
                 
                     console.log(newUser)

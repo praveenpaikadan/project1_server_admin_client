@@ -4,8 +4,6 @@ const {upload} = require('../../config/multer');
 const { deleteFiles } = require('../../lib/helpers')
 
 
-
-
 router.get('/', (req,res) => {
     Contact.find().select({updatedAt: 0, createdAt: 0}).sort('updatedAt')
     .then(response => {

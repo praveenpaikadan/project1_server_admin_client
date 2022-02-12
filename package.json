@@ -4,7 +4,9 @@
   "description": "express server for exercise app",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -35,5 +37,8 @@
     "passport-local": "^1.0.0",
     "razorpay": "^2.8.0",
     "react-router-dom": "^5.2.0"
+  },
+  "engines": {
+    "node": "12.22.1"
   }
 }
