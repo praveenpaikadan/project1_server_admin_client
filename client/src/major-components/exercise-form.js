@@ -201,7 +201,7 @@ const ExerciseForm = ({data}) => {
             // }
 
             // sending data and listenong for  progress and result(status)
-            axios.patch(BASE_URL+ "exercises", bodyFormData, {
+            axios.patch(BASE_URL+ "/exercises", bodyFormData, {
                 onUploadProgress: ProgressEvent => {
                     setProgress((ProgressEvent.loaded / ProgressEvent.total*100),
                 )}

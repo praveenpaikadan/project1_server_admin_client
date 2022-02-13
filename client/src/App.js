@@ -3,7 +3,7 @@ import Dashboard from './dashboard';
 import LoginPage from './login-page'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import NotFound from './pages/not-found';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {LoginContext} from './context/loginContext'
 import { useState, useEffect } from 'react';

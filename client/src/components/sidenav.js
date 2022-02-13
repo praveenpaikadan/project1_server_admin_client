@@ -36,23 +36,24 @@ function SideNav(props) {
             })
         }
     }
-    
+
+
     return (
       <div id="sidenav">
-
-            <div className="topContainer">
+            <div id="sidenav-internal-wrapper">
+            <div className="sidenav-topContainer">
                 <Logo/>
             </div>
 
-            <div className="middleContainer">
+            <div className="sidenav-middleContainer">
                 {!props.children? 
                     middleItems.map((item, index) => (
                         <Link to={item[2]} style={{ textDecoration: 'none', color: 'white' }} key={String(index)}><div 
                             key={index}
                             className={
                                 active===index?
-                                "navItemActive":
-                                "navItem"
+                                "sidenav-navItemActive":
+                                "sidenav-navItem"
                             }
                             onClick= {()=> handleChange(index)}
                         >
@@ -68,20 +69,20 @@ function SideNav(props) {
                 
             </div>
 
-            <div className="bottomContainer">
+            <div className="sidenav-bottomContainer">
                 <div 
                     onClick={()=> setActive(-1)}
-                    className="navItem"
+                    className="sidenav-navItem"
                     >
                     <SettingsApplicationsIcon style={{ fontSize: 20, marginRight:'10px'}} />
                     Settings
                 </div>
-                <div className="navItem" onClick={() => handleLogOutClick()}>
+                <div className="sidenav-navItem" onClick={() => handleLogOutClick()}>
                     <ExitToAppIcon style={{ fontSize: 20, marginRight:'10px' }}/>
                     Logout
                 </div>
             </div>
-        
+        </div>
       </div>
     );
   }

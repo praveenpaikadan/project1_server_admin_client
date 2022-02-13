@@ -160,9 +160,9 @@ export const ImageSearch = ({reload, refresh, heading, searchBoxStyle, imageCont
     const [copyFullUrl, setCopyFullUrl] = useState(false)
 
     return(
-        <div style={{flex:1, display: 'flex', flexDirection: 'column'}}>
+        <div style={{flex:1, display: 'flex', flexDirection: 'column', backgroundColor:'white'}}>
             {heading?<h1 className="page-heading">{heading}</h1>:null}
-            <div>
+            <div style={{zIndex: 1000, position: 'sticky', top: 0, backgroundColor: "white", padding: '10px', borderRadius: '10px'}}>
                 <Autocomplete
                     disablePortal
                     // freeSolo={true}
@@ -173,16 +173,19 @@ export const ImageSearch = ({reload, refresh, heading, searchBoxStyle, imageCont
                     renderInput={(params) => <TextField fullwidth value={search} onChange={(e) => {setSearch(e.target.value)}} {...params} label="Search Images" />}
                 />
                 <p style={{marginLeft: '20px', display:'block', color: 'gray'}}>Select to copy url</p>
-                <input checked={copyFullUrl} onChange={(e => setCopyFullUrl(e.target.checked))} type="checkbox" id="vehicle1" name="vehicle1" value="Bike" style={{marginRight: '10px'}}/>
-                <label for="vehicle1"> Copy full url</label>
+                <div style={{marginLeft: '20px'}}>
+                    <input checked={copyFullUrl} style={{marginLeft: '20px'}} onChange={(e => setCopyFullUrl(e.target.checked))} type="checkbox" id="vehicle1" name="vehicle1" value="Bike" style={{marginRight: '10px'}}/>
+                    <label for="vehicle1" > Copy full url</label>
+                </div> 
             </div>
+
             <div style={{flex:1,  width: '100%', overflow: 'scroll', borderRight: '10px solid white'}}>
                 {loading?
 
                 <Loader position='center'/>:
 
                 (!error?
-                <div className='content-main-wrapper' style={{...imageContainerStyle}}>
+                <div className='content-main-wrapper'>
                     {(imageData).filter(item => {return item.identifierText.toLowerCase().includes(search.toLowerCase())}).map((item) => (<ImageItem key={item._id} data={item} copyFullUrl={copyFullUrl} showDelete={showDelete} handleDelete={handleDeleteImage}/>))}
                 </div>:
                 <div onClick={() => {refresh()}}>{error}</div>)
@@ -199,9 +202,9 @@ const Gallery = () => {
     const refresh = () => {setReload(!reload)}
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', height: '100vh'}}>
+        <div style={{ display: 'flex', flexDirection: 'row', height: '100%'}}>
             <ImageSearch reload={reload} refresh={refresh} heading={'Gallery'} showDelete={true}/>
-            <div style={{width: '300px' , backgroundColor: '#e6e6e6', padding: '20px', height: '100vh', marginBottom: '20px'}} >
+            <div style={{width: '300px' , backgroundColor: '#e6e6e6', padding: '20px', height: '100%', marginBottom: '20px'}} >
                 <GeneralImageUpload refresh={refresh}/>
             </div>
         </div>

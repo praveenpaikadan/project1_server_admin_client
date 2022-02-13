@@ -1,12 +1,12 @@
 .main {
         display:flex;
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
     }
 
 .container {
       flex:1;
-      min-width:600px;
+      min-width:300px;
       flex-direction:column;
       min-width:1; 
       box-sizing: border-box;
@@ -25,32 +25,13 @@
     cursor: pointer;
     color: var(--main-color)
   }
+
 .wrapperContainer{
         display: flex;
         flex-direction: column;
         height:100%;
     }
 
-.unScrollableContainer{
-
-    }
-
-.scrollableContainer{
-    flex:1;
-    overflow-y: scroll;
-    flex-grow:1;
-    }
-
-.rightContainer{
-    background-color: blanchedalmond;
-    width:300px;
-    padding: 10px;
-    background-color: rgba(182, 177, 177, 0.363);
-    display: flex;
-    flex-direction: column;
-    align-items: center;    
-
-}
 .mainName{
     font-weight: bold;
     font-size: 1.5em;

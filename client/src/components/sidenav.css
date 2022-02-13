@@ -1,25 +1,30 @@
 
 #sidenav{
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 212px;
-    height: 100vh;
+    height: 100%;
     font-family: 'Ubuntu';
     font-style: normal;
     font-weight: bold;
     color: #C1C1C1;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(67, 67, 67, 0.712) 54.04%, rgba(67, 67, 67, 0.648) 75.39%, rgba(67, 67, 67, 0.552) 100%);
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
-    /* overflow: hidden ; */
 }
 
-.topContainer{
-    padding:30px;
+#sidenav-internal-wrapper{
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    /* margin-bottom: 20px; */
+    align-items: center;
+    overflow-y: scroll;
 }
 
-.middleContainer {
+.sidenav-topContainer{
+    margin-top: 30px;
+}
+
+.sidenav-middleContainer {
     display: flex;
     flex:  1;
     flex-direction: column;
@@ -27,7 +32,7 @@
     justify-content: flex-start;
 }
 
-.navItem{
+.sidenav-navItem{
     width: 100%;
     display: flex;
     align-items: center;
@@ -39,7 +44,7 @@
     padding-right: 10px;
 }
 
-.navItem:hover {
+.sidenav-navItem:hover {
     background: linear-gradient(90deg, #464444 0%, rgba(109, 107, 107, 0) 100%);
     filter: drop-shadow(0px 2px 2px rgba(122, 121, 121, 0.25));
     border-top-left-radius: 20px;
@@ -47,7 +52,7 @@
     cursor: pointer;  
 }
 
-.navItemActive {
+.sidenav-navItemActive {
     width: 100%;
     display: flex;
     align-items: center;
@@ -64,12 +69,14 @@
     cursor: pointer;  
 }
 
-.bottomContainer{
+.sidenav-bottomContainer{
     align-self: flex-start;
     margin-left: 20px;
+    margin-bottom: 40px;
+
 }
 
-.bottomContainer > div{
+.sidenav-bottomContainer > div{
     font-size: 15px;
     margin-bottom: 20px;
     padding: 5px;

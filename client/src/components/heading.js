@@ -32,6 +32,9 @@ const Heading = ({text, searchBarParams}) => {
 const styles = {
     container:{
         display: 'flex',
+        marginRight: '10px',
+        marginLeft: '10px',
+        marginTop: '10px',
         alignItems:'center',
         justifyContent: 'space-between',
     },

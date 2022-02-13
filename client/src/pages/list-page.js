@@ -20,13 +20,13 @@ const ListPage = ({ heading, spacing, headers, displayItems, mainData, mainDataC
     const styles = {
         main:{
             display:'flex',
-            height: '100vh',
+            height: '100%',
             overflow: 'hidden'
         },
     
         container: {
           flex:1, 
-          minWidth:'600px',
+          minWidth:'300px',
           flexDirection:'column',
           boxSizing: 'border-box',
           padding: '15px',

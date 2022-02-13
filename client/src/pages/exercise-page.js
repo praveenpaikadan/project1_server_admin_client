@@ -115,16 +115,21 @@ const ExercisePage = () => {
                 </div>
             </div>
 
-            <div className='rightContainer'>
-                <GeneralImageUpload refresh={imageRefresh} collapsed={true}/>
-
-                <ImageSearch 
-                reload={imageReload} 
-                refresh={imageRefresh} 
-                searchBoxStyle={{margin: 0}}
-                imageContainerStyle={{ flex: 1,flexDirection: 'row', alignItems:'center', height: '400px', width: '200px', marginBottom: '40px', overflow: 'scroll'}}
-                />
-
+            <div className='rightContainer image-right-container'>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%'}}>
+                    <div style={{  padding: '20px', marginBottom: '20px'}} >
+                        <GeneralImageUpload refresh={imageRefresh} collapsed={true}/>
+                    </div>
+                    <div style={{flex: 1, overflowY:'scroll'}}>
+                        <ImageSearch
+                            reload={imageReload} 
+                            refresh={imageRefresh} 
+                            searchBoxStyle={{margin: 0}}
+                            // imageContainerStyle={{ flex: 1, flexDirection: 'row', alignItems:'center', width: '200px', marginBottom: '40px', overflow: 'scroll'}}
+                            imageContainerStyle={{}} 
+                        />
+                    </div>
+                </div>
             </div>
         </div>    
   );

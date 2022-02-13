@@ -1,6 +1,6 @@
 .main {
         display:flex;
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
     }
 
@@ -31,28 +31,8 @@
         height:100%;
     }
 
-.unScrollableContainer{
 
-    }
 
-.scrollableContainer{
-    padding-right: 10px;
-    flex:1;
-    overflow-y: scroll;
-    flex-grow:1;
-    padding-bottom: 20px;
-    }
-
-.rightContainer{
-    background-color: blanchedalmond;
-    width:300px;
-    padding: 10px;
-    background-color: rgba(182, 177, 177, 0.363);
-    display: flex;
-    flex-direction: column;
-    align-items: center;    
-
-}
 .mainName{
     font-weight: bold;
     font-size: 2em;
