@@ -44,7 +44,7 @@ const styles = {
 
     container: {
       flex:1, 
-      minWidth:'600px',
+      minWidth:'300px',
       flexDirection:'column',
       minWidth:'1', 
       boxSizing: 'border-box',

@@ -3,6 +3,7 @@ const User = require('../../models/user');
 const multer = require('multer');
 const {upload} = require('../../config/multer');
 const Program = require('../../models/program');
+const WorkoutData = require('../../models/workout-data');
 
 // const fs = require('fs');
 
@@ -63,6 +64,54 @@ const Program = require('../../models/program');
 //     })
 // })
 
+// keep this route always above
+router.get('/overview', (req,res) => {
+    // .lean() will return plain JS object rather that mangoose doc object
+    User.find().select({hash:0, salt: 0}).sort("name").lean()
+    .then(fetchedData => {
+        Program.find().select({schedule: 0, goal: 0, images: 0, videos: 0, subscriptionOptions:0, equipments: 0, meta: 0}).sort({updatedAt: "descending"})
+        .then(programArray => {
+            WorkoutData.find().select({history: 0 }).sort({updatedAt: "descending"})
+            .then(workoutDataArray => {
+                var formatted = fetchedData.map((user, index) => {
+                    let currentWorkout = user.currentWorkout
+                    // doc._id return mangoose id object doc.id return id in string
+                    let currentProgram = programArray.find( program =>  program.id === (currentWorkout?currentWorkout.programID:null))
+                    let currentWorkoutData = workoutDataArray.find(workout => workout.id === (currentWorkout?currentWorkout.workoutID:null))
+                    user.currentProgram = currentProgram? currentProgram['programName']: null
+                    user.programType = currentProgram? (currentProgram['type']?'Public':'Custom'): null
+                    user.keyWords = user.name + ' ('+user.email+')'
+                    user.lastDateTracked = currentWorkoutData? new Date(currentWorkoutData['updatedAt']).toDateString(): null
+                    user.unlockedDays = user.currentWorkout? user.currentWorkout['unlockedDays']: null
+                    user.totalDays = currentProgram? (currentProgram['durationWeeks'] * currentProgram['daysPerWeek']) : null
+                    user.programStatus = (user.unlockedDays?user.unlockedDays: '-') + '/' + (user.totalDays?user.totalDays:'-')  
+                    return user
+                })
+                res.json(formatted)
+            })
+            .catch(error => {
+                console.log(error)
+                res.json({
+                    error: 'An error Ocuured while fetching workout details'
+                })
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            res.json({
+                error: 'An error Ocuured while fetching program details'
+            })
+        })
+    })
+    .catch(error => {
+        console.log(err)
+        res.json({
+            response: 'An error Ocuured while fetching excercise details'
+        })
+    })
+})
+
+
 router.get('/:id', (req,res) => {
 
     User.findById(req.params.id).select({hash:0, salt: 0}).sort("name")
@@ -81,9 +130,7 @@ router.get('/:id', (req,res) => {
 router.get('/', (req,res) => {
     User.find().select({hash:0, salt: 0}).sort("name")
     .then(response => {
-        res.json({
-            response
-        })
+        res.json(response)
     })
     .catch(error => {
         console.log(err)
@@ -94,8 +141,7 @@ router.get('/', (req,res) => {
 })
 
 
-
-// not complete --------------
+// not complete -not in use--------------
 router.get('/assigned-programs/:id', (req,res) => {
     var userID = req.params['id']
 

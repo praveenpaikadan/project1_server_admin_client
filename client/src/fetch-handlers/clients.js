@@ -3,7 +3,13 @@ import axios from 'axios';
 
 async function getAllClientData()  {
     let res = await axios.get(BASE_URL+`/clients`)
-    let fetchedData = await res.data.response
+    let fetchedData = await res.data
+    return fetchedData
+}
+
+async function getAllClientOverviewData()  {
+    let res = await axios.get(BASE_URL+`/clients/overview`)
+    let fetchedData = await res.data
     return fetchedData
 }
 
@@ -13,4 +19,4 @@ async function getClientDetails(id){
     return fetchedData
 }
 
-export {getAllClientData, getClientDetails}
+export {getAllClientData, getClientDetails, getAllClientOverviewData}

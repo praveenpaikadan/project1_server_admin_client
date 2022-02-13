@@ -6,7 +6,7 @@
 
 .container {
       flex:1;
-      min-width:600px;
+      min-width:300px;
       flex-direction:column;
       min-width:1; 
       box-sizing: border-box;
@@ -80,7 +80,7 @@
     align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
-    min-width: 400px;
+    min-width: 300px;
     width:100%;
     flex-grow: 1;
     margin-right: 15px;

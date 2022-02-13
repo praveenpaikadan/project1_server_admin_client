@@ -4,8 +4,13 @@ const {Order, returnReceiptIfExist, successPaymentHandler, failedPaymentHandler}
 const { handleSuccesfulSubscription } = require('../../controllers/workoutdata-controller');
 const { getFullMediaUrlIfRelative } = require('../../lib/helpers');
 const { tokenExtractor } = require('../../lib/tokenUtils');
-var ipAddress = require('ip').address();
-var PORT = require('dotenv').config().parsed.PORT;
+
+// var ipAddress = require('ip').address();
+// var PORT = require('dotenv').config().parsed.PORT;
+
+// const BASE_URL = `http://${ipAddress}:${PORT}/api/v1`
+
+const {APP_API_BASE_URL} = require('../../lib/apiUtils')
 
 
 router.get('/payment-page', async (req, res, next) => {
@@ -56,8 +61,8 @@ router.get('/payment-page', async (req, res, next) => {
             goal: order.programData.category,
             // color: "#FF4C00",
             color: "#5bb543",
-            successHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/verify`,
-            failedHandlerUrl: `http://${ipAddress}:${PORT}/api/v1/payment/recordfailure`
+            successHandlerUrl: APP_API_BASE_URL + `/payment/verify`,
+            failedHandlerUrl: APP_API_BASE_URL + `/payment/recordfailure`
         })
 
 

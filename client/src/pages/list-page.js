@@ -1,8 +1,8 @@
 import Heading from '../components/heading'
 import { useState } from 'react';
 import { RowHead, RowItem } from '../components/rowItems';
-import TabNav from '../components/tabnav';
-import SideNav from '../components/sidenav';
+import Loader from '../components/loader';
+
 {/*
 
     INPUT DATA : 
@@ -15,7 +15,7 @@ import SideNav from '../components/sidenav';
         // include active status
 */}
 
-const ListPage = ({ heading, spacing, headers, displayItems, mainData, mainDataClickHandler, topTabs, topTabClickHandler, listOfIDs}) => {
+const ListPage = ({ heading, spacing, headers, displayItems, mainData, mainDataClickHandler, loading}) => {
 
     const styles = {
         main:{
@@ -52,14 +52,12 @@ const ListPage = ({ heading, spacing, headers, displayItems, mainData, mainDataC
 
     const [search, setSearch] = useState('')
 
-    var keyWords = mainData.map((item) => {return({label: item.keyWords, id: item._id})}).filter((item => item.label !== undefined))
-
     return (
         <div style={styles.wrapperContainer}>
             <div style={styles.unScrollableContainer}>
                 <Heading 
                 text={heading}
-                searchBarParams={{search: search, setSearch, keyWords: keyWords}}
+                searchBarParams={{search: search, setSearch, keyWords: (mainData || []).map((item) => {return({label: item.keyWords, id: item._id})}).filter((item => item.label !== undefined))}}
                 
                 />
                 {/* <TabNav 
@@ -72,19 +70,48 @@ const ListPage = ({ heading, spacing, headers, displayItems, mainData, mainDataC
                     spacing={spacing}
                 />
             </div>
+            
+            {loading
+            
+                ?
 
-            <div style={styles.scrollableContainer}>
-                {mainData.filter(item => (item.keyWords.includes(search) || search.includes(item.keyWords))).map((data, index) => (
-                    <RowItem 
-                        key={data._id}
-                        index={index}
-                        data={data}
-                        spacing={spacing}
-                        mainDataClickHandler = {mainDataClickHandler}
-                        displayItems = {displayItems}
-                    />
-                ))}
-            </div>
+                <Loader position='center'/>
+
+                :
+
+                (mainData?
+                    
+                    (mainData !== []
+                        
+                        ?
+                    
+                        <div style={styles.scrollableContainer}>
+                        {mainData.filter(item => (item.keyWords.includes(search) || search.includes(item.keyWords))).map((data, index) => (
+                            <RowItem 
+                                key={data._id}
+                                index={index}
+                                data={data}
+                                spacing={spacing}
+                                mainDataClickHandler = {mainDataClickHandler}
+                                displayItems = {displayItems}
+                            />
+                        ))}
+                        </div>
+                    
+                        : 
+                    
+                        <div className="center-message">No items to display</div>
+
+                    )
+
+                :
+                
+                <div className="center-message">Failed to fetch Data. Please try again</div>
+            
+            )
+
+            }
+
         </div>
   );
 }

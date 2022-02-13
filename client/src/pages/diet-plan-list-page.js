@@ -3,6 +3,7 @@ import av from '../assets/profile.jpg'
 import ListPage from './list-page'
 import { getAllDietPlanData } from '../fetch-handlers/diet-plan';
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 const spacing = [300, 250, 200, 150] 
 
 
@@ -17,8 +18,8 @@ const headers = [
 
 function DietPlanListPage() {
 
-  const [data, setData] = useState([])
-
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getAllDietPlanData()
@@ -26,15 +27,17 @@ function DietPlanListPage() {
       console.log(fetchedData)
       var formatted = fetchedData.map((item) => {if(item.type === true){item.type = 'Public'}else if(item.type === false){item.type = 'Privet'}; item.username = item.client.userName; return item })
       setData(formatted)
+      setLoading(false)
+
     })
     .catch(err => {
       console.log(err)
+      toast.error('Failed to fetch exercise list. Please reload the page')
+      setLoading(false)
     })
   }, [])
   
-  const mainDataClickHandler = (id) => {
-    console.log(id)
-  }
+
 
   const topTabClickHandler = (index) => {
     console.log(index)
@@ -50,6 +53,7 @@ function DietPlanListPage() {
         topTabs= {topTabs}
         topTabClickHandler = {topTabClickHandler}
         displayItems={['planName', 'description', 'username', 'active' ]}
+        loading={loading}
     />
   );
 }

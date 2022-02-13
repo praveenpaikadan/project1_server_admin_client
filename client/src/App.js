@@ -1,9 +1,7 @@
 import './App.css'
-import { createContext } from 'react';
 import Dashboard from './dashboard';
 import LoginPage from './login-page'
-import { BrowserRouter, Route, Switch, useHistory, Redirect } from 'react-router-dom'
-import ClientsPage from './pages/client-list-page';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import NotFound from './pages/not-found';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

@@ -4,6 +4,7 @@ import ListPage from './list-page'
 import { getAllProgramData } from '../fetch-handlers/programs';
 import { useState, useEffect } from 'react';
 import { getAllExerciseData } from '../fetch-handlers/exercise';
+import { toast } from 'react-toastify';
 const spacing = [300, 250, 250] 
 
 const avatarName = (name, uri) => (
@@ -24,16 +25,20 @@ const headers = [
 
 function ExerciseListPage() {
 
-  const [data, setData] = useState([])
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
 
 
   useEffect(() => {
     getAllExerciseData()
     .then((fetchedData) => {
       setData(fetchedData)
+      setLoading(false)
     })
     .catch(err => {
-      console.log(err)
+      toast.error('Failed to fetch exercise list. Please reload the page')
+      setLoading(false)
     })
   }, [])
 
@@ -52,6 +57,7 @@ function ExerciseListPage() {
         topTabs= {topTabs}
         topTabClickHandler = {topTabClickHandler}
         displayItems={['exerciseName', 'repetitionType', 'active']}
+        loading={loading}
     />
   );
 }

@@ -39,12 +39,6 @@ app.use(cors({
 
 app.use(morgan('dev'))
 
-// serve react js static files for admin dash
-app.use(express.static(path.join(__dirname, 'client/build')));
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
-
 
 // app.use(express.json());  // comment this out if any anomaly
 // app.use(bodyParser.json());
@@ -88,6 +82,16 @@ app.use(passport.session());
 app.use('/api/admin', adminCentralRoute)
 app.use('/api/v1/', userCentralRoute)
 
+// serve react js static files for admin dash
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.use('/admin', (req, res) => {
+    if(req.method === 'GET'){
+        res.sendFile(path.join(__dirname+'/client/build/index.html'));
+    }else{
+        res.status(400).send('Bad Request')
+    }
+});
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {

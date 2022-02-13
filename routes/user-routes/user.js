@@ -64,7 +64,7 @@ router.get('/data', (req, res) => {
 
 router.post('/editprofile', (req, res) => {
 
-    if(! ['name', 'email', 'gender', 'dob', 'height', 'weight'].includes(req.body['field'])){
+    if(! ['name', 'email', 'gender', 'dob', 'height', 'weight', 'phone'].includes(req.body['field'])){
         res.status(401).end()
         return
     } 

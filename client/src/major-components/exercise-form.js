@@ -175,7 +175,7 @@ const ExerciseForm = ({data}) => {
             // }
             
             // sending data and listenong for  progress and result(status)
-            axios.post(BASE_URL+ "/admin/exercises", bodyFormData, {
+            axios.post(BASE_URL+ "/exercises", bodyFormData, {
                 onUploadProgress: ProgressEvent => {
                     setProgress((ProgressEvent.loaded / ProgressEvent.total*100),
                 )}
@@ -201,7 +201,7 @@ const ExerciseForm = ({data}) => {
             // }
 
             // sending data and listenong for  progress and result(status)
-            axios.patch(BASE_URL+ "admin/exercises", bodyFormData, {
+            axios.patch(BASE_URL+ "exercises", bodyFormData, {
                 onUploadProgress: ProgressEvent => {
                     setProgress((ProgressEvent.loaded / ProgressEvent.total*100),
                 )}
@@ -251,7 +251,6 @@ const ExerciseForm = ({data}) => {
                         )
                     })}
                     <div style={{display: 'flex'}}>
-
                         <AddButton 
                             instructions={instructions} 
                             addStep={addStep}

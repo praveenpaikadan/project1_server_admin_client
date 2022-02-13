@@ -10,7 +10,7 @@ const ScrollablePage = (props) => {
     
         container: {
           flex:1, 
-          minWidth:'600px',
+          minWidth:'300px',
           flexDirection:'column',
           boxSizing: 'border-box',
           padding: '15px',

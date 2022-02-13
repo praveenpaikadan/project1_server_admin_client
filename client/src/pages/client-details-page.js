@@ -46,7 +46,7 @@ const ProfileDetails = ({clientData}) => {
     }
 
     return(
-        <div style={{width:'100%'}}>
+        <div style={{width:'100%', height: '100%', overflow: 'scroll', marginBottom: '30px'}}>
             <Avatar alt={clientData.name} src={clientData.profilePhoto? getServerMediaUrl(clientData.profilePhoto.filename): null} style={{height: '7em', width: '7em', margin:'auto' }}/>
             <div className='mainName' style={{fontSize: '22px'}}>{clientData.name}</div>
             <div className='contactContainer'>
@@ -82,9 +82,18 @@ const ProfileDetails = ({clientData}) => {
                 </div>
 
                 <div className='detailsItemContainer'>
-                    <div className='detailsKey'>Last Tracked On : </div>
+                    <div className='detailsKey'>Last Active On : </div>
                     <div className='detailsValue'>{new Date(clientData.updatedAt).toDateString()}</div>
                 </div>
+
+                <div className='detailsItemContainer'>
+                    <div className='detailsKey'>Weight History : </div>
+                </div>
+                <div className='detailsValue'>{clientData.weightHistory?clientData.weightHistory.map((item) => (
+                        <div style={{marginLeft: '15px'}}>{`${new Date(clientData.updatedAt).toDateString(item.data)}: ${item.weight} kg`}</div>
+                    )):'Not avaialble'}
+                </div>
+            
             </div>
         </div>
     )
@@ -226,7 +235,7 @@ const ClientDetailsPage = () => {
                     {workoutsList && workoutsList[0] ?
                         <select onChange={(e) => {setActiveWorkoutID(e.target.value)}} className='activeProgramHeading' style={{outline: 0, borderTop: 0, borderLeft: 0, borderRight: 0, fontSize: '25px'}}>
                             {workoutsList.map((workout, index) => {
-                                return <option style={{fontSize: '20px' }}key={String(index)} value={workout._id} className='activeProgramHeading'>{workout.program.programName + (clientData.currentWorkout?(workout._id === clientData.currentWorkout.workoutID?' (Active)':''):'')}</option>
+                                return <option style={{fontSize: '20px' }}key={String(index)} value={workout._id} className='activeProgramHeading'>{(workout.program? workout.program.programName: 'Deleted program') + (clientData.currentWorkout?(workout._id === clientData.currentWorkout.workoutID?' (Active)':''):'')}</option>
                             })}
                         </select>:null}
                     </div>

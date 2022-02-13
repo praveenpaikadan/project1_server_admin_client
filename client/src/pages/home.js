@@ -10,11 +10,11 @@ const Home = () => {
     const {userData} = useContext(LoginContext)
 
 
-    return (
-        <div>
-            <MessagePost />
-        </div>
-    )
+    // return (
+    //     <div>
+    //         <MessagePost />
+    //     </div>
+    // )
 
     return (
         <div className='home-container'>
