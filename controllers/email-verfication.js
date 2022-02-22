@@ -35,11 +35,11 @@ async function sendVerificationEmail(reqBody) {
   
   // create reusable transporter object using the default SMTP transport
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    host: process.env.SEND_VER_FROM_EMAIL_HOST,
+    port: process.env.SEND_VER_FROM_EMAIL_PORT,
     auth: {
-        user: 'adalberto.okuneva52@ethereal.email',
-        pass: 'JbYCgQ2F2PpZj91Mux'
+        user: process.env.SEND_VER_FROM_EMAIL_ID,
+        pass: process.env.SEND_VER_FROM_EMAIL_PASS,
     }
 });
 
@@ -48,7 +48,7 @@ async function sendVerificationEmail(reqBody) {
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    from: process.env.SEND_VER_FROM_EMAIL_FROM, // sender address
     to: email, // list of receivers
     subject: "Verification Code", // Subject line
     text: `Your Verification Code is ${code}. This code will expire in ${expiry/60000} minutes` , // plain text body

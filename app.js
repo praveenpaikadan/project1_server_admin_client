@@ -19,6 +19,9 @@ const userCentralRoute      = require('./routes/user-central-router')
 // importing variables
 require('dotenv').config();
 
+// make a request to server api every 25 mins to prevent dyno from sleeping
+require('./lib/keep-server-alive')
+
 // Authentication confiurations
 require('./config/passport');
 
@@ -81,6 +84,9 @@ app.use(passport.session());
 // routes
 app.use('/api/admin', adminCentralRoute)
 app.use('/api/v1/', userCentralRoute)
+
+app.use('/api/keepalive', (req, res) => {res.status(200).send(); return})
+
 
 // serve react js static files for admin dash
 app.use(express.static(path.join(__dirname, 'client/build')));

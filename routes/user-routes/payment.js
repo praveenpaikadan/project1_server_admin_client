@@ -47,7 +47,7 @@ router.get('/payment-page', async (req, res, next) => {
             batch: orderDetails.notes.batch,
             amount: orderDetails.amount,
             authToken: authToken,
-            name: "Aboo Thahir Fitness",
+            name: "GoGiFit",
             description: "Test Transaction",
             // productDescription: order.programData.productDescription,
             productDescription: order.programData.otherRemarks || order.programData.goal,
