@@ -1,4 +1,4 @@
-import Logo from './assets/logo'
+// import Logo from './assets/logo'
 import './login-page.css'
 import { BASE_URL } from './App'
 import { LoginContext } from './context/loginContext'
@@ -7,6 +7,7 @@ import { getCredentials } from './fetch-handlers/admin-user'
 import { useHistory } from 'react-router-dom'
 import Loader from './components/loader'
 import { getCurrentUserData } from './fetch-handlers/admin-user'
+import pngLogo from './assets/logo300X300.png' 
 
 const LoginComponent = () => {
 
@@ -66,7 +67,8 @@ const LoginPage = () => (
     <div className='login-page-container'>
         <div className='login-box-container'>
         <div className='logo-container'>
-            <Logo/>
+            {/* <Logo/> */}
+            <img src={pngLogo} width={200} height={200}  alt={'logo'} />
         </div>
         <LoginComponent />
         </div>

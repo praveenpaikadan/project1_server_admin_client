@@ -22,7 +22,7 @@ router.get('/payment-page', async (req, res, next) => {
 
     var authToken = req.headers['x-access-token']?req.headers['x-access-token']:tokenExtractor(req)
 
-    console.log(data)
+    // console.log(data)
     if(!data.type){
       res.status(400).send('Bad Request')
     }
@@ -36,7 +36,7 @@ router.get('/payment-page', async (req, res, next) => {
       orderDetails = await order.createOrder()
     }
 
-    console.log(getFullMediaUrlIfRelative(order.programData.coverImage))
+    // console.log(getFullMediaUrlIfRelative(order.programData.coverImage))
     
 
     if(orderDetails){
@@ -85,7 +85,7 @@ router.get('/payment-page', async (req, res, next) => {
 
 router.post('/verify', async (req, res, next) => {
     var data = req.body
-    console.log(data)
+    // console.log(data)
     data.userID = req.user._doc._id
     var response = await successPaymentHandler(data)
     if(response.verificationStatus === 'success'){

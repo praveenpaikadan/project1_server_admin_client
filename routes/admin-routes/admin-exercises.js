@@ -19,10 +19,10 @@ const deleteFiles = (files) => {
     files.forEach(file => {
         var mpath = getMediaUrl(file)
         if (fs.existsSync(mpath)){
-            console.log(mpath)
+            // console.log(mpath)
             fs.unlink(mpath, err => {
                 if (err) {
-                    console.log('Failed to delete :' + mpath)
+                    console.log('Failed to delete :', err,  mpath)
                 }else{
                     console.log('File Deleted : ' + mpath) 
                 };
@@ -46,7 +46,7 @@ const getFilesToBeDeleted = async (id, contents) => {
 
 // routes
 router.get('/:id', (req,res) => {
-    console.log(req.params.id)
+    // console.log(req.params.id)
     // if there is no item null is returned.
     Exercise.findOne({"_id": req.params.id}).sort({updatedAt: "descending"})
     .then(response => {
@@ -125,7 +125,7 @@ router.post('/',
         })
         
         .catch(error => {
-            console.log('failed')
+            console.log(error)
             res.status(500).json({
                 response: "Failed"
             })
@@ -173,7 +173,7 @@ router.patch('/',
         }
 
         data.equipments = data.equipments.split(',')
-        console.log(data)
+        // console.log(data)
 
     
 

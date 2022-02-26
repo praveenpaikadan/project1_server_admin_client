@@ -25,14 +25,14 @@ const getMediaUrl = (filename) => {
 }
 
 const deleteFiles = (files) => {
-    console.log(files)
+    // console.log(files)
     files.forEach(file => {
         var mpath = getMediaUrl(file)
         if (fs.existsSync(mpath)){
-            console.log(mpath)
+            // console.log(mpath)
             fs.unlink(mpath, err => {
                 if (err) {
-                    console.log('Failed to delete :' + mpath)
+                    console.log('Failed to delete :', err , mpath)
                 }else{
                     console.log('File Deleted : ' + mpath) 
                 };
@@ -51,7 +51,7 @@ const getFilesToBeDeleted = async (id, content) => {
 
 router.get('/data', (req, res) => {
     let userID = req.session.passport.user
-    console.log(userID)
+    // console.log(userID)
     User.findOne({"_id": userID}, {hash: 0, salt: 0})
     .then((response) => {
         res.json(response)
@@ -64,7 +64,7 @@ router.get('/data', (req, res) => {
 
 router.post('/editprofile', (req, res) => {
 
-    if(! ['name', 'email', 'gender', 'dob', 'height', 'weight', 'phone'].includes(req.body['field'])){
+    if(! ['name', 'gender', 'dob', 'height', 'weight', 'phone'].includes(req.body['field'])){
         res.status(401).end()
         return
     } 
@@ -122,10 +122,10 @@ router.post('/profilephoto',
 
     (req, res) => {
 
-        console.log(req.body)
+        // console.log(req.body)
 
         let userID = req.session.passport.user
-        console.log(userID)
+        // console.log(userID)
         getFilesToBeDeleted(userID, 'profilePhoto')
         .then((filesNamesToBeDeleted => {
             User.findOneAndUpdate({"_id": userID}, {profilePhoto: req.files.profilephoto[0]}, {new: true})

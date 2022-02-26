@@ -30,7 +30,10 @@ router.post('/',
         options = { upsert: true, new: true, setDefaultsOnInsert: true }
         update = JSON.parse(req.body.data)
 
-        if(req.files.photo){ console.log(req.files.photo);update.photo = req.files.photo[0]};
+        if(req.files.photo){ 
+            // console.log(req.files.photo);
+            update.photo = req.files.photo[0]
+        };
         
         Contact.find()
         .then((conArr) => {

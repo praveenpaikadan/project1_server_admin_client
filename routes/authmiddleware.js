@@ -3,7 +3,7 @@ module.exports.isAuth = (req, res, next) => {
     if(req.isAuthenticated()) {
         next();
     } else {
-        console.log('Not Authenticated')
+        // console.log('Not Authenticated')
         res.status(403).end()
     }
 };

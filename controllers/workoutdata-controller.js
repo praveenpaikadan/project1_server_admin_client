@@ -20,7 +20,7 @@ getWorkoutData = async (req, res, next) => {
     var user = req.user._doc._id
     var workoutID = req.user._doc.currentWorkout?req.user._doc.currentWorkout.workoutID:undefined
 
-    console.log(workoutID)
+    // console.log(workoutID)
     
     WorkoutData.findOne({_id: workoutID})
     .then(response => { 
@@ -117,14 +117,14 @@ const handleSuccesfulSubscription = async (receipt, batchProcessed) => {
             reminder: 3,
         }
 
-        console.log(currentWorkout)
+        // console.log(currentWorkout)
         user.currentWorkout = currentWorkout
         var updatedUser = await user.save()
     }else{
         var user = await User.findOne({_id: receipt.userID})
         user.currentWorkout.status = 'active'
         user.currentWorkout.unlockedDays =  receipt.paymentBatches.find((item) => item.batch == batchProcessed)['expiryDay']
-        console.log(user.currentWorkout)
+        // console.log(user.currentWorkout)
         var updatedUser = await user.save()
     }
 }

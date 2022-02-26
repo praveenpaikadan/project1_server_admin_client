@@ -21,6 +21,7 @@ function ContactForm(){
             whatsapp: '',
             website: '',
             address: '',
+            detailedWriteup: '',
             info: '',
             infolink: '',   
             photo: {url: ''}   
@@ -123,14 +124,23 @@ function ContactForm(){
                 <label>Location longitude</label>
                 <input type='number' required name={'long'} value={data.long} onChange={(e) => {handleChange('long', e.target.value)}}/>
             </div>
+
             <div>
-                <label>Additional details</label>
+                <label>Detailed write up on trainer. Qualifcation, experience etc...)</label>
+                <textarea name={'deatailedWriteup'} value={data.detailedWriteup} onChange={(e) => {handleChange('detailedWriteup', e.target.value)}}/>
+            </div>
+
+            <div>
+                <label>Additional details (Short approx. 50 charecters)</label>
                 <input required name={'info'} value={data.info} onChange={(e) => {handleChange('info', e.target.value)}}/>
             </div>
             <div>
-                <label>Additional link</label>
+                <label>Additional link (Optional, User will be navigated to this link if clicked on the additional details)</label>
                 <input required name={'infolink'} value={data.infolink} onChange={(e) => {handleChange('infolink', e.target.value)}}/>
             </div>
+
+            
+
             <div>
             <label>Profile Image</label>
             {active?

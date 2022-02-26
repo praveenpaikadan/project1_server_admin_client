@@ -15,7 +15,7 @@ const getFullMediaUrlIfRelative = (potRelUrl) => {
 
 function checkIfRequestByIDandAlterUrlIfNeeded(req,res, next){
     var baseUrl = req.originalUrl.replace(req.url, "")
-    console.log('baseUrl : ' ,baseUrl )
+    // console.log('baseUrl : ' ,baseUrl )
   
     var {by, id, index} = req.query 
 
@@ -27,11 +27,11 @@ function checkIfRequestByIDandAlterUrlIfNeeded(req,res, next){
     if(by === "ExId"){
         Exercise.findOne({_id:id}).select({'coverImage': 1})
         .then(resp => {
-            console.log(resp)
+            // console.log(resp)
             try{
                 if(resp["coverImage"]){
                     var imgUrl = getFullMediaUrlIfRelative(resp["coverImage"].trim())
-                    console.log(imgUrl)
+                    // console.log(imgUrl)
                     res.redirect(imgUrl)
                 }else{
                     res.status(404).end()

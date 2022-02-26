@@ -10,6 +10,7 @@ const contactSchema =  mongoose.Schema({
     infolink: String,
     lat: Number,
     long: Number,
+    detailedWriteup: String,
     address: String,
     photo: {filename: String, path: String}
 }, { timestamps : true})

@@ -19,12 +19,12 @@ const deleteFiles = (files) => {
     files.forEach(file => {
         var mpath = getMediaUrl(file)
         if (fs.existsSync(mpath)){
-            console.log(mpath)
+            // console.log(mpath)
             fs.unlink(mpath, err => {
                 if (err) {
-                    console.log('Failed to delete :' + mpath)
+                    console.log('Failed to delete :', err, mpath)
                 }else{
-                    console.log('File Deleted : ' + mpath) 
+                    console.log('File Deleted : ', mpath) 
                 };
             });
         }
@@ -86,13 +86,13 @@ router.post('/',
         }]) ,
     
     (req, res) => {
-        console.log(req.body)
+        // console.log(req.body)
         var data = JSON.parse(req.body.data)
         
         data.images = req.files.images
         data.videos = req.files.videos
         
-        console.log(data)
+        // console.log(data)
 
         let program = new Program(data)
 
@@ -103,7 +103,7 @@ router.post('/',
             )
         })
         .catch(error => {
-            console.log('failed')
+            console.log(error)
             res.status(500).json({
                 error: "Failed"
             })
@@ -135,7 +135,7 @@ router.patch('/',
             data.videos = [video];
         }
 
-        console.log(data.privateClients)
+        // console.log(data.privateClients)
         let conditions = { _id: id };
         getFilesToBeDeleted(id, [data.images?'images':null, data.videos?'videos':null])
         .then((filesNamesToBeDeleted => {

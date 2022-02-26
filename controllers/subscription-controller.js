@@ -8,7 +8,7 @@ const getAvailablePrograms = (req, res, next) => {
     // console.log(req)
     var userID = req.user._doc?req.user._doc._id:"1234"
     var name = req.user._doc.name
-    console.log({_id: userID, name: name})
+    // console.log({_id: userID, name: name})
 
     const selectOptions = { active: 0, schedule: 0, 
         privetClients:0, meta: 0, "images.encoding": 0, 

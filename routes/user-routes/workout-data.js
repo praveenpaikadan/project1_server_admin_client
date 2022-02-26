@@ -39,7 +39,7 @@ router.get('/complete-history', (req,res) => {
                     wdList[i]['program'] = programs.find((item) => item._id === wdList[i]['programID'])
                     wdList[i]['calsPerRepList'] = calsPerRepObject?calsPerRepObject:{}
                 }
-                console.log(wdList)
+                // console.log(wdList)
                 res.json(wdList)
             })
             .catch(error => {
@@ -68,11 +68,11 @@ router.get('/complete-history', (req,res) => {
 
 router.post('/initiate', (req, res) => {   // set starting date
     var data = req.body
-    console.log(data)
+    // console.log(data)
     userID = req.user._doc?req.user._doc._id:null
     WorkoutData.findOneAndUpdate({_id: data.workoutID, userID: userID}, {startDate: new Date()}, {new: true})
     .then((response) => {
-        console.log(response)
+        // console.log(response)
         if(response){
             res.json({status: 1, workoutData: response})  // success
         }else{
@@ -90,7 +90,7 @@ router.post('/push', (req, res) => {
     var day = wodata.day
     var woID = wodata.workoutID
 
-    console.log(wodata)
+    // console.log(wodata)
 
 
     // TBD => include functions to Examine recieved wodata then end or continue with request
@@ -131,7 +131,7 @@ router.post('/push', (req, res) => {
         ], {ordered: true})
 
     .then(result => {
-    console.log(result)
+    // console.log(result)
     res.json(result)
     })
     .catch(err => console.log(err))
@@ -162,7 +162,7 @@ router.post('/delete-day', (req, res) => {
 
 router.post('/bulk', (req, res) => {            // handle pending uploads due to network error or server or database failure. The req data is an array of both data to be pushed to 
                                                 // history and data to be removed from the history, which is differentiated by the key 'toDel'.
-    console.log(req.body.bulkDayWorkoutData)                                       
+    // console.log(req.body.bulkDayWorkoutData)                                       
     var userID = req.user._doc?req.user._doc._id:"111111111111111111111111"
     var dataArray = req.body.bulkDayWorkoutData
 

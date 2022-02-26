@@ -153,7 +153,7 @@ class Order{
 
 
 
-        console.log('..... inside createOrder ..........', this.receipt)
+        // console.log('..... inside createOrder ..........', this.receipt)
 
         try{
             var activeBatch = this.receipt.paymentBatches[this.receipt.activeBatch]
@@ -186,7 +186,7 @@ class Order{
                 return null
             }
         }catch(error){
-            console.log('Failed To create order => ', error)
+            // console.log('Failed To create order => ', error)
             return null
         }
     }

@@ -4,18 +4,16 @@ const EmailCode = require('../models/email-code');
 
 const routineCodeCleanup = () => {
   console.log('Routine verification code cleanup is running, to clean up email codes expired 24 hours before every 24 hours') // cleanup all expired codes expired 24 hours before every 24 hours
-  try{
-    setInterval(() => {
-      EmailCode.deleteMany({ expiry: {$lt: Date.now()-(24*60*60*1000)}})
-      .then((results) => {console.log(results)})
-      console.log('Code cleaup actioned')
-    }, 24*60*60*1000) 
 
-  }catch(error){
-    let d = new Date()
-    console.log('Routine verification code cleanup failed in action at ', d)
-    console.log(error)
-  }
+  setInterval(() => {
+    EmailCode.deleteMany({ expiry: {$lt: Date.now()-(24*60*60*1000)}})
+    .then((results) => {
+      console.log('Email Code clean up done')
+    })
+    .catch((err) => {
+      console.log('Email Code clean up failed: ', err)
+    })
+  }, 24*60*60*1000) 
 }
 
 async function removeVerificationCodes(email){
@@ -58,7 +56,7 @@ async function sendVerificationEmail(reqBody) {
   var emailCode = new EmailCode({email: email, salt: salt, hash: hash, expiry: (Date.now() + expiry)})
   emailCode.save()
   .then((DBresponse) => {
-    console.log(DBResponse)
+    // console.log(DBresponse)
   })
   .catch(() => {
       
@@ -86,13 +84,13 @@ async function verifyEmail(email,code){
       if(validPassword(code, response[i].hash, response[i].salt)){
       
         if(Date.now() > response[i].expiry){
-          console.log(Date.now() +'>'+ response[i].expiry)
+          // console.log(Date.now() +'>'+ response[i].expiry)
           return 0  // code expired 
 
         }else{  
           response[i].updateOne({expiry: Date.now() + (30*60000)})  // extending expiry by 30 mins.
           .then(() => {
-            console.log('Success')
+            // console.log('Success')
             EmailCode.deleteMany({ expiry: {$lt: Date.now()}}) // deleting all expired codes -> A clean up process
           })    
           return 1  // code valid

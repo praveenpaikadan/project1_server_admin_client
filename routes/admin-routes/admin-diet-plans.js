@@ -26,7 +26,7 @@ router.get('/getid', (req,res) => {
 
 // routes
 router.get('/:id', (req,res) => {
-    console.log(req.params.id)
+    // console.log(req.params.id)
     // if there is no item null is returned.
     DietPlan.findOne({"_id": req.params.id})
     .then(response => {

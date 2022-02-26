@@ -75,7 +75,7 @@ router.post('/checkemail', (req, res, next) => {
 })
 
 router.post('/verifyemail', (req, res, next) => {
-    console.log(req.body)
+    // console.log(req.body)
     if(!req.body.email || !req.body.code){
         res.status(400).end()
         return
@@ -87,7 +87,7 @@ router.post('/verifyemail', (req, res, next) => {
 })
 
 router.post('/signup', (req, res, next) => {
-    console.log(req.body)
+    // console.log(req.body)
 
     if(!(req.body.email && req.body.password && req.body.name)){
         res.status(400).end()
@@ -121,7 +121,7 @@ router.post('/signup', (req, res, next) => {
                     req.body.weightHistory =  [{date: new Date, weight: req.body.weight}]
                     let newUser = new User(req.body)
                 
-                    console.log(newUser)
+                    // console.log(newUser)
                 
                     newUser.save()   
                     .then(response => {
@@ -168,7 +168,7 @@ router.post('/resetpwd', (req, res, next) => {
                 removeVerificationCodes(req.body.email)
                 let saltHash = genPassword(req.body.password)
                 var update = saltHash
-                console.log(update)
+                // console.log(update)
                 User.findOneAndUpdate({"email": req.body.email}, update, {new: true})  
                 .then(response => {
                     res.json({success: true, message: 'Password changed successfully. Please Sign in with new password', redirect: true})
@@ -202,12 +202,12 @@ router.post('/login', passport.authenticate('user'), (req, res) => {
     var user = req.user
     user.hash= null
     user.salt= null
-    console.log(user)
+    // console.log(user)
     res.json(user)
 })
 
 router.get('/logout', (req,res,next) => {
-    console.log('Reacched logout route')
+    // console.log('Reacched logout route')
     req.logOut()
     req.session.destroy((err)=> {
         if(!err){res.send('Logged out')}

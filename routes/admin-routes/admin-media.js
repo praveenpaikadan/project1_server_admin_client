@@ -16,7 +16,7 @@ router.get('/getall', (req,res) => {
 
 router.get('/:id', (req,res) => {
     let id = req.params.id
-    console.log(id)
+    // console.log(id)
     Media.findOne({_id: id}).select({_id: 1, relativeUrl: 1, identifierText: 1})
     .then(response => {
         res.json(response)
@@ -57,14 +57,14 @@ router.post('/',
         let media = new Media(mediaData)
         media.save()
         .then(response => {
-            console.log(response)
+            // console.log(response)
             res.json({
                 response
             })
         })
 
         .catch(error => {
-            console.log('failed')
+            console.log(error)
             res.status(500).json({
                 response: "Failed"
             })

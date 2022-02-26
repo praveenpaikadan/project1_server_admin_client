@@ -85,6 +85,7 @@ app.use(passport.session());
 app.use('/api/admin', adminCentralRoute)
 app.use('/api/v1/', userCentralRoute)
 
+// to prevent heroku server from sleeping. see lib/keep-server-alive.js file
 app.use('/api/keepalive', (req, res) => {res.status(200).send(); return})
 
 

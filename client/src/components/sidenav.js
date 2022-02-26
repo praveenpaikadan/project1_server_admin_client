@@ -8,6 +8,7 @@ import { logout } from '../fetch-handlers/admin-user';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../context/loginContext';
 import { toast } from 'react-toastify';
+import pngLogo from '../assets/logo300X300.png'
 
 function SideNav(props) {
 
@@ -44,7 +45,8 @@ function SideNav(props) {
       <div id="sidenav">
             <div id="sidenav-internal-wrapper">
             <div className="sidenav-topContainer">
-                <Logo/>
+                {/* <Logo/> */}
+                <img src={pngLogo} width={150} height={150}  alt={'logo'} />
             </div>
 
             <div className="sidenav-middleContainer">

@@ -363,6 +363,8 @@ const ExerciseForm = ({data}) => {
       {id?<div style={{maxWidth: '300px', margin: 'auto'}}>
         <button onClick={() => deleteHandler({_id: id})} class="btn btn-danger btn-block">Delete</button>
       </div>:null}
+
+      <div style={{backgrondColor: 'yellow', width: '100%', height: 150}}></div>
       
       </ScrollablePage>
     );
