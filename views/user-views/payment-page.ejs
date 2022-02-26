@@ -411,7 +411,7 @@
             setLoading()
             fetch("<%= successHandlerUrl %>", {
               method: 'POST',
-              headers:{'x-access-token': "<%= authToken %>", 'Content-Type': 'application/json'},
+              headers:{'x-access-token': "<%= authToken %>", 'Content-Type': 'text/plain'},
               body: JSON.stringify(payload),
             })
             .then(response => response.json())

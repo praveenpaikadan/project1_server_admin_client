@@ -32,7 +32,9 @@ function SideNav(props) {
             })
             .catch(err => {
                 console.log(err)
-                toast.error('Not able to logout ... Try Again')
+                // toast.success('Succesfully Logged Out.'); 
+                history.push('/login');  
+                setUserData(false)
             })
         }
     }

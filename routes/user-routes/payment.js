@@ -36,12 +36,13 @@ router.get('/payment-page', async (req, res, next) => {
       orderDetails = await order.createOrder()
     }
 
-    // console.log(orderDetails)
+    console.log(getFullMediaUrlIfRelative(order.programData.coverImage))
     
 
     if(orderDetails){
         res.render('user-views/payment-page', {
             // imgUrl: `http://${ipAddress}:${PORT}/api/v1/media/${order.getImageFile()}`,
+            // imgUrl: 'https://picsum.photos/200',
             imgUrl:  getFullMediaUrlIfRelative(order.programData.coverImage),
             receiptID: receipt._id,
             batch: orderDetails.notes.batch,

@@ -21,6 +21,7 @@ const programSchema = mongoose.Schema({
     productDescription: String,                  
     category: String,
 	equipments : [String],
+    generalInstructions: String,
 	schedule : 
 		[   
             { 

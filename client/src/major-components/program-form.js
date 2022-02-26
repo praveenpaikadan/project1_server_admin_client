@@ -97,6 +97,7 @@ const ProgramForm = ({data}) => {
         type: true,  // public = true, privet = false
         privateClients: [],
         otherRemarks: '',
+        generalInstructions: ''
              
     }
     const [type, setType] = useState(String(dv.type))   // true is public false is privet
@@ -271,6 +272,7 @@ const ProgramForm = ({data}) => {
             
             <MultiTextField label="Write a Goal (Detailed description of what program aims-This is shown in the program info screen)" dv={dv.goal} name='goal'     required={true} errors={errors} register={register} options={['required']} />
             
+            <MultiTextField label="General Instructions (This will be visible to the client once the program is subscribed. Details regarding general conduct, rest period, best practices like timings, suggestions or reccomendations etc.. can be included in this. Write in paragraphs, subheadings etc .. This will be accessible from the home page)"  dv={dv.generalInstructions} name='generalInstructions' required={true} errors={errors} register={register} />
             <OtherField label={'Schedule'}>
                 <Schedule2 dv={dv.schedule} scheduleRetreiver={scheduleRetreiver} exportSchedule={exportSchedule}/>
             </OtherField> 
