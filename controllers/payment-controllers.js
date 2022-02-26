@@ -186,7 +186,7 @@ class Order{
                 return null
             }
         }catch(error){
-            // console.log('Failed To create order => ', error)
+            console.log('Failed To create order => ', error)
             return null
         }
     }
@@ -266,6 +266,7 @@ async function returnReceiptIfExist(data){
 }
 
 async function successPaymentHandler(data){
+    // console.log('......', data)
 
     function createMessage(params){
         var verb = params.planType === 'Complete'?'subscribed to':'renewed subscription for';
@@ -287,7 +288,7 @@ async function successPaymentHandler(data){
     }
 
     try{
-        var secret = "XwWBs3w2eeRFdLmOfTXNHIZJ"
+        var secret = process.env.RAZORPAY_KEY_SECRET
         var batchNo = Number(data.batch)
         // batchNo actually refer to batchIndex
         var receipt = await Receipt.findOne({_id: data.receiptID})
