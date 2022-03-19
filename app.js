@@ -19,8 +19,8 @@ const userCentralRoute      = require('./routes/user-central-router')
 // importing variables
 require('dotenv').config();
 
-// make a request to server api every 25 mins to prevent dyno from sleeping
-require('./lib/keep-server-alive')
+// make a request to server api every 25 mins to prevent dyno from sleeping. // free heroku subscription has a limit to keep server alive each month. SO this was turned off.
+// require('./lib/keep-server-alive')  
 
 // Authentication confiurations
 require('./config/passport');

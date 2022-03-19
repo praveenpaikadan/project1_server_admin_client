@@ -281,9 +281,10 @@ const ExerciseForm = ({data}) => {
                 <span>{errors.repetitionType?"Required Field":""}</span>
             </div>
 
-            <div> 
+            {/* Hidden this one following request from trainer. Set values to zero */}
+            <div style={{display: 'none'}}> 
                 <label>Approximate Calories per rep</label>
-                <input min={0} step="any" required type="number" pattern="\d+" name={'calsPerRep'} defaultValue={dv.calsPerRep} {...register('calsPerRep', { required: true })} />
+                <input min={0} step="any" required type="number" pattern="\d+" name={'calsPerRep'} defaultValue={dv.calsPerRep || 0} {...register('calsPerRep', { required: true })} />
                 <span>{errors.calsPerRep?"Required Field":""}</span>
             </div>
 
