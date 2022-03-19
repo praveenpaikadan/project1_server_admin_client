@@ -25,7 +25,7 @@ router.post('/',
     (req, res, next) => {req.saveFileTo = 'AdminProfile'; req.fileField = 'photo'; next()},
     uploadToCloudinary,
 
-    // Disable due to Cloudinary
+    // Disabled due to Cloudinary
     // upload.fields([{
     //     name: 'photo', maxCount: 1
     //     }]) ,

@@ -78,11 +78,14 @@ router.get('/', (req,res) => {
 })
 
 router.post('/',
-    protected_upload.fields([{
-        name: 'images', maxCount: 2
-        }, {
-        name: 'video', maxCount: 1
-        }]) ,
+
+    // Disbaled as part of integration with Cloudinary. Form data parsing functionality of 'multer' is now carried out by 'express-fileupload'
+    // protected_upload.fields([{
+    //     name: 'images', maxCount: 2
+    //     }, {
+    //     name: 'video', maxCount: 1
+    //     }]) ,
+
     (req, res) => {
 
         var data = req.body;
@@ -134,11 +137,12 @@ router.post('/',
 
 router.patch('/',
 
-    protected_upload.fields([{
-        name: 'images', maxCount: 2
-        }, {
-        name: 'video', maxCount: 1
-        }]) ,
+    // Disbaled as part of integration with Cloudinary. Form data parsing functionality of 'multer' is now carried out by 'express-fileupload'
+    // protected_upload.fields([{
+    //     name: 'images', maxCount: 2
+    //     }, {
+    //     name: 'video', maxCount: 1
+    //     }]) ,
 
     (req,res) => {
     
