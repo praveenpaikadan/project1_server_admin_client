@@ -12,6 +12,7 @@ const PaymentRouter = require('./user-routes/payment')
 const express = require('express')
 const {sendVerificationEmail, verifyEmail, removeVerificationCodes} = require('../controllers/email-verfication');
 const { checkIfRequestByIDandAlterUrlIfNeeded } = require('../controllers/image-controllers');
+const { ifMediaRouteHasUrlThenRedirect } = require('../controllers/cloudinary-controller');
 
 
 
@@ -215,7 +216,14 @@ router.get('/logout', (req,res,next) => {
 })
 
 // router.use((req, res, next) => {console.log(req.originalUrl); next()})
-router.use('/media', checkIfRequestByIDandAlterUrlIfNeeded, express.static(getMediaPath()));  // publically available media only
+router.use('/media', 
+
+    ifMediaRouteHasUrlThenRedirect, // Added when cloudinary is added to redirect nedia requests by url
+
+    checkIfRequestByIDandAlterUrlIfNeeded, 
+    express.static(getMediaPath())
+);  // publically available media only
+
 router.use('/protected-media', checkIfRequestByIDandAlterUrlIfNeeded, express.static(getMediaPath(secured=true)));  // protected media only
 
 router.use(isAuth)

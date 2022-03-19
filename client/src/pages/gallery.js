@@ -77,7 +77,7 @@ export const GeneralImageUpload = ({refresh, collapsed}) => {
                 </span>
                 <div style={{display:  addimagesVisible?'block':'none'}}>
                     <ImageUpload setImageList={setImageList} maxNumber={1}/>
-                    <TextField margin='normal' fullWidth id="outlined-basic" value={identifierText} onChange={(event) => {setIdentifierText(event.target.value)}} value={identifierText} label="Identifying description" variant="outlined" display='block' size='small' />
+                    <TextField margin='normal' fullWidth id="outlined-basic" value={identifierText} onChange={(event) => {setIdentifierText(event.target.value)}} label="Identifying description" variant="outlined" display='block' size='small' />
                     <p style={{marginRight: "10px"}}>{error}</p>
                     <Progress max="100" color="success" value={progress} >{Math.round(progress,2) }%</Progress>
                     <Button style={{marginTop: '10px'}} variant="outlined" onClick={() => {handleUpload()}} >Upload</Button>
@@ -91,14 +91,19 @@ export const GeneralImageUpload = ({refresh, collapsed}) => {
 const ImageItem = ({data, showDelete, handleDelete, copyFullUrl}) => {
 
     const handleClick = () =>  {
-        navigator.clipboard.writeText((copyFullUrl?BASE_URL:'')+ data.relativeUrl)
-        toast.success('Copied url: '+ (copyFullUrl?BASE_URL:'')+ data.relativeUrl)
+        // navigator.clipboard.writeText((copyFullUrl?BASE_URL:'')+ data.relativeUrl)
+        // toast.success('Copied url: '+ (copyFullUrl?BASE_URL:'')+ data.relativeUrl)
+
+        // Changed as media is not handled by Cloudinary
+        navigator.clipboard.writeText(data.secureUrl)
+        toast.success('Copied url: '+ data.secureUrl)
     };
 
     return(
         <div className='image-container-wrapper'>
         <div className='image-item-container' onClick={() => {handleClick()}}>
-            <img src={BASE_URL+data.relativeUrl}></img>
+            {/* <img src={BASE_URL+data.relativeUrl}></img> */}
+            <img src={data.secureUrl}></img>
             <div className='text-container'>
                 <p>{data.identifierText}</p>
             </div>
@@ -172,11 +177,17 @@ export const ImageSearch = ({reload, refresh, heading, searchBoxStyle, imageCont
                     sx={{ maxWidth: 300, marginLeft:'auto', marginRight: '60px',marginTop: '40px', marginBottom: '40px',...searchBoxStyle }}
                     renderInput={(params) => <TextField fullwidth value={search} onChange={(e) => {setSearch(e.target.value)}} {...params} label="Search Images" />}
                 />
+                
                 <p style={{marginLeft: '20px', display:'block', color: 'gray'}}>Select to copy url</p>
-                <div style={{marginLeft: '20px'}}>
-                    <input checked={copyFullUrl} style={{marginLeft: '20px'}} onChange={(e => setCopyFullUrl(e.target.checked))} type="checkbox" id="vehicle1" name="vehicle1" value="Bike" style={{marginRight: '10px'}}/>
+
+
+                {/* Disabled as media are handled using cloudinary */}
+                {/* <div style={{marginLeft: '20px'}}>
+                    <input checked={copyFullUrl} style={{ marginRight: '10px'}} onChange={(e => setCopyFullUrl(e.target.checked))} type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
                     <label for="vehicle1" > Copy full url</label>
-                </div> 
+                </div>   */}
+
+
             </div>
 
             <div style={{flex:1,  width: '100%', overflow: 'scroll', borderRight: '10px solid white'}}>

@@ -9,8 +9,8 @@ const adminMediaRouter   = require('./admin-routes/admin-media');
 const adminWorkoutRouter   = require('./admin-routes/admin-workouts');
 const { isAuth, isAdmin  } = require('./authmiddleware');
 const adminContactRouter = require('./admin-routes/admin-contact')
-const adminDietPlanRouter = require('./admin-routes/admin-diet-plans')
-
+const adminDietPlanRouter = require('./admin-routes/admin-diet-plans');
+const { ifMediaRouteHasUrlThenRedirect } = require('../controllers/cloudinary-controller');
 
 const getMediaPath = (type) => {
     let sep =  __dirname.includes('/')?'/':"\\"
@@ -75,7 +75,16 @@ router.get('/logout', (req,res,next) => {
 })
 
 
-router.use('/media', express.static(getMediaPath(false)), express.static(getMediaPath(true)), express.static(getProfilePicturePath()));
+router.use('/media', 
+    
+    // to redirect to cloudinary url
+    ifMediaRouteHasUrlThenRedirect,
+
+    express.static(getMediaPath(false)), 
+    express.static(getMediaPath(true)), 
+    express.static(getProfilePicturePath())
+    );
+
 router.use('/adminusers', adminUserRouter)
 router.use('/programs', adminProgramRouter)
 router.use('/exercises', adminExerciseRouter)

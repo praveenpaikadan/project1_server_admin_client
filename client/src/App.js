@@ -11,8 +11,8 @@ import { getCurrentUserData } from './fetch-handlers/admin-user';
 import Loader from './components/loader';
 
 
-// const BASE_URL = 'http://localhost:3567/api/admin'
-const BASE_URL = "https://personal-training-app.herokuapp.com/api/admin"
+const BASE_URL = 'http://localhost:3567/api/admin'
+// const BASE_URL = "https://personal-training-app.herokuapp.com/api/admin"
 
 function App() {
 

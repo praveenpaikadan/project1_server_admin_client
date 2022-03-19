@@ -1,7 +1,8 @@
 const router   = require('express').Router();
 const Contact = require('../../models/contact-details');
 const {upload} = require('../../config/multer');
-const { deleteFiles } = require('../../lib/helpers')
+const { deleteFiles } = require('../../lib/helpers');
+const { uploadToCloudinary, deleteFromCloudinary } = require('../../controllers/cloudinary-controller');
 
 
 router.get('/', (req,res) => {
@@ -21,9 +22,13 @@ router.get('/', (req,res) => {
 
 router.post('/', 
 
-    upload.fields([{
-        name: 'photo', maxCount: 1
-        }]) ,
+    (req, res, next) => {req.saveFileTo = 'AdminProfile'; req.fileField = 'photo'; next()},
+    uploadToCloudinary,
+
+    // Disable due to Cloudinary
+    // upload.fields([{
+    //     name: 'photo', maxCount: 1
+    //     }]) ,
 
     (req, res) => {
 
@@ -32,17 +37,20 @@ router.post('/',
 
         if(req.files.photo){ 
             // console.log(req.files.photo);
-            update.photo = req.files.photo[0]
+            update.photo.meta = req.files.photo[0]
+            update.photo.filename = update.photo.meta.secure_url
+            update.photo.secureUrl = update.photo.meta.secure_url
         };
         
         Contact.find()
         .then((conArr) => {
             if(conArr[0]){
                 id = conArr[0]['id']
-                var filesToDelete = conArr[0].photo && req.files.photo?[conArr[0]['photo']['filename']]:[] 
+                // var filesToDelete = conArr[0].photo && req.files.photo?[conArr[0]['photo']['filename']]:[]   
                 Contact.findOneAndUpdate({_id: id}, update, options)
                 .then(response => {
-                    deleteFiles(filesToDelete, 'media')
+                    // deleteFiles(filesToDelete, 'media')
+                    deleteFromCloudinary(response.meta.public_id)
                     res.json(
                         response
                     )

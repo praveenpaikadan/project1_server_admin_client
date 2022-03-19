@@ -3,7 +3,9 @@ const User = require('../../models/user')
 const { getWorkoutData } = require('../../controllers/workoutdata-controller');
 const { profile_upload } = require('../../config/multer')
 const fs = require('fs');
-const express = require('express')
+const express = require('express');
+const { uploadToCloudinary, deleteFromCloudinary, ifMediaRouteHasUrlThenRedirect } = require('../../controllers/cloudinary-controller');
+const { response } = require('express');
 
 
  
@@ -52,7 +54,7 @@ const getFilesToBeDeleted = async (id, content) => {
 router.get('/data', (req, res) => {
     let userID = req.session.passport.user
     // console.log(userID)
-    User.findOne({"_id": userID}, {hash: 0, salt: 0})
+    User.findOne({"_id": userID}, {hash: 0, salt: 0, 'profilePhoto.meta': 0})
     .then((response) => {
         res.json(response)
     })
@@ -98,39 +100,68 @@ router.post('/editprofile', (req, res) => {
 
 router.use('/getprofilephoto',
    ////// Checking media specific access
-    (req, res, next) => {
-    
-        let userID = req.session.passport.user
-        if(req.url.includes(userID)){
-            next()
-        }else{
-            res.status(401).end()
-            return
-        }
+
+
+   // Not necessary
+    // (req, res, next) => {
+    //     let userID = req.session.passport.user
+    //     if(req.url.includes(userID)){
+    //         console.log(req.url)
+    //         next()
+    //     }else{
+    //         res.status(401).end()
+    //         return
+    //     }
         
-    },
-    express.static(getMediaPath())
+    // },
+    
+    // Disabled when cloudinary is added to manage media
+    // express.static(getMediaPath())
+
+    ifMediaRouteHasUrlThenRedirect,
+
     );  
 
 router.post('/profilephoto', 
 
-    // (req, res, next) => { console.log(req.body);res.end()},   
+    (req, res, next) => {req.saveFileTo = 'ProfilePhotos'; req.fileField = 'profilephoto'; next()},
+    uploadToCloudinary,
 
-    profile_upload.fields([{
-        name: 'profilephoto', maxCount: 1
-        }]) ,
+
+    // Disabled as media files are handled by cloudinary now. 
+    // profile_upload.fields([{
+    //     name: 'profilephoto', maxCount: 1
+    //     }]) ,
 
     (req, res) => {
 
-        // console.log(req.body)
-
         let userID = req.session.passport.user
-        // console.log(userID)
-        getFilesToBeDeleted(userID, 'profilePhoto')
-        .then((filesNamesToBeDeleted => {
-            User.findOneAndUpdate({"_id": userID}, {profilePhoto: req.files.profilephoto[0]}, {new: true})
+        var metaData =  req.files.profilephoto[0]
+
+
+        //Disabled as media handled by  cloudinary
+
+        // getFilesToBeDeleted(userID, 'profilePhoto')
+        // .then((filesNamesToBeDeleted => {
+        
+            User.findOne({"_id": userID})
             .then((response) => {
-                deleteFiles(filesNamesToBeDeleted)
+
+                var public_id_of_media_to_be_deleted = response.profilePhoto ? response.profilePhoto.meta.public_id : null
+
+                response.profilePhoto = { 
+                    filename: metaData.secure_url, 
+                    secureUrl: metaData.secure_url, 
+                    meta: metaData
+                }
+                
+                response.save()
+                
+                public_id_of_media_to_be_deleted && deleteFromCloudinary(public_id_of_media_to_be_deleted)
+
+                //Disabled as media handled by  cloudinary
+                // deleteFiles(filesNamesToBeDeleted)
+                
                 res.json(
                     response
                 )
@@ -139,7 +170,7 @@ router.post('/profilephoto',
                 console.log(err)
                 res.status(500).json({response: "Failed"})
             })
-    }))
+    // }))
     })
 
     

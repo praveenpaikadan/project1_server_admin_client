@@ -4,6 +4,7 @@ const mediaSchema = mongoose.Schema({
 	relativeUrl: String,        // either url or filename
     initiallyFor: String,
     identifierText: String,
+    secureUrl: String,
     meta: {}
 
 }, { timestamps : true })

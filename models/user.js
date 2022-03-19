@@ -26,7 +26,11 @@ const UserSchema =  mongoose.Schema({
         receiptID: String,
         reminder: Number
     },
-    profilePhoto: {}
+    profilePhoto: {
+        filename: String,
+        secureUrl: String,
+        meta: {}
+    }
 }, { timestamps : true})
 
 const User = mongoose.model('user', UserSchema)
