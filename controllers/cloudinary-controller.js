@@ -9,20 +9,25 @@ cloudinary.config({
 
 
 const uploadToCloudinary = (req, res, next) => {  // fileField and saveFileTo are additionl fields added in previous routes
-    var file = req.files[req.fileField] // only single image not 'images'
-    cloudinary.uploader.upload(file.tempFilePath, {folder: req.saveFileTo || 'Others'}, function(err, result){
-        if(result){
-            req.files[req.fileField] = [result]
-            next()
-            return
-        }
-        if(err){
-            console.log('Error with cloudinary, Image not uploaded', err)
-            res.status(500).end()
-            return
-        }
-        
-    })
+    var file = req.files ? req.files[req.fileField] : null // only single image not 'images'
+    if(file){
+        cloudinary.uploader.upload(file.tempFilePath, {folder: req.saveFileTo || 'Others'}, function(err, result){
+            if(result){
+                req.files[req.fileField] = [result]
+                next()
+                return
+            }
+            if(err){
+                console.log('Error with cloudinary, Image not uploaded', err)
+                res.status(500).end()
+                return
+            }
+            
+        })
+    }else{
+        next()
+    }
+    
 }
 
 const deleteFromCloudinary = (media_public_id) => {

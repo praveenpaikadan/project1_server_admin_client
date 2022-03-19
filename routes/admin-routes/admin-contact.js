@@ -35,7 +35,7 @@ router.post('/',
         options = { upsert: true, new: true, setDefaultsOnInsert: true }
         update = JSON.parse(req.body.data)
 
-        if(req.files.photo){ 
+        if(req.files && req.files.photo){ 
             // console.log(req.files.photo);
             update.photo.meta = req.files.photo[0]
             update.photo.filename = update.photo.meta.secure_url
@@ -50,7 +50,7 @@ router.post('/',
                 Contact.findOneAndUpdate({_id: id}, update, options)
                 .then(response => {
                     // deleteFiles(filesToDelete, 'media')
-                    deleteFromCloudinary(response.meta.public_id)
+                    conArr[0] && conArr[0].photo && deleteFromCloudinary(conArr[0].photo.meta.public_id)
                     res.json(
                         response
                     )

@@ -90,8 +90,8 @@ router.post('/',
         // console.log(req.body)
         var data = JSON.parse(req.body.data)
         
-        data.images = req.files.images
-        data.videos = req.files.videos
+        // data.images = req.files.images
+        // data.videos = req.files.videos
         
         // console.log(data)
 
@@ -127,23 +127,23 @@ router.patch('/',
         var data = JSON.parse(req.body.data)
         var id = req.body.id
 
-        if(req.files.images){
-            var image1 = req.files.images[0];
-            data.images = [image1];
-        }
+        // if(req.files.images){
+        //     var image1 = req.files.images[0];
+        //     data.images = [image1];
+        // }
 
-        if(req.files.videos){
-            var video = req.files.videos[0];
-            data.videos = [video];
-        }
+        // if(req.files.videos){
+        //     var video = req.files.videos[0];
+        //     data.videos = [video];
+        // }
 
         // console.log(data.privateClients)
         let conditions = { _id: id };
-        getFilesToBeDeleted(id, [data.images?'images':null, data.videos?'videos':null])
-        .then((filesNamesToBeDeleted => {
+        // getFilesToBeDeleted(id, [data.images?'images':null, data.videos?'videos':null])
+        // .then((filesNamesToBeDeleted => {
             Program.findByIdAndUpdate(conditions, data, { new: true})
             .then((response) => {
-                deleteFiles(filesNamesToBeDeleted)
+                // deleteFiles(filesNamesToBeDeleted)
                 res.json({
                     response
                 })
@@ -156,16 +156,16 @@ router.patch('/',
                 })
             })
                 
-        }))
+        // }))
 });
 
 router.delete('/:id', (req, res, next)=>{
     let id = req.params.id
-    getFilesToBeDeleted(id, ['images', 'videos'])
-    .then(filesNamesToBeDeleted => {
+    // getFilesToBeDeleted(id, ['images', 'videos'])
+    // .then(filesNamesToBeDeleted => {
         Program.findByIdAndDelete(id)
         .then((response) => {
-            deleteFiles(filesNamesToBeDeleted);
+            // deleteFiles(filesNamesToBeDeleted);
             res.json({
                 response
             })
@@ -176,14 +176,14 @@ router.delete('/:id', (req, res, next)=>{
                 response: "Failed to update"
             })
         })
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(404).json({
-            response: null,
-            message: "No Item found"
-        })
-    })
+    // })
+    // .catch(err => {
+    //     console.log(err)
+    //     res.status(404).json({
+    //         response: null,
+    //         message: "No Item found"
+    //     })
+    // })
 })
 
 module.exports = router

@@ -182,11 +182,11 @@ router.patch('/',
     
 
         let conditions = { _id: data.id };
-        getFilesToBeDeleted(data.id, [data.images?'images':null, data.video?'video':null])
-        .then((filesNamesToBeDeleted => {
+        // getFilesToBeDeleted(data.id, [data.images?'images':null, data.video?'video':null])
+        // .then((filesNamesToBeDeleted => {
             Exercise.findByIdAndUpdate(conditions, data, { new: true})
             .then((response) => {
-                deleteFiles(filesNamesToBeDeleted)
+                // deleteFiles(filesNamesToBeDeleted)
                 res.json({
                     response
                 })
@@ -199,7 +199,7 @@ router.patch('/',
                 })
             })
                 
-        }))
+        // }))
 });
 
 router.delete('/:id', (req, res, next)=>{

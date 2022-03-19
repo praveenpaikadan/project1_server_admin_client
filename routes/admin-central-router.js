@@ -1,6 +1,8 @@
 const router   = require('express').Router();
 const express  = require('express')
 const passport = require('passport');
+const fileupload = require('express-fileupload');
+
 const adminUserRouter   = require('./admin-routes/admin-users')
 const adminProgramRouter   = require('./admin-routes/admin-programs')
 const adminExerciseRouter   = require('./admin-routes/admin-exercises');
@@ -11,6 +13,12 @@ const { isAuth, isAdmin  } = require('./authmiddleware');
 const adminContactRouter = require('./admin-routes/admin-contact')
 const adminDietPlanRouter = require('./admin-routes/admin-diet-plans');
 const { ifMediaRouteHasUrlThenRedirect } = require('../controllers/cloudinary-controller');
+
+
+// for using with cloudinary upload. This is to get the file as req.files  < === CLOUDINARY 
+router.use(fileupload({useTempFiles: true}))
+
+
 
 const getMediaPath = (type) => {
     let sep =  __dirname.includes('/')?'/':"\\"

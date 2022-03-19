@@ -6,7 +6,6 @@ const MongoStore    = require('connect-mongo')(session);
 const bodyParser    = require('body-parser')
 const {tokenInterceptor} = require('./lib/tokenUtils')
 const path = require('path');
-const fileupload = require('express-fileupload');
 
 
 
@@ -44,9 +43,6 @@ app.use(cors({
 // app.use(tokenInterceptor)
 
 app.use(morgan('dev'))
-
-// for using with cloudinary upload. This is to get the file as req.files  < === CLOUDINARY REQUIREMENT
-app.use(fileupload({useTempFiles: true}))
 
 
 // app.use(express.json());  // comment this out if any anomaly
