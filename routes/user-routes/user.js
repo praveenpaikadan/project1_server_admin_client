@@ -3,12 +3,9 @@ const User = require('../../models/user')
 const { getWorkoutData } = require('../../controllers/workoutdata-controller');
 const { profile_upload } = require('../../config/multer')
 const fs = require('fs');
-const express = require('express');
 const { uploadToCloudinary, deleteFromCloudinary, ifMediaRouteHasUrlThenRedirect } = require('../../controllers/cloudinary-controller');
-const { response } = require('express');
+const fileupload = require('express-fileupload');
 
-
- 
 const getMediaPath = () => {
     let sep =  __dirname.includes('/')?'/':"\\"
     let url = __dirname.split(sep)
@@ -124,14 +121,14 @@ router.use('/getprofilephoto',
 
 router.post('/profilephoto', 
 
-    (req, res, next) => {req.saveFileTo = 'ProfilePhotos'; req.fileField = 'profilephoto'; next()},
-    uploadToCloudinary,
-
-
     // Disabled as media files are handled by cloudinary now. 
     // profile_upload.fields([{
     //     name: 'profilephoto', maxCount: 1
     //     }]) ,
+
+    fileupload({useTempFiles: true}),
+    (req, res, next) => {req.saveFileTo = 'ProfilePhotos'; req.fileField = 'profilephoto'; next()},
+    uploadToCloudinary,
 
     (req, res) => {
 
