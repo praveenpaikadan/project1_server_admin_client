@@ -144,7 +144,7 @@ router.post('/profilephoto',
             User.findOne({"_id": userID})
             .then((response) => {
 
-                var public_id_of_media_to_be_deleted = response.profilePhoto ? response.profilePhoto.meta.public_id : null
+                var public_id_of_media_to_be_deleted = response.profilePhoto && response.profilePhoto.meta && response.profilePhoto.meta.public_id ? response.profilePhoto.meta.public_id : null
 
                 response.profilePhoto = { 
                     filename: metaData.secure_url, 
